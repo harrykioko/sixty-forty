@@ -12,7 +12,7 @@ export const SiteFooter = () => {
               <span className="text-sixty40-purple">40</span>
             </h2>
             <p className="text-muted-foreground">
-              60/40 - sounds marginal, but what if we rip a unicorn?
+              60/40 - sounds marginal, but what if someone rips a unicorn one week?
             </p>
           </div>
           

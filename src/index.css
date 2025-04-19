@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,58 +34,8 @@
     --ring: 255 81% 75%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 240 28% 10%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 255 81% 75%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 100% 49%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 5% 26%;
-    --sidebar-ring: 255 81% 75%;
   }
 
-  .light {
-    --background: 0 0% 100%;
-    --foreground: 240 28% 14%;
-
-    --card: 0 0% 98%;
-    --card-foreground: 240 28% 14%;
-
-    --popover: 0 0% 98%;
-    --popover-foreground: 240 28% 14%;
-
-    --primary: 255 81% 75%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 100% 49%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 240 5% 95%;
-    --muted-foreground: 240 5% 45%;
-
-    --accent: 255 81% 75%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 5% 89%;
-    --input: 240 5% 89%;
-    --ring: 255 81% 75%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 28% 14%;
-    --sidebar-primary: 255 81% 75%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 100% 49%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 5% 89%;
-    --sidebar-ring: 255 81% 75%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }

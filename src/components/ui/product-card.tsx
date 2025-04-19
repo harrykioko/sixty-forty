@@ -24,6 +24,11 @@ export const ProductCard = ({
 }: ProductProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const isHarry = builderName.toLowerCase().includes('harry');
+  const gradientClass = isHarry 
+    ? 'from-sixty40-orange via-sixty40-pink to-red-500'
+    : 'from-sixty40-blue via-sixty40-purple to-indigo-500';
+
   return (
     <motion.div
       className="relative h-full"
@@ -40,12 +45,12 @@ export const ProductCard = ({
       >
         <div className="relative w-full h-48 overflow-hidden">
           <motion.div
-            className="absolute inset-0 bg-gradient-to-b from-transparent to-sixty40-dark/80 z-10"
-            animate={{ opacity: isHovered ? 0.7 : 0.5 }}
+            className={`absolute inset-0 bg-gradient-to-b ${gradientClass} opacity-20 z-10`}
+            animate={{ opacity: isHovered ? 0.3 : 0.2 }}
           />
           <motion.div
-            className="absolute inset-0 bg-sixty40-purple/20 z-10"
-            animate={{ opacity: isHovered ? 0.3 : 0 }}
+            className="absolute inset-0 bg-gradient-to-b from-transparent to-sixty40-dark/80 z-10"
+            animate={{ opacity: isHovered ? 0.7 : 0.5 }}
           />
           <motion.img
             src={image}
@@ -55,7 +60,7 @@ export const ProductCard = ({
             transition={{ duration: 0.3 }}
           />
           <div className="absolute top-3 left-3 z-20">
-            <Badge className="bg-sixty40-purple text-white font-medium">
+            <Badge className={`bg-gradient-to-r ${gradientClass} text-white font-medium animate-pulse-slow`}>
               {builderName}
             </Badge>
           </div>
@@ -89,7 +94,7 @@ export const ProductCard = ({
           
           <Button 
             variant="outline" 
-            className="w-full border-sixty40-purple/50 text-sixty40-purple hover:bg-sixty40-purple/10"
+            className={`w-full border-2 bg-gradient-to-r ${gradientClass} bg-clip-text text-transparent border-opacity-50 hover:bg-white/10`}
           >
             View Details
           </Button>

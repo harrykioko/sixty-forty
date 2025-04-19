@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Trophy } from "lucide-react";
@@ -13,7 +12,6 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
   return (
     <div className={`p-6 ${className}`}>
       <div className="relative">
-        {/* Winner Badge */}
         {product.isWinner && (
           <div className="absolute top-4 right-4 z-20">
             <Badge className={`bg-gradient-to-r ${gradientClass} text-white font-medium px-3 py-1 flex items-center gap-1`}>
@@ -23,7 +21,6 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
           </div>
         )}
         
-        {/* Product Header */}
         <div className="relative h-56 overflow-hidden rounded-t-lg mb-6">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 z-10" />
           <img 
@@ -39,14 +36,12 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
           </div>
         </div>
         
-        {/* Product Description */}
         <div className="space-y-6">
           <div>
             <h4 className="text-lg font-semibold mb-2">About this Product</h4>
             <p className="text-muted-foreground">{product.longDesc}</p>
           </div>
           
-          {/* Features */}
           <div>
             <h4 className="text-lg font-semibold mb-2">Key Features</h4>
             <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
@@ -56,7 +51,6 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
             </ul>
           </div>
           
-          {/* Tech Stack */}
           <div>
             <h4 className="text-lg font-semibold mb-2">Tech Stack</h4>
             <div className="flex flex-wrap gap-2">
@@ -72,7 +66,6 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
             </div>
           </div>
           
-          {/* Pricing (if available) */}
           {product.pricing && (
             <div>
               <h4 className="text-lg font-semibold mb-2">Pricing</h4>
@@ -80,7 +73,6 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
             </div>
           )}
           
-          {/* Demo Link (if available) */}
           {product.demoUrl && (
             <div>
               <h4 className="text-lg font-semibold mb-2">Demo</h4>
@@ -90,12 +82,11 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
                 onClick={() => window.open(product.demoUrl, '_blank')}
               >
                 <ExternalLink size={16} className="mr-1" />
-                Visit Demo
+                See Product
               </Button>
             </div>
           )}
           
-          {/* Builder Notes (if available) */}
           {product.builderNotes && (
             <div>
               <h4 className="text-lg font-semibold mb-2">Builder Notes</h4>

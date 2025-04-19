@@ -1,4 +1,3 @@
-
 // This file contains mock data for demonstration purposes
 // In a real application, this would be fetched from Supabase
 
@@ -107,7 +106,7 @@ export const PREVIOUS_WEEKS = [
 export const BUILDERS = [
   {
     name: "Harry",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    avatar: "/lovable-uploads/b93e6079-f7de-459d-b2f7-237ae698d76f.png",
     bio: "Full-stack developer specializing in React and Node.js. Harry loves building practical tools that solve real problems and has been coding for over 8 years.",
     wins: 12,
     products: 28,

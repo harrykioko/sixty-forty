@@ -8,9 +8,10 @@ export const HeroContent = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
+      className="max-w-3xl mx-auto text-center lg:text-left"
     >
       <motion.h1 
-        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+        className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -25,35 +26,24 @@ export const HeroContent = () => {
         </span>?
       </motion.h1>
       
-      <motion.div 
-        className="space-y-2 mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <p className="text-xl text-muted-foreground">
-          Each week, two builders go head-to-head. Two real products. One vote.
-        </p>
-        <p className="text-xl text-muted-foreground">
-          The one you choose gets{" "}
-          <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent font-semibold">
-            60% of everything
-          </span>{" "}
-          that week's products earn —{" "}
-          <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent font-semibold">
-            forever
-          </span>.
-        </p>
-        <p className="text-xl text-muted-foreground">
-          The other? They still eat. Just not first.
-        </p>
-      </motion.div>
-      
-      <motion.div 
-        className="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex"
+      <motion.p 
+        className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
+      >
+        Each week, two builders go head-to-head. You vote. One wins{" "}
+        <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent font-semibold">
+          60% of everything
+        </span>{" "}
+        — forever.
+      </motion.p>
+      
+      <motion.div 
+        className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
       >
         <Button
           size="lg"

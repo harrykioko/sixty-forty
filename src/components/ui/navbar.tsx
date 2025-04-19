@@ -1,7 +1,7 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -11,8 +11,11 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const scrollToHero = () => {
+    document.querySelector('#hero-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const navItems = [
-    { name: "Home", path: "/" },
     { name: "How It Works", path: "/#how-it-works" },
     { name: "Archive", path: "/#archive" },
     { name: "About Builders", path: "/#builders" },
@@ -23,7 +26,7 @@ const Navbar = () => {
       <div className="bg-background/30 hover:bg-background/50 transition-colors border-b border-white/5">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center">
+            <div onClick={scrollToHero} className="cursor-pointer">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -34,7 +37,7 @@ const Navbar = () => {
                   <span className="text-sixty40-purple">40</span>
                 </span>
               </motion.div>
-            </Link>
+            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
@@ -60,7 +63,7 @@ const Navbar = () => {
                 transition={{ delay: 0.4 }}
               >
                 <Button variant="outline" className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10">
-                  <Link to="/admin">Admin</Link>
+                  <a href="/admin">Admin</a>
                 </Button>
               </motion.div>
             </nav>
@@ -119,7 +122,7 @@ const Navbar = () => {
                   className="w-full border-sixty40-purple text-sixty40-purple"
                   onClick={toggleMenu}
                 >
-                  <Link to="/admin">Admin</Link>
+                  <a href="/admin">Admin</a>
                 </Button>
               </motion.div>
             </div>

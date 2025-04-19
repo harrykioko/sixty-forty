@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 
 export const SiteFooter = () => {
@@ -73,9 +72,14 @@ export const SiteFooter = () => {
                   </a>
                 </li>
                 <li>
-                  <Link to="/" className="text-muted-foreground hover:text-white">
+                  <a 
+                    href="https://www.instagram.com/sixty40dev/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-muted-foreground hover:text-white"
+                  >
                     Instagram
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link to="/" className="text-muted-foreground hover:text-white">
@@ -94,4 +98,3 @@ export const SiteFooter = () => {
     </footer>
   );
 };
-

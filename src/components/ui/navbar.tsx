@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -20,61 +19,63 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="w-full z-30 py-4">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <span className="text-2xl font-bold">
-                <span className="text-white">Sixty</span>
-                <span className="text-sixty40-purple">40</span>
-              </span>
-            </motion.div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item, index) => (
+    <header className="fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 backdrop-blur-sm hover:backdrop-blur-md">
+      <div className="bg-background/30 hover:bg-background/50 transition-colors border-b border-white/5">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <Link to="/" className="flex items-center">
               <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3 }}
               >
-                <a
-                  href={item.path}
-                  className="text-muted-foreground hover:text-white transition-colors"
-                >
-                  {item.name}
-                </a>
+                <span className="text-2xl font-bold">
+                  <span className="text-white">Sixty</span>
+                  <span className="text-sixty40-purple">40</span>
+                </span>
               </motion.div>
-            ))}
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              <Button variant="outline" className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10">
-                <Link to="/admin">Admin</Link>
-              </Button>
-            </motion.div>
-          </nav>
+            </Link>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMenu}
-              className="text-white"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              {navItems.map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <a
+                    href={item.path}
+                    className="text-muted-foreground hover:text-white transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                </motion.div>
+              ))}
+              
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Button variant="outline" className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10">
+                  <Link to="/admin">Admin</Link>
+                </Button>
+              </motion.div>
+            </nav>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleMenu}
+                className="text-white"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -82,7 +83,7 @@ const Navbar = () => {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <motion.div
-          className="fixed inset-0 z-50 glass overflow-y-auto pt-20"
+          className="fixed inset-0 z-50 backdrop-blur-md bg-background/80 overflow-y-auto pt-20"
           initial={{ opacity: 0, x: "100%" }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: "100%" }}

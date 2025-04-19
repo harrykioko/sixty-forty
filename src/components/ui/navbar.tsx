@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -25,7 +24,7 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 backdrop-blur-sm hover:backdrop-blur-md">
       <div className="bg-background/30 hover:bg-background/50 transition-colors border-b border-white/5">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-16">
             <div onClick={scrollToHero} className="cursor-pointer">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
@@ -40,7 +39,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center gap-8">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.name}
@@ -50,7 +49,7 @@ const Navbar = () => {
                 >
                   <a
                     href={item.path}
-                    className="text-muted-foreground hover:text-white transition-colors"
+                    className="relative font-medium text-muted-foreground hover:text-white transition-colors before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-full before:h-0.5 before:bg-gradient-to-r before:from-sixty40-purple before:to-sixty40-blue before:scale-x-0 before:origin-right before:transition-transform hover:before:scale-x-100 hover:before:origin-left"
                   >
                     {item.name}
                   </a>
@@ -62,8 +61,11 @@ const Navbar = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <Button variant="outline" className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10">
-                  <a href="/admin">Admin</a>
+                <Button 
+                  variant="outline" 
+                  className="relative px-6 border-sixty40-purple text-sixty40-purple transition-all duration-300 hover:bg-transparent hover:border-transparent hover:text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-sixty40-purple before:to-sixty40-blue before:opacity-0 hover:before:opacity-100 before:transition-opacity before:rounded-md before:-z-10"
+                >
+                  <a href="/admin" className="relative z-10">Admin</a>
                 </Button>
               </motion.div>
             </nav>

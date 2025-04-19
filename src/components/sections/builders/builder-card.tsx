@@ -3,10 +3,20 @@ import { motion } from "framer-motion";
 import { Trophy, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Builder } from "@/data/mock-data";
+import { BUILDERS } from "@/data/mock-data";
+
+// Create a type definition based on the actual structure in the mock data
+interface BuilderProps {
+  name: string;
+  avatar: string;
+  bio: string;
+  wins: number;
+  products: number;
+  socialLinks: Record<string, string>;
+}
 
 interface BuilderCardProps {
-  builder: Builder;
+  builder: BuilderProps;
   index: number;
 }
 

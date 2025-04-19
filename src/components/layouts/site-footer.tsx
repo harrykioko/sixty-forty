@@ -12,7 +12,7 @@ export const SiteFooter = () => {
               <span className="text-sixty40-purple">40</span>
             </h2>
             <p className="text-muted-foreground">
-              Weekly micro-SaaS competition platform
+              60/40 - sounds marginal, but what if we rip a unicorn?
             </p>
           </div>
           

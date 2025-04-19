@@ -13,10 +13,10 @@ export const BuildersSection = () => {
           <Badge className="mb-2 bg-sixty40-purple text-white">
             The Builders
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 break-words">
             Meet Harry & Marcos
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto break-words">
             we're so half black this just might work
           </p>
         </div>
@@ -42,19 +42,21 @@ export const BuildersSection = () => {
                   </div>
                 </div>
                 <div className="md:w-2/3">
-                  <h3 className="text-2xl font-bold mb-2">{builder.name}</h3>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="flex items-center">
-                      <Trophy size={16} className="text-sixty40-purple mr-1" />
+                  <h3 className="text-2xl font-bold mb-2 break-words">{builder.name}</h3>
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <div className="flex items-center whitespace-nowrap">
+                      <Trophy size={16} className="text-sixty40-purple mr-1 flex-shrink-0" />
                       <span className="text-sm">{builder.wins} Wins</span>
                     </div>
-                    <div className="flex items-center">
-                      <Star size={16} className="text-sixty40-blue mr-1" />
+                    <div className="flex items-center whitespace-nowrap">
+                      <Star size={16} className="text-sixty40-blue mr-1 flex-shrink-0" />
                       <span className="text-sm">{builder.products} Products</span>
                     </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">{builder.bio}</p>
-                  <div className="flex gap-2">
+                  <p className="text-muted-foreground mb-4 break-words line-clamp-4 md:line-clamp-none">
+                    {builder.bio}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
                     {Object.entries(builder.socialLinks).map(([platform, link]) => (
                       <Button
                         key={platform}
@@ -67,6 +69,7 @@ export const BuildersSection = () => {
                           href={link}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="whitespace-nowrap"
                         >
                           {platform}
                         </a>

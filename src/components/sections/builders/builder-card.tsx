@@ -1,7 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Trophy, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Trophy, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface BuilderStats {
@@ -57,7 +56,7 @@ export const BuilderCard = ({ stats, index }: BuilderCardProps) => {
               <span className="text-sm">{stats.wins} Wins</span>
             </div>
             <div className="flex items-center whitespace-nowrap">
-              <Star size={16} className="text-sixty40-blue mr-1 flex-shrink-0" />
+              <Package size={16} className="text-sixty40-blue mr-1 flex-shrink-0" />
               <span className="text-sm">{stats.products_launched} Products</span>
             </div>
           </div>

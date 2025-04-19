@@ -11,11 +11,11 @@ export const BuilderStats = ({ wins, productsLaunched, isHarry }: BuilderStatsPr
   return (
     <div className="flex items-center gap-3 mb-3">
       <div className="flex items-center text-sm">
-        <Trophy size={14} className={`mr-1 text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
+        <Trophy size={14} className={`mr-1 ${isHarry ? 'text-sixty40-orange' : 'text-sixty40-blue'}`} />
         <span>{wins || 0} Wins</span>
       </div>
       <div className="flex items-center text-sm">
-        <Package size={14} className={`mr-1 text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
+        <Package size={14} className={`mr-1 ${isHarry ? 'text-sixty40-orange' : 'text-sixty40-blue'}`} />
         <span>{productsLaunched || 0} Products</span>
       </div>
     </div>

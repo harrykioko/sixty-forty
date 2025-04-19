@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Trophy } from "lucide-react";
@@ -78,10 +79,10 @@ export const PastProductColumn = ({ product, className }: PastProductColumnProps
               <h4 className="text-lg font-semibold mb-2">Demo</h4>
               <Button
                 variant="outline"
-                className={`border-2 bg-gradient-to-r ${gradientClass} bg-clip-text text-transparent border-opacity-50 hover:bg-white/10`}
+                className={`w-full border-2 bg-gradient-to-r ${gradientClass} bg-clip-text text-transparent border-opacity-50 hover:bg-white/10 flex items-center justify-center`}
                 onClick={() => window.open(product.demoUrl, '_blank')}
               >
-                <ExternalLink size={16} className="mr-1" />
+                <ExternalLink size={16} className="mr-2 text-white" />
                 See Product
               </Button>
             </div>

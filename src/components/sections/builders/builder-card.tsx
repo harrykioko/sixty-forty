@@ -1,9 +1,8 @@
 
 import { motion } from "framer-motion";
 import { Trophy, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BUILDERS } from "@/data/mock-data";
+import { useBuilderStats } from "@/hooks/use-builder-stats";
 
 // Create a type definition based on the actual structure in the mock data
 interface BuilderProps {
@@ -21,6 +20,13 @@ interface BuilderCardProps {
 }
 
 export const BuilderCard = ({ builder, index }: BuilderCardProps) => {
+  const { data: builderStats = [] } = useBuilderStats();
+  
+  // Find the stats for this builder
+  const stats = builderStats.find(
+    (stat: any) => stat.builder?.name.toLowerCase().includes(builder.name.toLowerCase())
+  );
+
   return (
     <motion.div
       key={builder.name}
@@ -45,11 +51,11 @@ export const BuilderCard = ({ builder, index }: BuilderCardProps) => {
           <div className="flex flex-wrap items-center gap-4 mb-4">
             <div className="flex items-center whitespace-nowrap">
               <Trophy size={16} className="text-sixty40-purple mr-1 flex-shrink-0" />
-              <span className="text-sm">{builder.wins} Wins</span>
+              <span className="text-sm">{stats?.wins || 0} Wins</span>
             </div>
             <div className="flex items-center whitespace-nowrap">
               <Star size={16} className="text-sixty40-blue mr-1 flex-shrink-0" />
-              <span className="text-sm">{builder.products} Products</span>
+              <span className="text-sm">{stats?.products_launched || 0} Products</span>
             </div>
           </div>
           <p className="text-muted-foreground mb-4 break-words line-clamp-4 md:line-clamp-none">

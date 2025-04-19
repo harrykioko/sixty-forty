@@ -1,16 +1,19 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { X, Upload, Plus, Trash2 } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ProductData, BUILDERS } from "@/data/mock-data";
+import ImageUpload from "./form/ImageUpload";
+import GalleryUpload from "./form/GalleryUpload";
+import TechStackInput from "./form/TechStackInput";
+import FeaturesList from "./form/FeaturesList";
 
 interface ProductFormProps {
   product?: ProductData | null;
@@ -34,8 +37,6 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
   const [galleryImages, setGalleryImages] = useState<string[]>(product?.additionalImages || []);
   const [techStack, setTechStack] = useState<string[]>(product?.techStack || []);
   const [features, setFeatures] = useState<string[]>(product?.features || []);
-  const [newTech, setNewTech] = useState("");
-  const [newFeature, setNewFeature] = useState("");
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
     defaultValues: product ? {
@@ -51,38 +52,9 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
     }
   });
 
-  useEffect(() => {
-    // Reset form when product changes
-    if (product) {
-      reset({
-        title: product.title,
-        builderName: product.builderName,
-        shortDescription: product.shortDescription,
-        description: product.description,
-        pricing: product.pricing,
-        demoLink: product.demoLink,
-        builderNotes: product.builderNotes,
-      });
-      setTechStack(product.techStack || []);
-      setFeatures(product.features || []);
-      setMainImage(product.image);
-      setGalleryImages(product.additionalImages || []);
-    } else {
-      reset({
-        builderName: BUILDERS[0].name
-      });
-      setTechStack([]);
-      setFeatures([]);
-      setMainImage(null);
-      setGalleryImages([]);
-    }
-  }, [product, reset]);
-
   const handleMainImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // In a real app, this would upload to Supabase Storage
-      // For demo, we'll create a data URL
       const reader = new FileReader();
       reader.onload = () => {
         setMainImage(reader.result as string);
@@ -94,39 +66,12 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
   const handleGalleryImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && galleryImages.length < 3) {
-      // In a real app, this would upload to Supabase Storage
       const reader = new FileReader();
       reader.onload = () => {
         setGalleryImages([...galleryImages, reader.result as string]);
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const removeGalleryImage = (index: number) => {
-    setGalleryImages(galleryImages.filter((_, i) => i !== index));
-  };
-
-  const addTechItem = () => {
-    if (newTech && !techStack.includes(newTech)) {
-      setTechStack([...techStack, newTech]);
-      setNewTech("");
-    }
-  };
-
-  const removeTechItem = (item: string) => {
-    setTechStack(techStack.filter(tech => tech !== item));
-  };
-
-  const addFeatureItem = () => {
-    if (newFeature && !features.includes(newFeature)) {
-      setFeatures([...features, newFeature]);
-      setNewFeature("");
-    }
-  };
-
-  const removeFeatureItem = (item: string) => {
-    setFeatures(features.filter(feature => feature !== item));
   };
 
   const onSubmit = (data: FormValues) => {
@@ -235,42 +180,12 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
             </div>
 
             {/* Hero Image Upload */}
-            <div>
-              <Label>Hero Image</Label>
-              <div className="mt-1">
-                {mainImage ? (
-                  <div className="relative h-40 overflow-hidden rounded-md">
-                    <img
-                      src={mainImage}
-                      alt="Product hero"
-                      className="w-full h-full object-cover"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={() => setMainImage(null)}
-                    >
-                      <Trash2 size={16} />
-                    </Button>
-                  </div>
-                ) : (
-                  <label className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-white/20 rounded-md cursor-pointer hover:bg-white/5 transition-colors">
-                    <Upload className="mb-2 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      Click to upload hero image
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleMainImageUpload}
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
+            <ImageUpload
+              image={mainImage}
+              onImageUpload={handleMainImageUpload}
+              onImageRemove={() => setMainImage(null)}
+              label="Hero Image"
+            />
 
             {/* Short Description */}
             <div>
@@ -305,100 +220,21 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
             </div>
 
             {/* Tech Stack */}
-            <div>
-              <Label>Tech Stack</Label>
-              <div className="flex flex-wrap gap-2 mt-2 mb-3">
-                {techStack.map((tech) => (
-                  <Badge 
-                    key={tech} 
-                    className="bg-white/10 hover:bg-white/20 pl-3 pr-2 py-1.5"
-                  >
-                    {tech}
-                    <button
-                      type="button"
-                      onClick={() => removeTechItem(tech)}
-                      className="ml-2 hover:text-red-400"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <Input
-                  value={newTech}
-                  onChange={(e) => setNewTech(e.target.value)}
-                  placeholder="Add technology..."
-                  className="bg-black/20 border-white/10"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addTechItem();
-                    }
-                  }}
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addTechItem}
-                  disabled={!newTech}
-                >
-                  <Plus size={16} className="mr-1" />
-                  Add
-                </Button>
-              </div>
-            </div>
+            <TechStackInput
+              techStack={techStack}
+              onAddTech={(tech) => setTechStack([...techStack, tech])}
+              onRemoveTech={(tech) => setTechStack(techStack.filter(t => t !== tech))}
+            />
 
             {/* Features */}
-            <div>
-              <Label>Key Features</Label>
-              <ul className="space-y-2 mt-2 mb-3">
-                {features.map((feature, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center gap-2 bg-white/5 p-2 rounded-md"
-                  >
-                    <span className="flex-1">{feature}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeFeatureItem(feature)}
-                      className="text-muted-foreground hover:text-red-400"
-                    >
-                      <X size={16} />
-                    </button>
-                  </motion.li>
-                ))}
-              </ul>
-              <div className="flex gap-2">
-                <Input
-                  value={newFeature}
-                  onChange={(e) => setNewFeature(e.target.value)}
-                  placeholder="Add feature..."
-                  className="bg-black/20 border-white/10"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addFeatureItem();
-                    }
-                  }}
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addFeatureItem}
-                  disabled={!newFeature}
-                >
-                  <Plus size={16} className="mr-1" />
-                  Add
-                </Button>
-              </div>
-            </div>
+            <FeaturesList
+              features={features}
+              onAddFeature={(feature) => setFeatures([...features, feature])}
+              onRemoveFeature={(feature) => setFeatures(features.filter(f => f !== feature))}
+            />
 
             {/* Optional Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Pricing */}
               <div>
                 <Label htmlFor="pricing">Pricing (Optional)</Label>
                 <Input
@@ -409,7 +245,6 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
                 />
               </div>
 
-              {/* Demo URL */}
               <div>
                 <Label htmlFor="demoLink">Demo URL (Optional)</Label>
                 <Input
@@ -433,46 +268,11 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
             </div>
 
             {/* Gallery Images */}
-            <div>
-              <Label>Image Gallery (Optional, up to 3)</Label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
-                {[0, 1, 2].map((index) => (
-                  <div key={index}>
-                    {galleryImages[index] ? (
-                      <div className="relative h-32 bg-black/20 rounded-md overflow-hidden">
-                        <img
-                          src={galleryImages[index]}
-                          alt={`Gallery ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          className="absolute top-2 right-2"
-                          onClick={() => removeGalleryImage(index)}
-                        >
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
-                    ) : (
-                      <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-md cursor-pointer hover:bg-white/5 transition-colors">
-                        <Upload className="mb-1 text-muted-foreground" size={20} />
-                        <span className="text-xs text-muted-foreground text-center">
-                          Gallery image {index + 1}
-                        </span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleGalleryImageUpload}
-                        />
-                      </label>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <GalleryUpload
+              images={galleryImages}
+              onImageUpload={handleGalleryImageUpload}
+              onImageRemove={(index) => setGalleryImages(galleryImages.filter((_, i) => i !== index))}
+            />
           </CardContent>
         </Card>
 

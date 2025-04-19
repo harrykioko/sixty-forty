@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 interface AdminAuthProps {
@@ -13,35 +14,48 @@ interface AdminAuthProps {
 const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // In a real app, this would authenticate with Supabase
+    // DEVELOPMENT MODE: Bypass authentication
+    // TODO: REMOVE THIS IN PRODUCTION
+    // This bypasses both Supabase auth and admin role check
     setTimeout(() => {
       setIsLoading(false);
-      
-      // For demo purposes: simple validation
-      if (
-        (email.includes("harry") || email.includes("marcos")) && 
-        password.length >= 6
-      ) {
-        onAuthenticated();
-        toast({
-          title: "Logged in successfully",
-          description: "Welcome to the admin dashboard",
-        });
-      } else {
-        toast({
-          title: "Authentication failed",
-          description: "Invalid credentials. Please try again.",
-          variant: "destructive",
-        });
-      }
+      onAuthenticated();
+      toast({
+        title: "Development mode active",
+        description: "Authentication bypassed for testing",
+      });
     }, 1500);
+
+    // PRODUCTION CODE (commented out for now)
+    // try {
+    //   // 1. Send magic link
+    //   await supabase.auth.signInWithOtp({
+    //     email,
+    //     options: {
+    //       emailRedirectTo: `${window.location.origin}/admin/verify`
+    //     }
+    //   });
+    //
+    //   // 2. Show success message
+    //   toast({
+    //     title: "Check your email",
+    //     description: "We sent you a magic link to sign in",
+    //   });
+    // } catch (error) {
+    //   toast({
+    //     title: "Authentication failed",
+    //     description: "Please try again",
+    //     variant: "destructive",
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
@@ -60,41 +74,19 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
             </h1>
           </Link>
           <p className="text-muted-foreground mt-2">
-            Sign in to manage weekly competitions
+            Enter your email to receive a magic link
           </p>
         </div>
 
         <div className="glass-card p-6">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-black/20 border border-white/10 rounded-md text-white"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium mb-1"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 bg-black/20 border border-white/10 rounded-md text-white"
+                placeholder="Enter your email"
+                className="bg-black/20 border-white/10"
                 required
               />
             </div>
@@ -109,10 +101,10 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Signing in...
+                  Sending magic link...
                 </span>
               ) : (
-                "Sign In"
+                "Send Magic Link"
               )}
             </Button>
           </form>

@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,11 +9,18 @@ import AdminAuth from "@/components/admin/AdminAuth";
 import { CURRENT_WEEK } from "@/data/mock-data";
 
 const AdminDashboard = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // DEVELOPMENT MODE: Default to authenticated
+  // TODO: REMOVE IN PRODUCTION - Should check Supabase session and admin role
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
 
-  // When not authenticated, show login form
+  // DEVELOPMENT MODE: Skip auth check
+  // TODO: IN PRODUCTION:
+  // 1. Check Supabase session
+  // 2. Verify user email in admins table
+  // 3. Redirect to login if either check fails
   if (!isAuthenticated) {
     return <AdminAuth onAuthenticated={() => setIsAuthenticated(true)} />;
   }

@@ -1,15 +1,14 @@
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { CURRENT_WEEK } from "@/data/mock-data";
-import ProductCard from "@/components/ui/product-card";
-import ProductModal from "@/components/ui/product-modal";
-import VotingResults from "@/components/ui/voting-results";
-import EmailCapture from "@/components/ui/email-capture";
-import SocialShare from "@/components/ui/social-share";
-import { useToast } from "@/components/ui/use-toast";
-import { ProductData } from "@/data/mock-data";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
+import { CURRENT_WEEK } from '@/data/mock-data';
+import ProductCard from '@/components/ui/product-card';
+import ProductModal from '@/components/ui/product-modal';
+import VotingResults from '@/components/ui/voting-results';
+import SocialShare from '@/components/ui/social-share';
+import { useToast } from '@/components/ui/use-toast';
+import { ProductData } from '@/data/mock-data';
 
 export const BattleSection = () => {
   const { toast } = useToast();
@@ -83,7 +82,7 @@ export const BattleSection = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8">
-          <div className="md:w-2/3">
+          <div className="w-full">
             {showVoteResults && (
               <VotingResults
                 productA={{
@@ -113,10 +112,6 @@ export const BattleSection = () => {
                 />
               </div>
             )}
-          </div>
-          
-          <div className="md:w-1/3">
-            <EmailCapture />
           </div>
         </div>
       </div>

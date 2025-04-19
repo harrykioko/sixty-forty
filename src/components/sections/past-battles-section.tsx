@@ -1,7 +1,6 @@
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Trophy, Star, ChevronDown, History } from "lucide-react";
+import { ChevronDown, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import PastBattleModal from "@/components/ui/past-battle-modal";
@@ -11,7 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { format } from "date-fns";
+import { BattleCard } from "./past-battles/battle-card";
+import { OlderBattlesList } from "./past-battles/older-battles-list";
 
 export const PastBattlesSection = () => {
   const { data: pastBattles, isLoading, error } = usePastBattles();
@@ -22,61 +22,6 @@ export const PastBattlesSection = () => {
   const recentBattles = pastBattles?.slice(0, 3) ?? [];
   // Get the remaining battles
   const olderBattles = pastBattles?.slice(3) ?? [];
-
-  const BattleCard = ({ battle, index }: { battle: any; index: number }) => {
-    const winner = battle.products?.find(p => p.id === battle.winner_id);
-    const runnerUp = battle.products?.find(p => p.id !== battle.winner_id);
-
-    return (
-      <motion.div
-        key={battle.id}
-        className="glass-card p-6"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
-        viewport={{ once: true }}
-      >
-        <Badge className="mb-2 bg-gray-800/70 text-white">
-          {format(new Date(battle.start_date), 'MMM d')} - {format(new Date(battle.end_date), 'MMM d, yyyy')}
-        </Badge>
-        <h3 className="text-xl font-bold mb-2">Week {battle.number}</h3>
-        <div className="space-y-3 mb-4">
-          {winner && (
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-sixty40-purple flex items-center justify-center rounded-full mr-3">
-                <Trophy size={16} className="text-white" />
-              </div>
-              <div>
-                <p className="font-medium">{winner.name}</p>
-                <p className="text-xs text-muted-foreground">by {winner.builders?.name}</p>
-              </div>
-            </div>
-          )}
-          {runnerUp && (
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full mr-3">
-                <Star size={16} className="text-white" />
-              </div>
-              <div>
-                <p className="font-medium">{runnerUp.name}</p>
-                <p className="text-xs text-muted-foreground">by {runnerUp.builders?.name}</p>
-              </div>
-            </div>
-          )}
-        </div>
-        <Button
-          variant="outline"
-          className="w-full border-gray-700 text-gray-300 hover:bg-gray-800/50"
-          onClick={() => {
-            setSelectedWeek(index);
-            setIsModalOpen(true);
-          }}
-        >
-          View Details
-        </Button>
-      </motion.div>
-    );
-  };
 
   if (isLoading) {
     return (
@@ -143,7 +88,15 @@ export const PastBattlesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {recentBattles.map((battle, index) => (
-            <BattleCard key={battle.id} battle={battle} index={index} />
+            <BattleCard
+              key={battle.id}
+              battle={battle}
+              index={index}
+              onViewDetails={() => {
+                setSelectedWeek(index);
+                setIsModalOpen(true);
+              }}
+            />
           ))}
         </div>
 
@@ -164,33 +117,13 @@ export const PastBattlesSection = () => {
                 className="w-[320px] bg-black/90 backdrop-blur-sm border border-white/10"
                 align="center"
               >
-                <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
-                  {olderBattles.map((battle, index) => (
-                    <div 
-                      key={battle.id}
-                      className="p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
-                      onClick={() => {
-                        setSelectedWeek(index + 3);
-                        setIsModalOpen(true);
-                      }}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
-                          {format(new Date(battle.start_date), 'MMM d')} - {format(new Date(battle.end_date), 'MMM d, yyyy')}
-                        </Badge>
-                        <Badge className="bg-sixty40-purple/20 text-sixty40-purple border border-sixty40-purple/30">
-                          Week {battle.number}
-                        </Badge>
-                      </div>
-                      <h4 className="font-medium mb-1">
-                        {battle.products?.find(p => p.id === battle.winner_id)?.name || 'Unknown Winner'}
-                      </h4>
-                      <div className="text-sm text-muted-foreground">
-                        Winner: {battle.products?.find(p => p.id === battle.winner_id)?.builders?.name || 'Unknown'}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <OlderBattlesList
+                  battles={olderBattles}
+                  onSelectBattle={(index) => {
+                    setSelectedWeek(index + 3);
+                    setIsModalOpen(true);
+                  }}
+                />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

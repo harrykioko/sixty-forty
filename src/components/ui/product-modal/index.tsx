@@ -57,7 +57,6 @@ export const ProductModal = ({
               image={selectedImage}
               title={title}
               builderName={builderName}
-              onClose={onClose}
             />
 
             <div className="p-6">

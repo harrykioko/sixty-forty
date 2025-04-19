@@ -167,7 +167,7 @@ export const BUILDERS = [
   {
     name: "Marcos",
     avatar: "/lovable-uploads/04f69a9a-fed8-4b84-a2b4-ca270cdbf3f6.png",
-    bio: "Design-focused developer who bridges the gap between beautiful UIs and solid backend architecture. Marcos has a background in UX research and Python development.",
+    bio: "Amazon>>Via>>GoPuff>>Pinterest - this man can navigate a cliff. A poet, a lover, a cat dad with big lightskin energy.",
     wins: 16,
     products: 28,
     socialLinks: {

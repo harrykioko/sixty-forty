@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { format } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Calendar } from "lucide-react";
-import { cn } from "@/lib/utils"; // Add this import
+import { cn } from "@/lib/utils";
 import { Week } from "@/types/admin";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,7 @@ interface WeekEditorModalProps {
 
 export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorModalProps) {
   const isEditing = Boolean(weekData);
-  const [weekNumber, setWeekNumber] = useState(weekData?.id.split('-')[1] || '');
+  const [weekNumber, setWeekNumber] = useState(weekData?.id?.split('-')[1] || '');
   const [theme, setTheme] = useState(weekData?.theme || '');
   const [startDate, setStartDate] = useState<Date | undefined>(weekData?.startDate);
   const [endDate, setEndDate] = useState<Date | undefined>(weekData?.endDate);
@@ -46,6 +45,10 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
     if (!theme) newErrors.theme = "Theme is required";
     if (!startDate) newErrors.startDate = "Start date is required";
     if (!endDate) newErrors.endDate = "End date is required";
+    
+    if (startDate && endDate && startDate >= endDate) {
+      newErrors.endDate = "End date must be after start date";
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

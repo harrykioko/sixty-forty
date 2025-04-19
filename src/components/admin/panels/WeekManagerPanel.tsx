@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
 import { WeekManagerProps, Week } from "@/types/admin";
+import { useWeekManagement } from "@/hooks/use-week-management";
 
 export const WeekManagerPanel = ({
   currentWeek,
@@ -14,6 +15,7 @@ export const WeekManagerPanel = ({
 }: WeekManagerProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingWeek, setEditingWeek] = useState<Week | undefined>();
+  const { createOrUpdateWeek } = useWeekManagement();
 
   const handleOpenCreate = () => {
     setEditingWeek(undefined);
@@ -25,15 +27,15 @@ export const WeekManagerPanel = ({
     setIsModalOpen(true);
   };
 
-  const handleSaveWeek = (weekData: Partial<Week>) => {
-    if (editingWeek) {
-      // Handle edit
-      console.log("Editing week:", weekData);
-    } else {
-      // Handle create
+  const handleSaveWeek = async (weekData: Partial<Week>) => {
+    try {
+      await createOrUpdateWeek(weekData);
+      setIsModalOpen(false);
+      // Optionally, trigger a refetch or update of current week
       onCreateNewWeek();
+    } catch (error) {
+      console.error('Failed to save week:', error);
     }
-    setIsModalOpen(false);
   };
 
   return (

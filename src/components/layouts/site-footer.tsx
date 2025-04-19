@@ -63,9 +63,14 @@ export const SiteFooter = () => {
               <h3 className="font-semibold mb-3">Connect</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to="/" className="text-muted-foreground hover:text-white">
+                  <a 
+                    href="https://x.com/sixty40dev" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-muted-foreground hover:text-white"
+                  >
                     Twitter
-                  </Link>
+                  </a>
                 </li>
                 <li>
                   <Link to="/" className="text-muted-foreground hover:text-white">
@@ -89,3 +94,4 @@ export const SiteFooter = () => {
     </footer>
   );
 };
+

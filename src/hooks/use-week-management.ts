@@ -11,10 +11,17 @@ export const useWeekManagement = () => {
   const createOrUpdateWeek = async (weekData: Partial<Week>) => {
     setIsLoading(true);
     try {
+      // Extract week number from ID and convert to number
+      const weekNumber = parseInt(weekData.id.split('-')[1], 10);
+      
+      if (isNaN(weekNumber)) {
+        throw new Error('Invalid week number format');
+      }
+
       const { data, error } = await supabase
         .from('weeks')
         .upsert({
-          number: weekData.id.split('-')[1],
+          number: weekNumber, // Now this is a number, not a string
           theme: weekData.theme,
           start_date: weekData.startDate.toISOString().split('T')[0],
           end_date: weekData.endDate.toISOString().split('T')[0],
@@ -45,4 +52,3 @@ export const useWeekManagement = () => {
 
   return { createOrUpdateWeek, isLoading };
 };
-

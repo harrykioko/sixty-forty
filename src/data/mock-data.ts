@@ -172,9 +172,9 @@ export const BUILDERS = [
     wins: 16,
     products: 28,
     socialLinks: {
-      twitter: "https://twitter.com/marcos",
-      instagram: "https://instagram.com/marcos",
-      linkedin: "https://linkedin.com/marcos"
+      twitter: "https://x.com/mjdymond",
+      instagram: "https://www.instagram.com/mjdymond/",
+      linkedin: "https://www.linkedin.com/in/mjdymond/"
     }
   }
 ];

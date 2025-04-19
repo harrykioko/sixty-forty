@@ -17,7 +17,7 @@ export const BuildersSection = () => {
             Meet Harry & Marcos
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            The masterminds behind this weekly micro-SaaS competition.
+            we're so half black this just might work
           </p>
         </div>
 

@@ -1,4 +1,3 @@
-
 import { ProductData } from "@/data/mock-data";
 
 export interface Week {

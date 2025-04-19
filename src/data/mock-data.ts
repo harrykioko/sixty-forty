@@ -160,8 +160,9 @@ export const BUILDERS = [
     wins: 12,
     products: 28,
     socialLinks: {
-      twitter: "https://twitter.com/harry",
-      github: "https://github.com/harry"
+      twitter: "https://twitter.com/harry", // Replace with Harry's Twitter/X URL
+      instagram: "https://instagram.com/harry", // Replace with Harry's Instagram URL
+      linkedin: "https://linkedin.com/harry" // Replace with Harry's LinkedIn URL
     }
   },
   {
@@ -171,8 +172,9 @@ export const BUILDERS = [
     wins: 16,
     products: 28,
     socialLinks: {
-      twitter: "https://twitter.com/marcos",
-      github: "https://github.com/marcos"
+      twitter: "https://twitter.com/marcos", // Replace with Marcos's Twitter/X URL
+      instagram: "https://instagram.com/marcos", // Replace with Marcos's Instagram URL
+      linkedin: "https://linkedin.com/marcos" // Replace with Marcos's LinkedIn URL
     }
   }
 ];

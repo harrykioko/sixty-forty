@@ -27,6 +27,41 @@ export type Database = {
         }
         Relationships: []
       }
+      builder_stats: {
+        Row: {
+          builder_id: string
+          created_at: string | null
+          id: string
+          products_launched: number
+          updated_at: string | null
+          wins: number
+        }
+        Insert: {
+          builder_id: string
+          created_at?: string | null
+          id?: string
+          products_launched?: number
+          updated_at?: string | null
+          wins?: number
+        }
+        Update: {
+          builder_id?: string
+          created_at?: string | null
+          id?: string
+          products_launched?: number
+          updated_at?: string | null
+          wins?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "builder_stats_builder_id_fkey"
+            columns: ["builder_id"]
+            isOneToOne: true
+            referencedRelation: "builders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       builders: {
         Row: {
           avatar_url: string | null

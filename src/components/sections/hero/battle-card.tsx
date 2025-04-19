@@ -1,22 +1,23 @@
-
 import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
+import { CURRENT_WEEK } from "@/data/mock-data";
 import CountdownTimer from "@/components/ui/countdown-timer";
-
-const isBuildPhase = true; // This should be determined by the actual date logic later
-
-// Extract week number from the ID (e.g., "week-1" -> 1)
-const getWeekNumber = (weekId: string) => {
-  const match = weekId.match(/week-(\d+)/);
-  return match ? match[1] : "1"; // Default to 1 if no match
-};
+import { useBuilderStats } from "@/hooks/use-builder-stats";
 
 export const BattleCard = () => {
-  const weekNumber = getWeekNumber(CURRENT_WEEK.id);
+  const { data: builderStats = [] } = useBuilderStats();
+  const isBuildPhase = true; // This should be determined by the actual date logic later
+
+  // Extract week number from the ID (e.g., "week-1" -> 1)
+  const getWeekNumber = (weekId: string) => {
+    const match = weekId.match(/week-(\d+)/);
+    return match ? match[1] : "1"; // Default to 1 if no match
+  };
   
+  const weekNumber = getWeekNumber(CURRENT_WEEK.id);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
@@ -68,6 +69,10 @@ export const BattleCard = () => {
                 ? `from-sixty40-orange${isBuildPhase ? '/40' : ''} via-sixty40-pink${isBuildPhase ? '/40' : ''} to-red-500${isBuildPhase ? '/40' : ''}`
                 : `from-sixty40-blue${isBuildPhase ? '/40' : ''} via-sixty40-purple${isBuildPhase ? '/40' : ''} to-indigo-500${isBuildPhase ? '/40' : ''}`;
               
+              const stats = builderStats.find(
+                (stat: any) => stat.builder?.name.toLowerCase().includes(isHarry ? 'harry' : 'marcos')
+              );
+              
               return (
                 <motion.div 
                   key={index}
@@ -79,26 +84,26 @@ export const BattleCard = () => {
                     <div className={`absolute -inset-1 rounded-full bg-gradient-to-r ${gradientClass} blur-sm opacity-70`}></div>
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/20">
                       <img
-                        src={BUILDERS[index].avatar}
+                        src={stats?.builder?.avatar_url || builder.builderAvatar}
                         alt={builder.builderName}
                         className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
                   
-                  <h3 className="font-bold text-xl">{builder.builderName}</h3>
+                  <h3 className="font-bold text-xl">{stats?.builder?.name || builder.builderName}</h3>
                   <p className="text-xs text-muted-foreground italic mb-3">
-                    {index === 0 ? "Puts the VC into vibe coding" : "Speed. Sass. SaaS."}
+                    {stats?.builder?.tagline || (isHarry ? "Puts the VC into vibe coding" : "Speed. Sass. SaaS.")}
                   </p>
                   
                   <div className="flex items-center gap-3 mb-3">
                     <div className="flex items-center text-sm">
                       <Trophy size={14} className={`mr-1 text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
-                      <span>{BUILDERS[index].wins} Wins</span>
+                      <span>{stats?.wins || 0} Wins</span>
                     </div>
                     <div className="flex items-center text-sm">
                       <Package size={14} className={`mr-1 text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
-                      <span>{BUILDERS[index].products} Products</span>
+                      <span>{stats?.products_launched || 0} Products</span>
                     </div>
                   </div>
                   
@@ -186,4 +191,3 @@ export const BattleCard = () => {
     </motion.div>
   );
 };
-

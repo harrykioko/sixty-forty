@@ -89,8 +89,8 @@ const AdminDashboard = () => {
     };
   };
   
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', { 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric', 
       year: 'numeric' 
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <Badge className="mb-2 bg-sixty40-purple/20 text-sixty40-purple">
-                    Week {CURRENT_WEEK.number}
+                    Week {CURRENT_WEEK.id.split('-')[1] || '1'}
                   </Badge>
                   <CardTitle className="text-2xl md:text-3xl">{CURRENT_WEEK.theme}</CardTitle>
                   <CardDescription className="mt-1">

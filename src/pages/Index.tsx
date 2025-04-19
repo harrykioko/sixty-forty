@@ -7,6 +7,7 @@ import { HowItWorksSection } from "@/components/sections/how-it-works-section";
 import { PastBattlesSection } from "@/components/sections/past-battles-section";
 import { BuildersSection } from "@/components/sections/builders-section";
 import { SiteFooter } from "@/components/layouts/site-footer";
+import { StickyCta } from "@/components/ui/sticky-cta";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
       </main>
 
       <SiteFooter />
+      <StickyCta />
     </div>
   );
 };

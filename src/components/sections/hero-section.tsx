@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
 import CountdownTimer from "@/components/ui/countdown-timer";
 

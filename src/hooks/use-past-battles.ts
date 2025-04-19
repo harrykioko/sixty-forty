@@ -44,7 +44,14 @@ const fetchPastBattles = async () => {
     .order('number', { ascending: false });
 
   if (error) throw error;
-  return data as PastBattle[];
+  
+  // Ensure products is always an array for each battle
+  const formattedData = data.map((battle: any) => ({
+    ...battle,
+    products: Array.isArray(battle.products) ? battle.products : []
+  }));
+  
+  return formattedData as PastBattle[];
 };
 
 export const usePastBattles = () => {

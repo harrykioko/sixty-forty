@@ -7,7 +7,7 @@ import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
 
 export const HeroSection = () => {
   return (
-    <section className="py-16 md:py-24 px-4">
+    <section className="py-12 md:py-20 px-4">
       <div className="container mx-auto max-w-screen-xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <motion.div
@@ -18,17 +18,42 @@ export const HeroSection = () => {
             <Badge className="mb-4 bg-sixty40-purple text-white px-3 py-1 text-sm">
               This Week's Battle
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              <span>Weekly Micro-SaaS</span>{" "}
-              <span className="gradient-text">Competition</span>
-            </h1>
-            <p className="text-xl mb-6 text-muted-foreground max-w-lg">
-              Every week, Harry and Marcos build competing MVPs and release them into the wild. Vote for your favorite and help crown this week's champion!
-            </p>
-            <div className="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex">
+            
+            <motion.h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              What if shipping fast made you rich?
+            </motion.h1>
+            
+            <motion.div 
+              className="space-y-2 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <p className="text-xl text-muted-foreground">
+                Each week, two builders go head-to-head. Two real products. One vote.
+              </p>
+              <p className="text-xl text-muted-foreground">
+                The one you choose gets <span className="text-white font-semibold">60% of everything</span> that week's products earn — forever.
+              </p>
+              <p className="text-xl text-muted-foreground">
+                The other? They still eat. Just not first.
+              </p>
+            </motion.div>
+            
+            <motion.div 
+              className="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               <Button
                 size="lg"
-                className="bg-sixty40-purple hover:bg-sixty40-purple/90 w-full sm:w-auto"
+                className="bg-sixty40-purple hover:bg-sixty40-purple/90 w-full sm:w-auto transform transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <a href="#vote-now">Vote Now</a>
@@ -36,12 +61,12 @@ export const HeroSection = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10 w-full sm:w-auto"
+                className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10 w-full sm:w-auto transform transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <a href="#how-it-works">How It Works</a>
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div

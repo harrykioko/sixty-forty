@@ -1,3 +1,4 @@
+
 // This file contains mock data for demonstration purposes
 // In a real application, this would be fetched from Supabase
 
@@ -100,6 +101,55 @@ export const PREVIOUS_WEEKS = [
     winner: "BrainBox by Marcos",
     runnerUp: "InsightHub by Harry",
     date: "March 24-31, 2025"
+  },
+  {
+    id: "week-minus-3",
+    theme: "Website Builders",
+    winner: "PageCraft by Harry",
+    runnerUp: "SiteForge by Marcos",
+    date: "March 17-24, 2025"
+  },
+  {
+    id: "week-minus-4",
+    theme: "eCommerce Solutions",
+    winner: "ShopMaster by Marcos",
+    runnerUp: "StoreFront by Harry",
+    date: "March 10-17, 2025"
+  },
+  {
+    id: "week-minus-5",
+    theme: "Social Media Tools",
+    winner: "SocialFlow by Harry",
+    runnerUp: "EngageAI by Marcos",
+    date: "March 3-10, 2025"
+  },
+  {
+    id: "week-minus-6",
+    theme: "Project Management",
+    winner: "TaskForce by Marcos",
+    runnerUp: "ProjectPro by Harry",
+    date: "February 25 - March 3, 2025"
+  },
+  {
+    id: "week-minus-7",
+    theme: "Video Editing Tools",
+    winner: "ClipMaster by Harry",
+    runnerUp: "VideoFlow by Marcos",
+    date: "February 18-25, 2025"
+  },
+  {
+    id: "week-minus-8",
+    theme: "Note-Taking Apps",
+    winner: "MemoPad by Marcos",
+    runnerUp: "QuickNotes by Harry",
+    date: "February 11-18, 2025"
+  },
+  {
+    id: "week-minus-9",
+    theme: "AI Writing Assistants",
+    winner: "WordSmith by Harry",
+    runnerUp: "ProseAI by Marcos",
+    date: "February 4-11, 2025"
   }
 ];
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Zap } from "lucide-react";
@@ -154,7 +153,7 @@ export const HeroSection = () => {
                         {/* Builder name and tagline */}
                         <h3 className="font-bold text-xl">{builder.builderName}</h3>
                         <p className="text-xs text-muted-foreground italic mb-3">
-                          {isHarry ? "Builds before breakfast" : "Speed. Sass. SaaS."}
+                          {index === 0 ? "Puts the VC into vibe coding" : "Speed. Sass. SaaS."}
                         </p>
                         
                         {/* Stats with icons */}

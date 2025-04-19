@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { Clock, Trophy, Package, ExternalLink, Zap } from "lucide-react";
+import { Clock, Trophy, Package, ExternalLink, Zap, Vote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
@@ -87,6 +86,20 @@ export const BattleCard = () => {
                       <span>{BUILDERS[index].products} Products</span>
                     </div>
                   </div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex items-center gap-2 px-3 py-1.5 mb-3 rounded-full text-sm font-medium bg-gradient-to-r ${gradientClass} bg-opacity-10 backdrop-blur-sm border border-white/10`}
+                    style={{ 
+                      background: `linear-gradient(90deg, ${isHarry ? '#f9731620' : '#0ea5e920'} 0%, ${isHarry ? '#d946ef20' : '#9b87f520'} 100%)`,
+                    }}
+                  >
+                    <Vote size={14} className={`text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
+                    <span className="animate-pulse-slow">
+                      {index === 0 ? '42' : '38'} votes
+                    </span>
+                  </motion.div>
                   
                   <Button
                     size="sm"

@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
 import CountdownTimer from "@/components/ui/countdown-timer";
 
@@ -17,10 +15,6 @@ export const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Badge className="mb-4 bg-sixty40-purple text-white px-3 py-1 text-sm">
-              This Week's Battle
-            </Badge>
-            
             <motion.h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
               initial={{ opacity: 0, y: 30 }}

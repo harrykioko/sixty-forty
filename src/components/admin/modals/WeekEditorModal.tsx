@@ -3,6 +3,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar } from "lucide-react";
+import { cn } from "@/lib/utils"; // Add this import
 import { Week } from "@/types/admin";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";

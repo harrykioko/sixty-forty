@@ -12,26 +12,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BattleCard } from "./past-battles/battle-card";
 import { OlderBattlesList } from "./past-battles/older-battles-list";
+import { LoadingState } from "./past-battles/loading-state";
+import { ErrorState } from "./past-battles/error-state";
+import { EmptyState } from "./past-battles/empty-state";
 
 export const PastBattlesSection = () => {
   const { data: pastBattles, isLoading, error } = usePastBattles();
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Get the three most recent battles
-  const recentBattles = pastBattles?.slice(0, 3) ?? [];
-  // Get the remaining battles
-  const olderBattles = pastBattles?.slice(3) ?? [];
-
   if (isLoading) {
     return (
       <section id="archive" className="py-16 px-4">
         <div className="container mx-auto max-w-screen-xl">
-          <div className="text-center mb-12">
-            <Badge className="mb-2 bg-sixty40-blue text-white animate-pulse">
-              Loading...
-            </Badge>
-          </div>
+          <LoadingState />
         </div>
       </section>
     );
@@ -41,11 +35,7 @@ export const PastBattlesSection = () => {
     return (
       <section id="archive" className="py-16 px-4">
         <div className="container mx-auto max-w-screen-xl">
-          <div className="text-center mb-12">
-            <Badge className="mb-2 bg-destructive text-white">
-              Error loading past battles
-            </Badge>
-          </div>
+          <ErrorState />
         </div>
       </section>
     );
@@ -55,21 +45,16 @@ export const PastBattlesSection = () => {
     return (
       <section id="archive" className="py-16 px-4">
         <div className="container mx-auto max-w-screen-xl">
-          <div className="text-center mb-12">
-            <Badge className="mb-2 bg-sixty40-purple text-white text-xl">
-              Paradigm shifting shit is imminent
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              Battle Archive
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Stay tuned for epic product showdowns that will redefine innovation.
-            </p>
-          </div>
+          <EmptyState />
         </div>
       </section>
     );
   }
+
+  // Get the three most recent battles
+  const recentBattles = pastBattles.slice(0, 3);
+  // Get the remaining battles
+  const olderBattles = pastBattles.slice(3);
 
   return (
     <section id="archive" className="py-16 px-4">

@@ -8,7 +8,15 @@ import CountdownTimer from "@/components/ui/countdown-timer";
 
 const isBuildPhase = true; // This should be determined by the actual date logic later
 
+// Extract week number from the ID (e.g., "week-1" -> 1)
+const getWeekNumber = (weekId: string) => {
+  const match = weekId.match(/week-(\d+)/);
+  return match ? match[1] : "1"; // Default to 1 if no match
+};
+
 export const BattleCard = () => {
+  const weekNumber = getWeekNumber(CURRENT_WEEK.id);
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
@@ -21,7 +29,7 @@ export const BattleCard = () => {
         <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <h2 className="text-xl font-bold">Week {CURRENT_WEEK.weekNumber} Showdown</h2>
+              <h2 className="text-xl font-bold">Week {weekNumber} Showdown</h2>
               {!isBuildPhase && (
                 <Badge variant="outline" className="ml-2 bg-sixty40-dark/30 border-sixty40-purple/50 text-white animate-pulse-slow">
                   <span className="mr-1 w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
@@ -30,7 +38,7 @@ export const BattleCard = () => {
               )}
             </div>
             <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
-              <Clock size={14} className="mr-1" /> Week {CURRENT_WEEK.weekNumber}
+              <Clock size={14} className="mr-1" /> Week {weekNumber}
             </Badge>
           </div>
           
@@ -104,7 +112,7 @@ export const BattleCard = () => {
                           background: `linear-gradient(90deg, ${isHarry ? '#f9731620' : '#0ea5e920'} 0%, ${isHarry ? '#d946ef20' : '#9b87f520'} 100%)`,
                         }}
                       >
-                        <Vote size={14} className={`text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
+                        <Package size={14} className={`text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
                         <span className="animate-pulse-slow">
                           {index === 0 ? '42' : '38'} votes
                         </span>

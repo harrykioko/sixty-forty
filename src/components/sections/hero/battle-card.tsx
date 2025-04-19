@@ -1,10 +1,12 @@
+
 import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CURRENT_WEEK } from "@/data/mock-data";
+import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
 import CountdownTimer from "@/components/ui/countdown-timer";
 import { useBuilderStats } from "@/hooks/use-builder-stats";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats();
@@ -63,15 +65,20 @@ export const BattleCard = () => {
               </div>
             )}
             
-            {CURRENT_WEEK.products.map((builder, index) => {
+            {CURRENT_WEEK.products.map((product, index) => {
               const isHarry = index === 0;
               const gradientClass = isHarry 
                 ? `from-sixty40-orange${isBuildPhase ? '/40' : ''} via-sixty40-pink${isBuildPhase ? '/40' : ''} to-red-500${isBuildPhase ? '/40' : ''}`
                 : `from-sixty40-blue${isBuildPhase ? '/40' : ''} via-sixty40-purple${isBuildPhase ? '/40' : ''} to-indigo-500${isBuildPhase ? '/40' : ''}`;
               
+              // Find the builder stats for this product
               const stats = builderStats.find(
                 (stat: any) => stat.builder?.name.toLowerCase().includes(isHarry ? 'harry' : 'marcos')
               );
+
+              // Get the builder data
+              const builderName = product.builderName;
+              const builderData = BUILDERS.find(builder => builder.name === builderName);
               
               return (
                 <motion.div 
@@ -83,15 +90,23 @@ export const BattleCard = () => {
                   <div className="relative mb-3">
                     <div className={`absolute -inset-1 rounded-full bg-gradient-to-r ${gradientClass} blur-sm opacity-70`}></div>
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/20">
-                      <img
-                        src={stats?.builder?.avatar_url || builder.builderAvatar}
-                        alt={builder.builderName}
-                        className="w-full h-full object-cover"
-                      />
+                      {stats?.builder?.avatar_url || (builderData?.avatar) ? (
+                        <img
+                          src={stats?.builder?.avatar_url || builderData?.avatar}
+                          alt={builderName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                          <span className="text-lg font-semibold text-white">
+                            {builderName?.charAt(0)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   
-                  <h3 className="font-bold text-xl">{stats?.builder?.name || builder.builderName}</h3>
+                  <h3 className="font-bold text-xl">{stats?.builder?.name || builderName}</h3>
                   <p className="text-xs text-muted-foreground italic mb-3">
                     {stats?.builder?.tagline || (isHarry ? "Puts the VC into vibe coding" : "Speed. Sass. SaaS.")}
                   </p>

@@ -1,15 +1,25 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Star } from "lucide-react";
+import { Trophy, Star, ChevronDown, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PREVIOUS_WEEKS } from "@/data/mock-data";
 import PastBattleModal from "@/components/ui/past-battle-modal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const PastBattlesSection = () => {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAllBattles, setShowAllBattles] = useState(false);
+
+  // Get the three most recent battles
+  const recentBattles = PREVIOUS_WEEKS.slice(0, 3);
+  // Get the remaining battles
+  const olderBattles = PREVIOUS_WEEKS.slice(3);
 
   // Sample past battle data - in a real app, this would be fetched from Supabase
   const mockPastBattleData = {
@@ -59,10 +69,51 @@ export const PastBattlesSection = () => {
     ]
   };
 
-  const openModal = (weekIndex: number) => {
-    setSelectedWeek(weekIndex);
-    setIsModalOpen(true);
-  };
+  const BattleCard = ({ week, index }: { week: any; index: number }) => (
+    <motion.div
+      key={week.id}
+      className="glass-card p-6"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      viewport={{ once: true }}
+    >
+      <Badge className="mb-2 bg-gray-800/70 text-white">
+        {week.date}
+      </Badge>
+      <h3 className="text-xl font-bold mb-2">{week.theme}</h3>
+      <div className="space-y-3 mb-4">
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-sixty40-purple flex items-center justify-center rounded-full mr-3">
+            <Trophy size={16} className="text-white" />
+          </div>
+          <div>
+            <p className="font-medium">{week.winner}</p>
+            <p className="text-xs text-muted-foreground">Winner</p>
+          </div>
+        </div>
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full mr-3">
+            <Star size={16} className="text-white" />
+          </div>
+          <div>
+            <p className="font-medium">{week.runnerUp}</p>
+            <p className="text-xs text-muted-foreground">Runner Up</p>
+          </div>
+        </div>
+      </div>
+      <Button
+        variant="outline"
+        className="w-full border-gray-700 text-gray-300 hover:bg-gray-800/50"
+        onClick={() => {
+          setSelectedWeek(index);
+          setIsModalOpen(true);
+        }}
+      >
+        View Details
+      </Button>
+    </motion.div>
+  );
 
   return (
     <section id="archive" className="py-16 px-4">
@@ -79,58 +130,55 @@ export const PastBattlesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PREVIOUS_WEEKS.map((week, index) => (
-            <motion.div
-              key={week.id}
-              className="glass-card p-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="mb-2 bg-gray-800/70 text-white">
-                {week.date}
-              </Badge>
-              <h3 className="text-xl font-bold mb-2">{week.theme}</h3>
-              <div className="space-y-3 mb-4">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-sixty40-purple flex items-center justify-center rounded-full mr-3">
-                    <Trophy size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium">{week.winner}</p>
-                    <p className="text-xs text-muted-foreground">Winner</p>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full mr-3">
-                    <Star size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium">{week.runnerUp}</p>
-                    <p className="text-xs text-muted-foreground">Runner Up</p>
-                  </div>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                className="w-full border-gray-700 text-gray-300 hover:bg-gray-800/50"
-                onClick={() => openModal(index)}
-              >
-                View Details
-              </Button>
-            </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {recentBattles.map((week, index) => (
+            <BattleCard key={week.id} week={week} index={index} />
           ))}
         </div>
 
-        <div className="text-center mt-8">
-          <Button
-            variant="outline"
-            className="border-sixty40-purple text-sixty40-purple hover:bg-sixty40-purple/10"
-          >
-            View All Past Battles
-          </Button>
+        <div className="text-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="relative px-6 border-sixty40-purple text-sixty40-purple transition-all duration-300 hover:bg-transparent hover:border-transparent hover:text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-sixty40-purple before:to-sixty40-blue before:opacity-0 hover:before:opacity-100 before:transition-opacity before:rounded-md before:-z-10"
+              >
+                <History className="mr-2" />
+                View All Past Battles
+                <ChevronDown className="ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent 
+              className="w-[320px] bg-black/90 backdrop-blur-sm border border-white/10"
+              align="center"
+            >
+              <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
+                {olderBattles.map((week, index) => (
+                  <div 
+                    key={week.id}
+                    className="p-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+                    onClick={() => {
+                      setSelectedWeek(index + 3);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
+                        {week.date}
+                      </Badge>
+                      <Badge className="bg-sixty40-purple/20 text-sixty40-purple border border-sixty40-purple/30">
+                        Week {index + 4}
+                      </Badge>
+                    </div>
+                    <h4 className="font-medium mb-1">{week.theme}</h4>
+                    <div className="text-sm text-muted-foreground">
+                      Winner: {week.winner}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 

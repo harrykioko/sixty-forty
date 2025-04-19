@@ -1,4 +1,3 @@
-
 // This file contains mock data for demonstration purposes
 // In a real application, this would be fetched from Supabase
 
@@ -157,7 +156,7 @@ export const BUILDERS = [
   {
     name: "Harry",
     avatar: "/lovable-uploads/b93e6079-f7de-459d-b2f7-237ae698d76f.png",
-    bio: "Full-stack developer specializing in React and Node.js. Harry loves building practical tools that solve real problems and has been coding for over 8 years.",
+    bio: "Fintech VC with a single-digit handicap*. Avid horseback rider, recovering Jeopardy contestant, and the best bad magician you'll ever meet at afters. *cap",
     wins: 12,
     products: 28,
     socialLinks: {

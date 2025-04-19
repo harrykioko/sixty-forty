@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,14 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              What if shipping fast made you rich?
+              What if{" "}
+              <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent">
+                shipping fast
+              </span>{" "}
+              made you{" "}
+              <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent">
+                rich
+              </span>?
             </motion.h1>
             
             <motion.div 
@@ -38,7 +46,14 @@ export const HeroSection = () => {
                 Each week, two builders go head-to-head. Two real products. One vote.
               </p>
               <p className="text-xl text-muted-foreground">
-                The one you choose gets <span className="text-white font-semibold">60% of everything</span> that week's products earn — forever.
+                The one you choose gets{" "}
+                <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent font-semibold">
+                  60% of everything
+                </span>{" "}
+                that week's products earn —{" "}
+                <span className="bg-gradient-to-r from-[#8a2be2] to-[#00bfff] bg-clip-text text-transparent font-semibold">
+                  forever
+                </span>.
               </p>
               <p className="text-xl text-muted-foreground">
                 The other? They still eat. Just not first.

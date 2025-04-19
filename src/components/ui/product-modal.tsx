@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -75,6 +74,7 @@ export const ProductModal = ({
               <button
                 className="absolute top-4 right-4 z-10 text-white bg-black/30 hover:bg-black/50 p-1.5 rounded-full transition-colors"
                 onClick={onClose}
+                aria-label="Close modal"
               >
                 <X size={20} />
               </button>

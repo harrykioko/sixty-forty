@@ -1,13 +1,14 @@
 
-import { ProductData } from "@/data/mock-data";
+import { Tables } from "@/integrations/supabase/types";
 
 export interface Week {
   id: string;
-  theme: string;
+  number: number;
   startDate: Date;
   endDate: Date;
   status: string;
-  products: ProductData[];
+  products: Product[];
+  winnerId?: string | null;
 }
 
 export interface Product {
@@ -43,8 +44,8 @@ export interface WeekManagerProps {
 }
 
 export interface BuilderSubmissionsProps {
-  products: ProductData[];
-  onEdit: (product: ProductData) => void;
+  products: Product[];
+  onEdit: (product: Product) => void;
   onAdd: (builderName: string) => void;
 }
 

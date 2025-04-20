@@ -17,7 +17,7 @@ interface WeekEditorModalProps {
 
 export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorModalProps) {
   const isEditing = Boolean(weekData);
-  const [weekNumber, setWeekNumber] = useState(weekData?.id?.split('-')[1] || '');
+  const [weekNumber, setWeekNumber] = useState(weekData?.number?.toString() || weekData?.id?.split('-')[1] || '');
   const [startDate, setStartDate] = useState<Date | undefined>(weekData?.startDate);
   const [endDate, setEndDate] = useState<Date | undefined>(weekData?.endDate);
   const [status, setStatus] = useState(weekData?.status || 'draft');
@@ -43,10 +43,10 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
 
     onSave({
       id: `week-${weekNumber}`,
+      number: parseInt(weekNumber, 10),
       startDate: startDate as Date,
       endDate: endDate as Date,
       status,
-      theme: '', // Added to maintain existing type compatibility
       products: weekData?.products || []
     });
   };

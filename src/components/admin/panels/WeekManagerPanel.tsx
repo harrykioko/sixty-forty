@@ -81,9 +81,9 @@ export const WeekManagerPanel = ({
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <div>
               <Badge className="mb-2 bg-sixty40-purple/20 text-sixty40-purple">
-                Week {currentWeek.id.split('-')[1] || '1'}
+                Week {currentWeek.number || currentWeek.id.split('-')[1] || '1'}
               </Badge>
-              <CardTitle className="text-2xl md:text-3xl">{currentWeek.theme}</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl">Battle #{currentWeek.number}</CardTitle>
               <CardDescription className="mt-1">
                 <span className="inline-flex items-center">
                   <Calendar size={14} className="mr-1 text-muted-foreground" />

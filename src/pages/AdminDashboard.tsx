@@ -56,10 +56,11 @@ const AdminDashboard = () => {
   // Transform the Supabase data to match our Week type
   const formattedWeek: Week = {
     id: battleData.currentWeek.id,
-    theme: battleData.currentWeek.theme || `Week ${battleData.currentWeek.number}`,
+    number: battleData.currentWeek.number,
     startDate: new Date(battleData.currentWeek.start_date),
     endDate: new Date(battleData.currentWeek.end_date),
     status: battleData.currentWeek.status,
+    winnerId: battleData.currentWeek.winner_id,
     products: battleData.products || []
   };
 
@@ -103,7 +104,7 @@ const AdminDashboard = () => {
             transition={{ duration: 0.3, delay: 0.1 }}
           >
             <ProductList
-              products={battleData.products}
+              products={formattedWeek.products}
               onEdit={handleEditProduct}
             />
           </motion.section>

@@ -27,6 +27,7 @@ interface Week {
 }
 
 const fetchCurrentBattle = async () => {
+  // Fetch current week with status
   const { data: currentWeek, error: weekError } = await supabase
     .from('weeks')
     .select('*')
@@ -76,3 +77,4 @@ export const useCurrentBattle = () => {
     queryFn: fetchCurrentBattle
   });
 };
+

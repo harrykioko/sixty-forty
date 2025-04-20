@@ -20,12 +20,21 @@ interface BuilderCardProps {
 }
 
 export const BuilderCard = ({ builder, index }: BuilderCardProps) => {
-  const { data: builderStats = [] } = useBuilderStats();
+  const { data: builderStats = [], isLoading, error } = useBuilderStats();
   
   // Find the stats for this builder
   const stats = builderStats.find(
     (stat: any) => stat.builder?.name.toLowerCase().includes(builder.name.toLowerCase())
   );
+
+  // If there's an error, show it
+  if (error) {
+    return (
+      <div className="glass-card p-6 text-red-500">
+        Error loading builder stats
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -51,11 +60,15 @@ export const BuilderCard = ({ builder, index }: BuilderCardProps) => {
           <div className="flex flex-wrap items-center gap-4 mb-4">
             <div className="flex items-center whitespace-nowrap">
               <Trophy size={16} className="text-sixty40-purple mr-1 flex-shrink-0" />
-              <span className="text-sm">{stats?.wins || 0} Wins</span>
+              <span className="text-sm">
+                {isLoading ? "Loading..." : stats?.wins || 0} Wins
+              </span>
             </div>
             <div className="flex items-center whitespace-nowrap">
               <Star size={16} className="text-sixty40-blue mr-1 flex-shrink-0" />
-              <span className="text-sm">{stats?.products_launched || 0} Products</span>
+              <span className="text-sm">
+                {isLoading ? "Loading..." : stats?.products_launched || 0} Products
+              </span>
             </div>
           </div>
           <p className="text-muted-foreground mb-4 break-words line-clamp-4 md:line-clamp-none">
@@ -86,3 +99,4 @@ export const BuilderCard = ({ builder, index }: BuilderCardProps) => {
     </motion.div>
   );
 };
+

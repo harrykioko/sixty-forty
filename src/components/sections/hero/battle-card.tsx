@@ -56,8 +56,8 @@ export const BattleCard = () => {
                   name={product.builders?.name || ''}
                   avatar_url={product.builders?.avatar_url}
                   tagline={stats?.builder?.tagline}
-                  wins={stats?.wins}
-                  products_launched={stats?.products_launched}
+                  wins={stats?.wins || 0}
+                  products_launched={stats?.products_launched || 0}
                   product={isBattleActive ? { name: product.name } : null}
                   isHarry={isHarry}
                   isBattleActive={isBattleActive}

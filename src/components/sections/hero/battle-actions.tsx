@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Construction, ExternalLink } from "lucide-react";
 import CountdownTimer from "@/components/ui/countdown-timer";
+import { useEffect, useState } from "react";
+import { usePastBattles } from "@/hooks/use-past-battles";
 
 interface BattleActionsProps {
   isBattleActive: boolean;
@@ -10,6 +12,15 @@ interface BattleActionsProps {
 }
 
 export const BattleActions = ({ isBattleActive, endDate }: BattleActionsProps) => {
+  const { data: pastBattles } = usePastBattles();
+  const [lastBattleId, setLastBattleId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pastBattles && pastBattles.length > 0) {
+      setLastBattleId(pastBattles[0].id);
+    }
+  }, [pastBattles]);
+
   if (isBattleActive) {
     return (
       <div className="mt-4 text-center">
@@ -41,7 +52,7 @@ export const BattleActions = ({ isBattleActive, endDate }: BattleActionsProps) =
           className="relative px-6 border-sixty40-purple text-sixty40-purple transition-all duration-300 hover:bg-transparent hover:border-transparent hover:text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-sixty40-purple before:to-sixty40-blue before:opacity-0 hover:before:opacity-100 before:transition-opacity before:rounded-md before:-z-10"
           asChild
         >
-          <a href="#last-week" className="relative z-10 flex items-center gap-2">
+          <a href={`/battle/${lastBattleId}`} className="relative z-10 flex items-center gap-2">
             See Last Week's Battle
             <ExternalLink size={14} />
           </a>

@@ -12,10 +12,14 @@ export const BattleHeader = ({ weekNumber, isBattleActive }: BattleHeaderProps) 
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center">
         <h2 className="text-xl font-bold">Week {weekNumber} Showdown</h2>
-        {isBattleActive && (
+        {isBattleActive ? (
           <Badge variant="outline" className="ml-2 bg-sixty40-dark/30 border-sixty40-purple/50 text-white animate-pulse-slow">
             <span className="mr-1 w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
             Live
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="ml-2 bg-sixty40-dark/30 border-white/20 text-white">
+            Building
           </Badge>
         )}
       </div>

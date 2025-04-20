@@ -4,12 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { AdminActionsProps } from "@/types/admin";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 export const AdminActionsPanel = ({
   currentWeek,
   onEmailSubscribers,
   onPublishBattle,
 }: AdminActionsProps) => {
+  // Fetch vote counts for the current week's products
+  const { data: voteData } = useQuery({
+    queryKey: ['voteCounts', currentWeek.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('votes')
+        .select('product_id, count')
+        .eq('week_id', currentWeek.id)
+        .then(({ data }) => {
+          // Transform the data into a map of product_id -> count
+          return data?.reduce((acc, { product_id, count }) => {
+            acc[product_id] = count;
+            return acc;
+          }, {}) || {};
+        });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!currentWeek.id,
+  });
+
   return (
     <Card className="glass-card border-white/10">
       <CardHeader>
@@ -27,9 +50,9 @@ export const AdminActionsPanel = ({
             </h4>
             {currentWeek.products.map(product => (
               <div key={product.id} className="flex justify-between items-center">
-                <span className="text-sm truncate max-w-[180px]">{product.title}</span>
+                <span className="text-sm truncate max-w-[180px]">{product.name}</span>
                 <Badge variant="outline" className="bg-white/5">
-                  {product.votes} votes
+                  {voteData?.[product.id] || 0} votes
                 </Badge>
               </div>
             ))}

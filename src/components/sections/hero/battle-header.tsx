@@ -4,15 +4,15 @@ import { Clock } from "lucide-react";
 
 interface BattleHeaderProps {
   weekNumber: number;
-  isBuildPhase: boolean;
+  isBattleActive: boolean;
 }
 
-export const BattleHeader = ({ weekNumber, isBuildPhase }: BattleHeaderProps) => {
+export const BattleHeader = ({ weekNumber, isBattleActive }: BattleHeaderProps) => {
   return (
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center">
         <h2 className="text-xl font-bold">Week {weekNumber} Showdown</h2>
-        {!isBuildPhase && (
+        {isBattleActive && (
           <Badge variant="outline" className="ml-2 bg-sixty40-dark/30 border-sixty40-purple/50 text-white animate-pulse-slow">
             <span className="mr-1 w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
             Live

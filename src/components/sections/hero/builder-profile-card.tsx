@@ -14,7 +14,7 @@ interface BuilderProfile {
     url?: string;
   } | null;
   isHarry: boolean;
-  isBuildPhase: boolean;
+  isBattleActive: boolean;
 }
 
 export const BuilderProfileCard = ({ 
@@ -25,11 +25,11 @@ export const BuilderProfileCard = ({
   products_launched = 0,
   product,
   isHarry,
-  isBuildPhase
+  isBattleActive
 }: BuilderProfile) => {
   const gradientClass = isHarry 
-    ? `from-sixty40-orange${isBuildPhase ? '/40' : ''} via-sixty40-pink${isBuildPhase ? '/40' : ''} to-red-500${isBuildPhase ? '/40' : ''}`
-    : `from-sixty40-blue${isBuildPhase ? '/40' : ''} via-sixty40-purple${isBuildPhase ? '/40' : ''} to-indigo-500${isBuildPhase ? '/40' : ''}`;
+    ? `from-sixty40-orange${isBattleActive ? '/40' : ''} via-sixty40-pink${isBattleActive ? '/40' : ''} to-red-500${isBattleActive ? '/40' : ''}`
+    : `from-sixty40-blue${isBattleActive ? '/40' : ''} via-sixty40-purple${isBattleActive ? '/40' : ''} to-indigo-500${isBattleActive ? '/40' : ''}`;
 
   return (
     <motion.div 
@@ -72,7 +72,7 @@ export const BuilderProfileCard = ({
         </div>
       </div>
       
-      {!isBuildPhase && product?.name && (
+      {isBattleActive && product?.name && (
         <>
           <motion.div
             initial={{ opacity: 0, y: 5 }}

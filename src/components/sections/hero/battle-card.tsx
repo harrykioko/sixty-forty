@@ -14,7 +14,7 @@ export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats();
   const { data: battleData, isLoading, error } = useCurrentBattle();
   
-  const isBuildPhase = battleData?.currentWeek?.status === 'live';
+  const isBattleActive = battleData?.currentWeek?.status === 'active';
 
   if (isLoading) {
     return <BattleLoadingState />;
@@ -36,33 +36,14 @@ export const BattleCard = () => {
       className="order-first lg:order-last"
     >
       <div className="relative">
-        <div className={`absolute -inset-0.5 bg-gradient-to-r ${isBuildPhase ? 'from-sixty40-purple/50 to-sixty40-blue/50' : 'from-sixty40-purple to-sixty40-blue'} rounded-lg blur opacity-75`}></div>
+        <div className={`absolute -inset-0.5 bg-gradient-to-r ${isBattleActive ? 'from-sixty40-purple/50 to-sixty40-blue/50' : 'from-sixty40-purple to-sixty40-blue'} rounded-lg blur opacity-75`}></div>
         <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
           <BattleHeader 
             weekNumber={battleData.currentWeek.number}
-            isBuildPhase={isBuildPhase}
+            isBattleActive={isBattleActive}
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {isBuildPhase && (
-              <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                <motion.div 
-                  className="bg-gradient-to-r from-sixty40-purple/50 to-sixty40-blue/50 bg-clip-text text-transparent font-bold text-2xl flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, 0, -5, 0]
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "loop"
-                  }}
-                >
-                  <Construction className="text-white" size={18} />
-                </motion.div>
-              </div>
-            )}
-            
             {battleData.products.map((product) => {
               const isHarry = product.builders?.name.toLowerCase().includes('harry');
               const stats = builderStats.find(
@@ -77,16 +58,16 @@ export const BattleCard = () => {
                   tagline={stats?.builder?.tagline}
                   wins={stats?.wins}
                   products_launched={stats?.products_launched}
-                  product={isBuildPhase ? null : { name: product.name }}
+                  product={isBattleActive ? { name: product.name } : null}
                   isHarry={isHarry}
-                  isBuildPhase={isBuildPhase}
+                  isBattleActive={isBattleActive}
                 />
               );
             })}
           </div>
           
           <BattleActions 
-            isBuildPhase={isBuildPhase}
+            isBattleActive={isBattleActive}
             endDate={battleData.currentWeek.end_date}
           />
         </div>

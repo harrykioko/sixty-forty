@@ -1,15 +1,15 @@
 
-import { ProductData } from "@/data/mock-data";
+import { Product } from "@/types/admin";
 import AdminProductCard from "./panels/product/AdminProductCard";
 import EmptyProductList from "./panels/product/EmptyProductList";
 
 interface ProductListProps {
-  products: ProductData[];
-  onEdit: (product: ProductData) => void;
+  products: Product[];
+  onEdit: (product: Product) => void;
 }
 
 const ProductList = ({ products, onEdit }: ProductListProps) => {
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return <EmptyProductList />;
   }
 

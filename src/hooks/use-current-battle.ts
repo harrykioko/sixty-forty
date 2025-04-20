@@ -27,25 +27,66 @@ interface Week {
 }
 
 const fetchCurrentBattle = async () => {
-  // Fetch current week with status
+  // First try to fetch a 'live' week
   const { data: currentWeek, error: weekError } = await supabase
     .from('weeks')
     .select('*')
     .eq('status', 'live')
-    .single();
+    .maybeSingle();
 
-  if (weekError) {
-    if (weekError.code === 'PGRST116') {
-      return { currentWeek: null, products: [] };
-    }
+  if (weekError && weekError.code !== 'PGRST116') {
     throw weekError;
   }
 
+  // If no live week found, try to find a 'building' week as fallback
   if (!currentWeek) {
-    return { currentWeek: null, products: [] };
+    const { data: buildingWeek, error: buildingWeekError } = await supabase
+      .from('weeks')
+      .select('*')
+      .eq('status', 'building')
+      .maybeSingle();
+      
+    if (buildingWeekError && buildingWeekError.code !== 'PGRST116') {
+      throw buildingWeekError;
+    }
+    
+    if (buildingWeek) {
+      // Fetch builders for a building week
+      const { data: products, error: productsError } = await supabase
+        .from('products')
+        .select(`
+          id,
+          name,
+          short_desc,
+          image_url,
+          tech_stack,
+          builder_id,
+          builders (
+            name,
+            slug,
+            avatar_url
+          )
+        `)
+        .eq('week_id', buildingWeek.id);
+  
+      if (productsError) throw productsError;
+  
+      return {
+        currentWeek: buildingWeek,
+        products: products || [],
+        isBuildingPhase: true
+      };
+    }
+    
+    // If no week found at all
+    return { 
+      currentWeek: null, 
+      products: [],
+      isBuildingPhase: false 
+    };
   }
 
-  // Fetch products associated with the current week
+  // Fetch products for live week
   const { data: products, error: productsError } = await supabase
     .from('products')
     .select(`
@@ -67,7 +108,8 @@ const fetchCurrentBattle = async () => {
 
   return {
     currentWeek,
-    products: products || []
+    products: products || [],
+    isBuildingPhase: false
   };
 };
 
@@ -77,4 +119,3 @@ export const useCurrentBattle = () => {
     queryFn: fetchCurrentBattle
   });
 };
-

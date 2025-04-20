@@ -11,7 +11,7 @@ import { StickyCta } from "@/components/ui/sticky-cta";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-sixty40-dark bg-dot-pattern">
       <Navbar />
       
       <main className="flex-grow">

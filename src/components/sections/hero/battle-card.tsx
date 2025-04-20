@@ -14,8 +14,6 @@ export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats();
   const { data: battleData, isLoading, error } = useCurrentBattle();
   
-  const isBattleActive = battleData?.currentWeek?.status === 'active';
-
   if (isLoading) {
     return <BattleLoadingState />;
   }
@@ -24,9 +22,12 @@ export const BattleCard = () => {
     return <BattleErrorState />;
   }
 
-  if (!battleData?.currentWeek || !battleData?.products?.length) {
+  if (!battleData?.currentWeek) {
     return <BattleEmptyState />;
   }
+
+  const isBattleActive = battleData.currentWeek.status === 'live';
+  const isBuilding = battleData.isBuildingPhase || battleData.currentWeek.status === 'building';
 
   return (
     <motion.div
@@ -64,10 +65,36 @@ export const BattleCard = () => {
                 />
               );
             })}
+
+            {battleData.products.length === 0 && isBuilding && (
+              <>
+                <BuilderProfileCard
+                  name="Harry"
+                  avatar_url={null}
+                  tagline="Puts the VC into vibe coding"
+                  wins={0}
+                  products_launched={0}
+                  product={null}
+                  isHarry={true}
+                  isBattleActive={false}
+                />
+                <BuilderProfileCard
+                  name="Marcos"
+                  avatar_url={null}
+                  tagline="Speed. Sass. SaaS."
+                  wins={0}
+                  products_launched={0}
+                  product={null}
+                  isHarry={false}
+                  isBattleActive={false}
+                />
+              </>
+            )}
           </div>
           
           <BattleActions 
             isBattleActive={isBattleActive}
+            isBuilding={isBuilding}
             endDate={battleData.currentWeek.end_date}
           />
         </div>

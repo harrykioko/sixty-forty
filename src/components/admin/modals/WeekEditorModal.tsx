@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -32,7 +33,6 @@ interface WeekEditorModalProps {
 export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorModalProps) {
   const isEditing = Boolean(weekData);
   const [weekNumber, setWeekNumber] = useState(weekData?.id?.split('-')[1] || '');
-  const [theme, setTheme] = useState(weekData?.theme || '');
   const [startDate, setStartDate] = useState<Date | undefined>(weekData?.startDate);
   const [endDate, setEndDate] = useState<Date | undefined>(weekData?.endDate);
   const [status, setStatus] = useState(weekData?.status || 'draft');
@@ -42,7 +42,6 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
     const newErrors: Record<string, string> = {};
     
     if (!weekNumber) newErrors.weekNumber = "Week number is required";
-    if (!theme) newErrors.theme = "Theme is required";
     if (!startDate) newErrors.startDate = "Start date is required";
     if (!endDate) newErrors.endDate = "End date is required";
     
@@ -59,10 +58,10 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
 
     onSave({
       id: `week-${weekNumber}`,
-      theme,
       startDate: startDate as Date,
       endDate: endDate as Date,
       status,
+      theme: '', // Added to maintain existing type compatibility
       products: weekData?.products || []
     });
   };
@@ -93,19 +92,6 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
               />
               {errors.weekNumber && (
                 <span className="text-sm text-red-500">{errors.weekNumber}</span>
-              )}
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="theme">Week Theme</Label>
-              <Input
-                id="theme"
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-                className={errors.theme ? "border-red-500" : ""}
-              />
-              {errors.theme && (
-                <span className="text-sm text-red-500">{errors.theme}</span>
               )}
             </div>
 
@@ -199,3 +185,4 @@ export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorM
     </Dialog>
   );
 }
+

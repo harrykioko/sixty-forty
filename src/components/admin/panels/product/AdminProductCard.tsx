@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ProductData } from "@/data/mock-data";
+import { Product } from "@/types/admin";
 
 interface AdminProductCardProps {
-  product: ProductData;
-  onEdit: (product: ProductData) => void;
+  product: Product;
+  onEdit: (product: Product) => void;
 }
 
 const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
@@ -23,6 +23,15 @@ const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
     });
   };
 
+  // Handle different product data structures
+  const productTitle = product.title || product.name;
+  const productDescription = product.shortDescription || product.short_desc;
+  const productImage = product.image || product.image_url;
+  const builderName = product.builderName || (product.builders?.name || "Unknown");
+  
+  // Ensure tech_stack is an array
+  const techStack = product.tech_stack || [];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -32,32 +41,32 @@ const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
       <Card className="glass-card overflow-hidden border-white/10">
         <div className="h-48 overflow-hidden relative">
           <img
-            src={product.image}
-            alt={product.title}
+            src={productImage || "/placeholder.svg"}
+            alt={productTitle}
             className="w-full h-full object-cover"
           />
           <div className="absolute top-3 right-3 flex gap-2">
-            <Badge className={`${product.builderName === "Harry" ? "bg-gradient-to-r from-orange-400 to-pink-500" : "bg-gradient-to-r from-teal-400 to-blue-500"}`}>
-              {product.builderName}
+            <Badge className={`${builderName === "Harry" ? "bg-gradient-to-r from-orange-400 to-pink-500" : "bg-gradient-to-r from-teal-400 to-blue-500"}`}>
+              {builderName}
             </Badge>
           </div>
         </div>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row justify-between gap-4">
             <div>
-              <h3 className="text-xl font-bold mb-2">{product.title}</h3>
+              <h3 className="text-xl font-bold mb-2">{productTitle}</h3>
               <p className="text-muted-foreground line-clamp-2 mb-3">
-                {product.shortDescription}
+                {productDescription}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {product.techStack.slice(0, 3).map((tech) => (
+                {techStack.slice(0, 3).map((tech) => (
                   <Badge key={tech} variant="outline" className="bg-white/5">
                     {tech}
                   </Badge>
                 ))}
-                {product.techStack.length > 3 && (
+                {techStack.length > 3 && (
                   <Badge variant="outline" className="bg-white/5">
-                    +{product.techStack.length - 3} more
+                    +{techStack.length - 3} more
                   </Badge>
                 )}
               </div>
@@ -83,7 +92,7 @@ const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete product</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete "{product.title}"? This action cannot be undone.
+                      Are you sure you want to delete "{productTitle}"? This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

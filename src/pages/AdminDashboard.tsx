@@ -10,6 +10,7 @@ import { WeekManagerPanel } from "@/components/admin/panels/WeekManagerPanel";
 import { AdminActionsPanel } from "@/components/admin/panels/AdminActionsPanel";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
 import { EmptyStateModal } from "@/components/admin/panels/EmptyStateModal";
+import { Week, Product } from "@/types/admin";
 
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -52,12 +53,22 @@ const AdminDashboard = () => {
     );
   }
 
+  // Transform the Supabase data to match our Week type
+  const formattedWeek: Week = {
+    id: battleData.currentWeek.id,
+    theme: battleData.currentWeek.theme || `Week ${battleData.currentWeek.number}`,
+    startDate: new Date(battleData.currentWeek.start_date),
+    endDate: new Date(battleData.currentWeek.end_date),
+    status: battleData.currentWeek.status,
+    products: battleData.products || []
+  };
+
   const handleAddProduct = (builderName: string) => {
     setEditingProduct({ builderName } as any);
     setIsFormOpen(true);
   };
 
-  const handleEditProduct = (product: any) => {
+  const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
     setIsFormOpen(true);
   };
@@ -79,10 +90,10 @@ const AdminDashboard = () => {
             transition={{ duration: 0.3 }}
           >
             <WeekManagerPanel
-              currentWeek={battleData.currentWeek}
+              currentWeek={formattedWeek}
               onEndVoting={() => {}}
               onCreateNewWeek={() => {}}
-              formatDate={(date) => new Date(date).toLocaleDateString()}
+              formatDate={(date) => date.toLocaleDateString()}
             />
           </motion.section>
           
@@ -103,7 +114,7 @@ const AdminDashboard = () => {
             transition={{ duration: 0.3, delay: 0.2 }}
           >
             <AdminActionsPanel
-              currentWeek={battleData.currentWeek}
+              currentWeek={formattedWeek}
               onEmailSubscribers={() => {
                 toast({
                   title: "Emails queued",

@@ -60,3 +60,4 @@ export const usePastBattles = () => {
     queryFn: fetchPastBattles
   });
 };
+

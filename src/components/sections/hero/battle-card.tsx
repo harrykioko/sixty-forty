@@ -3,22 +3,46 @@ import { motion } from "framer-motion";
 import { Clock, Trophy, Package, ExternalLink, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CURRENT_WEEK, BUILDERS } from "@/data/mock-data";
 import CountdownTimer from "@/components/ui/countdown-timer";
 import { useBuilderStats } from "@/hooks/use-builder-stats";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useCurrentBattle } from "@/hooks/use-current-battle";
+import { Avatar } from "@/components/ui/avatar";
 
 export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats();
-  const isBuildPhase = true; // This should be determined by the actual date logic later
-
-  // Extract week number from the ID (e.g., "week-1" -> 1)
-  const getWeekNumber = (weekId: string) => {
-    const match = weekId.match(/week-(\d+)/);
-    return match ? match[1] : "1"; // Default to 1 if no match
-  };
+  const { data: battleData, isLoading, error } = useCurrentBattle();
   
-  const weekNumber = getWeekNumber(CURRENT_WEEK.id);
+  const isBuildPhase = battleData?.currentWeek?.status === 'live';
+
+  if (isLoading) {
+    return (
+      <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
+        <div className="flex items-center justify-center h-64">
+          <p className="text-muted-foreground animate-pulse">Loading battle data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
+        <div className="flex items-center justify-center h-64">
+          <p className="text-red-500">Error loading battle data</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!battleData?.currentWeek || !battleData?.products?.length) {
+    return (
+      <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
+        <div className="flex items-center justify-center h-64">
+          <p className="text-muted-foreground">No active battle</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -32,7 +56,7 @@ export const BattleCard = () => {
         <div className="relative glass-card p-6 md:p-8 rounded-lg overflow-hidden backdrop-blur-md bg-black/20 border border-white/10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <h2 className="text-xl font-bold">Week {weekNumber} Showdown</h2>
+              <h2 className="text-xl font-bold">Week {battleData.currentWeek.number} Showdown</h2>
               {!isBuildPhase && (
                 <Badge variant="outline" className="ml-2 bg-sixty40-dark/30 border-sixty40-purple/50 text-white animate-pulse-slow">
                   <span className="mr-1 w-2 h-2 rounded-full bg-red-500 inline-block"></span> 
@@ -41,7 +65,7 @@ export const BattleCard = () => {
               )}
             </div>
             <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
-              <Clock size={14} className="mr-1" /> Week {weekNumber}
+              <Clock size={14} className="mr-1" /> Week {battleData.currentWeek.number}
             </Badge>
           </div>
           
@@ -65,8 +89,8 @@ export const BattleCard = () => {
               </div>
             )}
             
-            {CURRENT_WEEK.products.map((product, index) => {
-              const isHarry = index === 0;
+            {battleData.products.map((product, index) => {
+              const isHarry = product.builders?.name.toLowerCase().includes('harry');
               const gradientClass = isHarry 
                 ? `from-sixty40-orange${isBuildPhase ? '/40' : ''} via-sixty40-pink${isBuildPhase ? '/40' : ''} to-red-500${isBuildPhase ? '/40' : ''}`
                 : `from-sixty40-blue${isBuildPhase ? '/40' : ''} via-sixty40-purple${isBuildPhase ? '/40' : ''} to-indigo-500${isBuildPhase ? '/40' : ''}`;
@@ -75,14 +99,10 @@ export const BattleCard = () => {
               const stats = builderStats.find(
                 (stat: any) => stat.builder?.name.toLowerCase().includes(isHarry ? 'harry' : 'marcos')
               );
-
-              // Get the builder data
-              const builderName = product.builderName;
-              const builderData = BUILDERS.find(builder => builder.name === builderName);
               
               return (
                 <motion.div 
-                  key={index}
+                  key={product.id}
                   className="relative glass-card p-4 rounded-lg bg-black/20 border border-white/10 flex flex-col items-center"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
@@ -90,23 +110,23 @@ export const BattleCard = () => {
                   <div className="relative mb-3">
                     <div className={`absolute -inset-1 rounded-full bg-gradient-to-r ${gradientClass} blur-sm opacity-70`}></div>
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white/20">
-                      {stats?.builder?.avatar_url || (builderData?.avatar) ? (
+                      {product.builders?.avatar_url ? (
                         <img
-                          src={stats?.builder?.avatar_url || builderData?.avatar}
-                          alt={builderName}
+                          src={product.builders.avatar_url}
+                          alt={product.builders.name}
                           className="w-full h-full object-cover"
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-700 flex items-center justify-center">
                           <span className="text-lg font-semibold text-white">
-                            {builderName?.charAt(0)}
+                            {product.builders?.name?.charAt(0)}
                           </span>
                         </div>
                       )}
                     </div>
                   </div>
                   
-                  <h3 className="font-bold text-xl">{stats?.builder?.name || builderName}</h3>
+                  <h3 className="font-bold text-xl">{product.builders?.name}</h3>
                   <p className="text-xs text-muted-foreground italic mb-3">
                     {stats?.builder?.tagline || (isHarry ? "Puts the VC into vibe coding" : "Speed. Sass. SaaS.")}
                   </p>
@@ -122,20 +142,15 @@ export const BattleCard = () => {
                     </div>
                   </div>
                   
-                  {!isBuildPhase && (
+                  {!isBuildPhase && product.name && (
                     <>
                       <motion.div
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex items-center gap-2 px-3 py-1.5 mb-3 rounded-full text-sm font-medium bg-gradient-to-r ${gradientClass} bg-opacity-10 backdrop-blur-sm border border-white/10`}
-                        style={{ 
-                          background: `linear-gradient(90deg, ${isHarry ? '#f9731620' : '#0ea5e920'} 0%, ${isHarry ? '#d946ef20' : '#9b87f520'} 100%)`,
-                        }}
                       >
                         <Package size={14} className={`text-${isHarry ? 'sixty40-orange' : 'sixty40-blue'}`} />
-                        <span className="animate-pulse-slow">
-                          {index === 0 ? '42' : '38'} votes
-                        </span>
+                        <span>{product.name}</span>
                       </motion.div>
                       
                       <Button
@@ -146,7 +161,7 @@ export const BattleCard = () => {
                       >
                         <a href="#vote-now">
                           View Product
-                          <ExternalLink size={14} />
+                          <ExternalLink size={14} className="ml-2" />
                         </a>
                       </Button>
                     </>
@@ -198,7 +213,7 @@ export const BattleCard = () => {
             </div>
           ) : (
             <div className="mt-4 text-center">
-              <CountdownTimer targetDate={CURRENT_WEEK.endDate} />
+              <CountdownTimer targetDate={new Date(battleData.currentWeek.end_date)} />
             </div>
           )}
         </div>

@@ -44,6 +44,7 @@ const fetchCurrentBattle = async () => {
     return { currentWeek: null, products: [] };
   }
 
+  // Fetch products associated with the current week
   const { data: products, error: productsError } = await supabase
     .from('products')
     .select(`

@@ -18,17 +18,21 @@ export const AdminActionsPanel = ({
     queryFn: async () => {
       const { data, error } = await supabase
         .from('votes')
-        .select('product_id, count')
-        .eq('week_id', currentWeek.id)
-        .then(({ data }) => {
-          // Transform the data into a map of product_id -> count
-          return data?.reduce((acc, { product_id, count }) => {
-            acc[product_id] = count;
-            return acc;
-          }, {}) || {};
-        });
+        .select('product_id')
+        .eq('week_id', currentWeek.id);
+        
       if (error) throw error;
-      return data;
+      
+      // Transform the data into a map of product_id -> count
+      const voteCountMap = {};
+      data?.forEach(vote => {
+        if (!voteCountMap[vote.product_id]) {
+          voteCountMap[vote.product_id] = 0;
+        }
+        voteCountMap[vote.product_id] += 1;
+      });
+      
+      return voteCountMap;
     },
     enabled: !!currentWeek.id,
   });

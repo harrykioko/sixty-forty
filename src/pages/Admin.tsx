@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Plus, Edit, Eye, Calendar, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,22 @@ const Admin = () => {
     return <AdminAuth onAuthenticated={() => {}} />;
   }
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Logged out",
+        description: "You have been logged out successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b border-white/10 p-4">
@@ -49,13 +66,7 @@ const Admin = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => {
-                setIsAuthenticated(false);
-                toast({
-                  title: "Logged out",
-                  description: "You have been logged out successfully",
-                });
-              }}
+              onClick={handleLogout}
             >
               Sign Out
             </Button>

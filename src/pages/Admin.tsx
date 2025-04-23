@@ -1,19 +1,18 @@
-
-import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthProvider";
 import AdminAuth from "@/components/admin/AdminAuth";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
 import { CURRENT_WEEK, PREVIOUS_WEEKS } from "@/data/mock-data";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
+  const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useRequireAdminAuth();
 
   const handleLogout = async () => {
     try {
@@ -22,6 +21,7 @@ const Admin = () => {
         title: "Logged out",
         description: "You have been logged out successfully",
       });
+      navigate("/admin");
     } catch (error) {
       toast({
         title: "Error",

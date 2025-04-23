@@ -1,5 +1,5 @@
 
-import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
+import { useAuth } from "@/contexts/AuthProvider";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
 import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoadingState";
 import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCheck";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const AdminDashboard = () => {
-  const { isAuthenticated, isLoading } = useRequireAdminAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const { data: battleData, isLoading: battleLoading, error } = useCurrentBattle();
   const { toast } = useToast();
   const navigate = useNavigate();

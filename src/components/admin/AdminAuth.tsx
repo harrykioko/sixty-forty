@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,8 +14,40 @@ interface AdminAuthProps {
 
 const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check for existing session on component mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      
+      if (data.session) {
+        toast({
+          title: "Already authenticated",
+          description: "You're already logged in.",
+        });
+        onAuthenticated();
+      }
+    };
+    
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session) {
+          onAuthenticated();
+        }
+      }
+    );
+    
+    checkSession();
+    
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onAuthenticated, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +57,8 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/admin/dashboard`,
+          // Use the current URL as the redirect URL
+          emailRedirectTo: window.location.origin + "/admin",
         },
       });
 

@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,21 +19,22 @@ const Admin = () => {
   useEffect(() => {
     const handleMagicLink = async () => {
       if (window.location.hash.includes("access_token")) {
-        const { data, error } = await supabase.auth.getSessionFromUrl();
-        
-        if (error) {
+        try {
+          // Exchange the code for a session
+          await supabase.auth.exchangeCodeForSession(window.location.hash);
+          
+          // Clear the hash from the URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
+          // Redirect to dashboard
+          navigate("/admin/dashboard");
+        } catch (error) {
           toast({
             title: "Authentication Error",
             description: "Your login link has expired. Please try again.",
             variant: "destructive",
           });
           navigate("/admin");
-          return;
-        }
-
-        if (data?.session) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-          navigate("/admin/dashboard");
         }
       }
     };

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,53 +10,54 @@ export const useRequireAdminAuth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Set up auth state listener FIRST to prevent missing any auth events
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        // Only update auth state, avoid triggering navigation here
-        setIsAuthenticated(!!session);
+    // Clean the URL hash if it includes an access token (magic link flow)
+    const cleanUrl = () => {
+      if (window.location.hash && window.location.hash.includes("access_token")) {
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
-    );
+    };
 
-    // THEN check for initial session and clean URL if needed
+    // Check the current session from Supabase
     const checkSession = async () => {
-      try {
-        // Clean URL hash if present
-        if (window.location.hash && window.location.hash.includes("access_token")) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
+      const { data, error } = await supabase.auth.getSession();
 
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) throw error;
-
-        if (!session) {
-          // Only redirect if we're not already on the admin page
-          if (window.location.pathname !== '/admin') {
-            navigate('/admin');
-          }
-          setIsAuthenticated(false);
-        } else {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
+      if (error) {
         toast({
           title: "Authentication Error",
           description: error.message || "Failed to verify session",
           variant: "destructive",
         });
         setIsAuthenticated(false);
-      } finally {
         setIsLoading(false);
+        return;
       }
+
+      if (!data.session) {
+        if (window.location.pathname !== "/admin") {
+          navigate("/admin");
+        }
+        setIsAuthenticated(false);
+      } else {
+        setIsAuthenticated(true);
+      }
+
+      setIsLoading(false);
     };
+
+    // Set up auth listener to catch redirect logins (magic link success)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          setIsAuthenticated(true);
+          setIsLoading(false);
+          cleanUrl(); // important: remove tokens from URL
+        }
+      }
+    );
 
     checkSession();
 
-    // Cleanup subscription on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
   return { isAuthenticated, isLoading };

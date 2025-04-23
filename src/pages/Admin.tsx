@@ -1,6 +1,7 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, Plus, Edit, Eye, Calendar, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,21 +9,81 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import AdminAuth from "@/components/admin/AdminAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 import { CURRENT_WEEK, PREVIOUS_WEEKS } from "@/data/mock-data";
 
 const Admin = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Clean up URL hash if present
+    const hash = window.location.hash;
+    if (hash && hash.includes("access_token")) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Check authentication status
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          setIsAuthenticated(true);
+          toast({
+            title: "Authenticated",
+            description: `Welcome back, ${session.user.email}`,
+          });
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth error:", error);
+        toast({
+          title: "Authentication Error",
+          description: "Please try logging in again",
+          variant: "destructive",
+        });
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setIsAuthenticated(!!session);
+        if (!session && !isLoading) {
+          navigate("/admin");
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, toast, isLoading]);
 
   const handleAuthenticated = () => {
     setIsAuthenticated(true);
-    
     toast({
       title: "Logged in successfully",
       description: "Welcome to the admin dashboard",
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sixty40-purple"></div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (

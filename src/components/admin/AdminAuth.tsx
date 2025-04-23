@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,16 +17,11 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Check for existing session on component mount
   useEffect(() => {
     const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (data.session) {
-        toast({
-          title: "Already authenticated",
-          description: "You're already logged in.",
-        });
+      if (session) {
         onAuthenticated();
       }
     };
@@ -41,13 +35,13 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
       }
     );
     
+    // Check for existing session
     checkSession();
     
-    // Cleanup subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
-  }, [onAuthenticated, toast]);
+  }, [onAuthenticated]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +51,6 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          // Use the current URL as the redirect URL
           emailRedirectTo: window.location.origin + "/admin",
         },
       });

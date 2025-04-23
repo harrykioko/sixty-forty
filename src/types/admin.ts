@@ -1,4 +1,3 @@
-
 import { Tables } from "@/integrations/supabase/types";
 
 export interface Week {
@@ -53,4 +52,20 @@ export interface AdminActionsProps {
   currentWeek: Week;
   onEmailSubscribers: () => void;
   onPublishBattle: () => void;
+}
+
+export interface WeekData {
+  id: string;
+  number: number;
+  startDate: Date;
+  endDate: Date;
+  status: string;
+  products: Product[];
+  theme?: string;
+  totalVotes?: number;
+  winnerName?: string;
+  winnerName?: string | null;
+  startDate: Date;
+  endDate: Date;
+  created_at?: string | null;
 }

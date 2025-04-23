@@ -22,7 +22,8 @@ const Admin = () => {
     );
   }
 
-  return <AdminAuth onAuthenticated={() => navigate("/admin/dashboard")} />;
+  return <AdminAuth />;
 };
 
 export default Admin;
+

@@ -1,47 +1,27 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-interface AdminAuthProps {
-  onAuthenticated: () => void;
-}
-
-const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
+const AdminAuth = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        onAuthenticated();
+        console.log("Session set from login:", session);
       }
-    };
+    });
     
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
-          onAuthenticated();
-        }
-      }
-    );
-    
-    // Check for existing session
-    checkSession();
-    
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [onAuthenticated]);
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,3 +127,4 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
 };
 
 export default AdminAuth;
+

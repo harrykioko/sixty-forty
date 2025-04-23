@@ -1,10 +1,8 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/components/admin/AdminHeader";
-import AdminAuth from "@/components/admin/AdminAuth";
 import ProductForm from "@/components/admin/ProductForm";
 import ProductList from "@/components/admin/ProductList";
 import { WeekManagerPanel } from "@/components/admin/panels/WeekManagerPanel";
@@ -13,68 +11,15 @@ import { useCurrentBattle } from "@/hooks/use-current-battle";
 import { EmptyStateModal } from "@/components/admin/panels/EmptyStateModal";
 import { Week, Product } from "@/types/admin";
 import { supabase } from "@/integrations/supabase/client";
+import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
 
 const AdminDashboard = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { data: battleData, isLoading: battleLoading, error } = useCurrentBattle();
-
-  useEffect(() => {
-    // Clean up URL hash if present - this should run before session checks
-    if (window.location.hash && window.location.hash.includes("access_token")) {
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
-    // Check authentication status
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          setIsAuthenticated(true);
-          toast({
-            title: "Authenticated",
-            description: `Welcome back, ${session.user.email}`,
-          });
-        } else {
-          setIsAuthenticated(false);
-          navigate("/admin");
-        }
-      } catch (error) {
-        console.error("Auth error:", error);
-        toast({
-          title: "Authentication Error",
-          description: "Please try logging in again",
-          variant: "destructive",
-        });
-        setIsAuthenticated(false);
-        navigate("/admin");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkSession();
-
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
-          setIsAuthenticated(true);
-        } else if (!isLoading) {
-          setIsAuthenticated(false);
-          navigate("/admin");
-        }
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [toast, navigate, isLoading]);
+  const { isAuthenticated, isLoading } = useRequireAdminAuth();
 
   if (isLoading) {
     return (
@@ -135,7 +80,6 @@ const AdminDashboard = () => {
     );
   }
 
-  // Transform the Supabase data to match our Week type
   const formattedWeek: Week = {
     id: battleData.currentWeek.id,
     number: battleData.currentWeek.number,

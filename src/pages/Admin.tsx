@@ -20,9 +20,8 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Clean up URL hash if present
-    const hash = window.location.hash;
-    if (hash && hash.includes("access_token")) {
+    // Clean up URL hash if present - this should run before session checks
+    if (window.location.hash && window.location.hash.includes("access_token")) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
@@ -57,9 +56,11 @@ const Admin = () => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        setIsAuthenticated(!!session);
-        if (!session && !isLoading) {
-          navigate("/admin");
+        if (session) {
+          setIsAuthenticated(true);
+        } else if (!isLoading) {
+          // Instead of redirecting, just update authentication state
+          setIsAuthenticated(false);
         }
       }
     );

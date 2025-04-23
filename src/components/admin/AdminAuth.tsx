@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AdminAuthProps {
   onAuthenticated: () => void;
@@ -20,42 +21,29 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // DEVELOPMENT MODE: Bypass authentication
-    // TODO: REMOVE THIS IN PRODUCTION
-    // This bypasses both Supabase auth and admin role check
-    setTimeout(() => {
-      setIsLoading(false);
-      onAuthenticated();
-      toast({
-        title: "Development mode active",
-        description: "Authentication bypassed for testing",
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/admin/dashboard`,
+        },
       });
-    }, 1500);
 
-    // PRODUCTION CODE (commented out for now)
-    // try {
-    //   // 1. Send magic link
-    //   await supabase.auth.signInWithOtp({
-    //     email,
-    //     options: {
-    //       emailRedirectTo: `${window.location.origin}/admin/verify`
-    //     }
-    //   });
-    //
-    //   // 2. Show success message
-    //   toast({
-    //     title: "Check your email",
-    //     description: "We sent you a magic link to sign in",
-    //   });
-    // } catch (error) {
-    //   toast({
-    //     title: "Authentication failed",
-    //     description: "Please try again",
-    //     variant: "destructive",
-    //   });
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      if (error) throw error;
+
+      toast({
+        title: "Magic link sent!",
+        description: "Check your inbox to sign in to the admin dashboard.",
+      });
+    } catch (error) {
+      toast({
+        title: "Authentication failed",
+        description: error.message || "Please try again with an authorized email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -74,18 +62,18 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
             </h1>
           </Link>
           <p className="text-muted-foreground mt-2">
-            Enter your email to receive a magic link
+            Enter your admin email to receive a magic link
           </p>
         </div>
 
-        <div className="glass-card p-6">
+        <div className="glass-card p-6 border border-white/10 backdrop-blur-md rounded-lg">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Enter your admin email"
                 className="bg-black/20 border-white/10"
                 required
               />
@@ -108,6 +96,10 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
               )}
             </Button>
           </form>
+
+          <p className="text-sm text-muted-foreground mt-4 text-center">
+            Admins only. A magic link will be sent to your email.
+          </p>
         </div>
 
         <div className="text-center mt-4">

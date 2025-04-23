@@ -1,36 +1,12 @@
 
 import { useAuth } from "@/contexts/AuthProvider";
 import AdminAuth from "@/components/admin/AdminAuth";
-import AdminHeader from "@/components/admin/AdminHeader";
-import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
-import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
-import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
-import { CURRENT_WEEK, PREVIOUS_WEEKS } from "@/data/mock-data";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Admin = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({
-        title: "Logged out",
-        description: "You have been logged out successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to log out. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {

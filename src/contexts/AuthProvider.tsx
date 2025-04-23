@@ -1,8 +1,6 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 import { Session, User } from "@supabase/supabase-js";
 
 interface AuthContextProps {
@@ -24,54 +22,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { toast } = useToast();
-
   useEffect(() => {
     const initAuth = async () => {
       try {
+        // Process magic link if present
         if (window.location.hash.includes("access_token")) {
-          try {
-            await supabase.auth.exchangeCodeForSession(window.location.hash);
-            window.history.replaceState({}, document.title, window.location.pathname);
-
-            if (location.pathname === "/admin") {
-              navigate("/admin/dashboard");
-            }
-          } catch (err) {
-            toast({
-              title: "Login link expired",
-              description: "Please request a new magic link.",
-              variant: "destructive",
-            });
-            if (location.pathname !== "/admin") {
-              navigate("/admin");
-            }
-          }
+          await supabase.auth.exchangeCodeForSession(window.location.hash);
+          window.history.replaceState({}, document.title, window.location.pathname);
         }
 
+        // Retrieve session after exchange
         const { data: { session } } = await supabase.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
+        // Subscribe to future auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
           setSession(session);
           setUser(session?.user ?? null);
         });
 
-        return () => {
-          subscription.unsubscribe();
-        };
+        return () => subscription.unsubscribe();
       } catch (error) {
-        console.error("Auth init error", error);
+        console.error("Auth initialization error:", error);
         setIsLoading(false);
       }
     };
 
     initAuth();
-  }, [navigate, location, toast]);
+  }, []);
 
   const value = {
     session,

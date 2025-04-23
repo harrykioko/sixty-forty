@@ -5,14 +5,22 @@ import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoa
 import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCheck";
 import { DashboardContent } from "@/components/admin/dashboard/DashboardContent";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const { data: battleData, isLoading: battleLoading, error } = useCurrentBattle();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Redirect to login page if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/admin");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   const handleLogout = async () => {
     try {

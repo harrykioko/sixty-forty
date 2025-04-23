@@ -62,14 +62,18 @@ const AdminAuth = ({ onAuthenticated }: AdminAuthProps) => {
             </h1>
           </Link>
           <p className="text-muted-foreground mt-2">
-            Enter your admin email to receive a magic link
+            Sign in to manage weekly competitions
           </p>
         </div>
 
         <div className="glass-card p-6 border border-white/10 backdrop-blur-md rounded-lg">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email
+              </label>
               <Input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

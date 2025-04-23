@@ -5,7 +5,7 @@ import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoa
 import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCheck";
 import { DashboardContent } from "@/components/admin/dashboard/DashboardContent";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 

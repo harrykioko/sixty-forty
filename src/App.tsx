@@ -18,7 +18,13 @@ const App = () => {
 
   useEffect(() => {
     const initAuth = async () => {
-      await supabase.auth.getSession(); // hydrate session from URL hash
+      await supabase.auth.getSession(); 
+
+      // Clean up hash if present
+      if (window.location.hash.includes("access_token")) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
       setReady(true);
     };
     initAuth();
@@ -47,4 +53,3 @@ const App = () => {
 };
 
 export default App;
-

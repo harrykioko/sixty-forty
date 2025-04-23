@@ -1,4 +1,6 @@
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AdminAuth from "@/components/admin/AdminAuth";
 import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
@@ -6,12 +8,49 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
-import { supabase } from "@/integrations/supabase/client";
 import { CURRENT_WEEK, PREVIOUS_WEEKS } from "@/data/mock-data";
 
 const Admin = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useRequireAdminAuth();
+
+  useEffect(() => {
+    const handleMagicLink = async () => {
+      if (window.location.hash.includes("access_token")) {
+        const { data, error } = await supabase.auth.getSessionFromUrl();
+        
+        if (error) {
+          toast({
+            title: "Authentication Error",
+            description: "Your login link has expired. Please try again.",
+            variant: "destructive",
+          });
+          navigate("/admin");
+          return;
+        }
+
+        if (data?.session) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+          navigate("/admin/dashboard");
+        }
+      }
+    };
+
+    handleMagicLink();
+  }, [navigate, toast]);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          navigate("/admin/dashboard");
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   if (isLoading) {
     return (

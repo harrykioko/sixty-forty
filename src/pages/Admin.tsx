@@ -1,10 +1,9 @@
 
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import AdminAuth from "@/components/admin/AdminAuth";
 import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import AdminAuth from "@/components/admin/AdminAuth";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
@@ -15,56 +14,6 @@ const Admin = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useRequireAdminAuth();
-
-  useEffect(() => {
-    const handleMagicLink = async () => {
-      if (window.location.hash.includes("access_token")) {
-        try {
-          // Exchange the code for a session
-          await supabase.auth.exchangeCodeForSession(window.location.hash);
-          
-          // Clear the hash from the URL
-          window.history.replaceState({}, document.title, window.location.pathname);
-          
-          // Redirect to dashboard
-          navigate("/admin/dashboard");
-        } catch (error) {
-          toast({
-            title: "Authentication Error",
-            description: "Your login link has expired. Please try again.",
-            variant: "destructive",
-          });
-          navigate("/admin");
-        }
-      }
-    };
-
-    handleMagicLink();
-  }, [navigate, toast]);
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_IN" && session) {
-          navigate("/admin/dashboard");
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sixty40-purple"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <AdminAuth onAuthenticated={() => {}} />;
-  }
 
   const handleLogout = async () => {
     try {
@@ -81,6 +30,18 @@ const Admin = () => {
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sixty40-purple"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthenticated={() => {}} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

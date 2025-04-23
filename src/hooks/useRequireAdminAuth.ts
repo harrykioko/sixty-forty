@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,54 +11,44 @@ export const useRequireAdminAuth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Clean the URL hash if it includes an access token (magic link flow)
-    const cleanUrl = () => {
-      if (window.location.hash && window.location.hash.includes("access_token")) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    };
-
-    // Check the current session from Supabase
+    // Simplified auth check - just verify session exists
     const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      try {
+        const { data, error } = await supabase.auth.getSession();
 
-      if (error) {
-        toast({
-          title: "Authentication Error",
-          description: error.message || "Failed to verify session",
-          variant: "destructive",
-        });
+        if (error) {
+          toast({
+            title: "Authentication Error",
+            description: error.message || "Failed to verify session",
+            variant: "destructive",
+          });
+          setIsAuthenticated(false);
+          
+          if (window.location.pathname !== "/admin") {
+            navigate("/admin");
+          }
+        } else if (!data.session) {
+          setIsAuthenticated(false);
+          
+          if (window.location.pathname !== "/admin") {
+            navigate("/admin");
+          }
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
         setIsAuthenticated(false);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!data.session) {
+        
         if (window.location.pathname !== "/admin") {
           navigate("/admin");
         }
-        setIsAuthenticated(false);
-      } else {
-        setIsAuthenticated(true);
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     };
 
-    // Set up auth listener to catch redirect logins (magic link success)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_IN" && session) {
-          setIsAuthenticated(true);
-          setIsLoading(false);
-          cleanUrl(); // important: remove tokens from URL
-        }
-      }
-    );
-
     checkSession();
-
-    return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
   return { isAuthenticated, isLoading };

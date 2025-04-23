@@ -1,3 +1,4 @@
+
 import { Tables } from "@/integrations/supabase/types";
 
 export interface Week {
@@ -63,9 +64,6 @@ export interface WeekData {
   products: Product[];
   theme?: string;
   totalVotes?: number;
-  winnerName?: string;
   winnerName?: string | null;
-  startDate: Date;
-  endDate: Date;
   created_at?: string | null;
 }

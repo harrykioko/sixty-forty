@@ -1,5 +1,6 @@
 // This file contains mock data for demonstration purposes
 // In a real application, this would be fetched from Supabase
+import { Product, WeekData } from "@/types/admin";
 
 export interface ProductData {
   id: string;
@@ -70,85 +71,129 @@ export const MOCK_PRODUCTS: ProductData[] = [
   }
 ];
 
-export const CURRENT_WEEK = {
+export const CURRENT_WEEK: WeekData = {
   id: "week-1",
+  number: 1,
   theme: "AI Productivity Tools",
   startDate: new Date("2025-04-15T00:00:00"),
   endDate: new Date("2025-04-21T20:00:00"), // Sunday 8PM ET
   status: "active", // "draft", "active", "completed"
-  products: MOCK_PRODUCTS
+  products: MOCK_PRODUCTS as unknown as Product[],
+  totalVotes: 90,
+  winnerName: null,
+  created_at: "2025-04-15T00:00:00"
 };
 
-export const PREVIOUS_WEEKS = [
+export const PREVIOUS_WEEKS: WeekData[] = [
   {
     id: "week-0",
+    number: 0,
     theme: "Personal Finance Apps",
-    winner: "MoneyTracker by Marcos",
-    runnerUp: "BudgetWise by Harry",
-    date: "April 7-14, 2025"
+    winnerName: "MoneyTracker by Marcos",
+    startDate: new Date("2025-04-08T00:00:00"),
+    endDate: new Date("2025-04-14T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-04-08T00:00:00"
   },
   {
     id: "week-minus-1",
+    number: -1,
     theme: "Email Automation Tools",
-    winner: "MailGenius by Harry",
-    runnerUp: "AutoBox by Marcos",
-    date: "March 31 - April 7, 2025"
+    winnerName: "MailGenius by Harry",
+    startDate: new Date("2025-04-01T00:00:00"),
+    endDate: new Date("2025-04-07T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-04-01T00:00:00"
   },
   {
     id: "week-minus-2",
+    number: -2,
     theme: "Knowledge Management",
-    winner: "BrainBox by Marcos",
-    runnerUp: "InsightHub by Harry",
-    date: "March 24-31, 2025"
+    winnerName: "BrainBox by Marcos",
+    startDate: new Date("2025-03-25T00:00:00"),
+    endDate: new Date("2025-03-31T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-03-25T00:00:00"
   },
   {
     id: "week-minus-3",
+    number: -3,
     theme: "Website Builders",
-    winner: "PageCraft by Harry",
-    runnerUp: "SiteForge by Marcos",
-    date: "March 17-24, 2025"
+    winnerName: "PageCraft by Harry",
+    startDate: new Date("2025-03-18T00:00:00"),
+    endDate: new Date("2025-03-24T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-03-18T00:00:00"
   },
   {
     id: "week-minus-4",
+    number: -4,
     theme: "eCommerce Solutions",
-    winner: "ShopMaster by Marcos",
-    runnerUp: "StoreFront by Harry",
-    date: "March 10-17, 2025"
+    winnerName: "ShopMaster by Marcos",
+    startDate: new Date("2025-03-11T00:00:00"),
+    endDate: new Date("2025-03-17T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-03-11T00:00:00"
   },
   {
     id: "week-minus-5",
+    number: -5,
     theme: "Social Media Tools",
-    winner: "SocialFlow by Harry",
-    runnerUp: "EngageAI by Marcos",
-    date: "March 3-10, 2025"
+    winnerName: "SocialFlow by Harry",
+    startDate: new Date("2025-03-04T00:00:00"),
+    endDate: new Date("2025-03-10T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-03-04T00:00:00"
   },
   {
     id: "week-minus-6",
+    number: -6,
     theme: "Project Management",
-    winner: "TaskForce by Marcos",
-    runnerUp: "ProjectPro by Harry",
-    date: "February 25 - March 3, 2025"
+    winnerName: "TaskForce by Marcos",
+    startDate: new Date("2025-02-26T00:00:00"),
+    endDate: new Date("2025-03-03T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-02-26T00:00:00"
   },
   {
     id: "week-minus-7",
+    number: -7,
     theme: "Video Editing Tools",
-    winner: "ClipMaster by Harry",
-    runnerUp: "VideoFlow by Marcos",
-    date: "February 18-25, 2025"
+    winnerName: "ClipMaster by Harry",
+    startDate: new Date("2025-02-19T00:00:00"),
+    endDate: new Date("2025-02-25T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-02-19T00:00:00"
   },
   {
     id: "week-minus-8",
+    number: -8,
     theme: "Note-Taking Apps",
-    winner: "MemoPad by Marcos",
-    runnerUp: "QuickNotes by Harry",
-    date: "February 11-18, 2025"
+    winnerName: "MemoPad by Marcos",
+    startDate: new Date("2025-02-12T00:00:00"),
+    endDate: new Date("2025-02-18T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-02-12T00:00:00"
   },
   {
     id: "week-minus-9",
+    number: -9,
     theme: "AI Writing Assistants",
-    winner: "WordSmith by Harry",
-    runnerUp: "ProseAI by Marcos",
-    date: "February 4-11, 2025"
+    winnerName: "WordSmith by Harry",
+    startDate: new Date("2025-02-05T00:00:00"),
+    endDate: new Date("2025-02-11T20:00:00"),
+    status: "completed",
+    products: [],
+    created_at: "2025-02-05T00:00:00"
   }
 ];
 

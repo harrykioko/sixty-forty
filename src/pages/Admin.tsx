@@ -2,7 +2,7 @@
 import { useToast } from "@/hooks/use-toast";
 import AdminAuth from "@/components/admin/AdminAuth";
 import { useRequireAdminAuth } from "@/hooks/useRequireAdminAuth";
-import { AdminHeader } from "@/components/admin/AdminHeader";
+import AdminHeader from "@/components/admin/AdminHeader";
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";

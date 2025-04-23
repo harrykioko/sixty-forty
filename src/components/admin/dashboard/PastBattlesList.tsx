@@ -20,7 +20,7 @@ export const PastBattlesList = ({ weeks }: PastBattlesListProps) => {
                 <div className="flex items-center gap-2 mb-2">
                   <Badge className="bg-gray-600">Completed</Badge>
                   <span className="text-muted-foreground text-sm">
-                    {new Date(week.endDate).toLocaleDateString()}
+                    {week.endDate.toLocaleDateString()}
                   </span>
                 </div>
                 <h4 className="text-xl font-bold mb-1">{week.theme}</h4>

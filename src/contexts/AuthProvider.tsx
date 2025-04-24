@@ -1,8 +1,8 @@
-
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextProps {
   session: Session | null;
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [hasProcessedMagicLink, setHasProcessedMagicLink] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
 
   const initAuth = useCallback(async () => {
     try {
@@ -60,9 +61,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       
-      // If user is authenticated and on the /admin page, redirect to dashboard
-      if (currentSession && location.pathname === "/admin") {
-        console.log("User authenticated on /admin, redirecting to dashboard");
+      // Redirect authenticated users on home to dashboard
+      if (currentSession && location.pathname === "/") {
+        console.log("User authenticated on home, redirecting to dashboard");
+        toast({
+          title: "Welcome back!",
+          description: "Redirecting you to the admin dashboard...",
+        });
         navigate("/admin/dashboard");
       }
       
@@ -71,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Auth initialization error:", error);
       setIsLoading(false);
     }
-  }, [navigate, location.pathname, hasProcessedMagicLink]);
+  }, [navigate, location.pathname, hasProcessedMagicLink, toast]);
 
   // Set up auth state change listener
   useEffect(() => {

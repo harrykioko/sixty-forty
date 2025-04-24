@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -28,12 +27,7 @@ const AdminAuth = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: "https://www.sixty40.xyz/admin/dashboard",
-        },
-      });
+      const { error } = await supabase.auth.signInWithOtp({ email });
 
       if (error) throw error;
 
@@ -127,4 +121,3 @@ const AdminAuth = () => {
 };
 
 export default AdminAuth;
-

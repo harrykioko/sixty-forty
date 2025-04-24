@@ -2,9 +2,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -13,6 +15,8 @@ const Navbar = () => {
   const scrollToHero = () => {
     document.querySelector('#hero-section')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const adminPath = isAuthenticated ? "/admin/dashboard" : "/admin";
 
   const navItems = [
     { name: "How It Works", path: "/#how-it-works" },
@@ -38,7 +42,6 @@ const Navbar = () => {
               </motion.div>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
               {navItems.map((item, index) => (
                 <motion.div
@@ -65,12 +68,11 @@ const Navbar = () => {
                   variant="outline" 
                   className="relative px-6 border-sixty40-purple text-sixty40-purple transition-all duration-300 hover:bg-transparent hover:border-transparent hover:text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-sixty40-purple before:to-sixty40-blue before:opacity-0 hover:before:opacity-100 before:transition-opacity before:rounded-md before:-z-10"
                 >
-                  <a href="/admin" className="relative z-10">Admin</a>
+                  <a href={adminPath} className="relative z-10">Admin</a>
                 </Button>
               </motion.div>
             </nav>
 
-            {/* Mobile menu button */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
@@ -85,7 +87,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <motion.div
           className="fixed inset-0 z-50 backdrop-blur-md bg-background/80 overflow-y-auto pt-20"

@@ -46,6 +46,11 @@
     min-height: 100vh;
   }
 
+  /* Make sure Radix UI popper content has correct z-index */
+  [data-radix-popper-content-wrapper] {
+    z-index: 50 !important;
+  }
+
   /* Custom font settings */
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-bold tracking-tight;

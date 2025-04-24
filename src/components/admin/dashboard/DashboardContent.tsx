@@ -20,6 +20,11 @@ export const DashboardContent = ({ battleData }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Debug log to confirm state is changing
+  React.useEffect(() => {
+    console.log("CreateBattleDialog state:", showCreateDialog);
+  }, [showCreateDialog]);
+
   if (!battleData?.currentWeek) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#1a1f2c] to-[#20143a]">

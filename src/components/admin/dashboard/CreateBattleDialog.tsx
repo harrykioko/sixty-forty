@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,11 @@ export const CreateBattleDialog = ({ open, onClose }: CreateBattleDialogProps) =
   const [weekNumber, setWeekNumber] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  
+  // Debug log to confirm mounting and open state
+  useEffect(() => {
+    console.log("CreateBattleDialog mounted — open:", open);
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,4 +140,3 @@ export const CreateBattleDialog = ({ open, onClose }: CreateBattleDialogProps) =
     </Dialog>
   );
 };
-

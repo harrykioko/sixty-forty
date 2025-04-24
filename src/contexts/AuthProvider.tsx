@@ -6,21 +6,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 interface AuthContextProps {
   session: Session | null;
-  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps>({
   session: null,
-  user: null,
   isAuthenticated: false,
   isLoading: true,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(`[Supabase] Session retrieved: ${currentSession ? 'Session exists' : 'No session'}`);
         
         setSession(currentSession);
-        setUser(currentSession?.user ?? null);
         
         if (currentSession && location.pathname === '/admin') {
           navigate("/admin/dashboard");
@@ -50,7 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      setUser(session?.user ?? null);
       
       if (session && location.pathname === '/admin') {
         navigate("/admin/dashboard");
@@ -66,7 +61,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         session,
-        user,
         isAuthenticated: !!session,
         isLoading,
       }}

@@ -16,14 +16,14 @@ import { supabase } from "@/integrations/supabase/client";
 export const DashboardContent = ({ battleData }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Debug log to confirm state is changing
+  // Debug log to verify dialog state
   React.useEffect(() => {
-    console.log("CreateBattleDialog state:", showCreateDialog);
-  }, [showCreateDialog]);
+    console.log("DASHBOARD CONTENT render — dialogOpen:", dialogOpen);
+  }, [dialogOpen]);
 
   if (!battleData?.currentWeek) {
     return (
@@ -102,7 +102,7 @@ export const DashboardContent = ({ battleData }) => {
           >
             <AdminActionsPanel
               currentWeek={formattedWeek}
-              onCreateNewBattleWeek={() => setShowCreateDialog(true)}
+              onCreateNewBattleWeek={() => setDialogOpen(true)}
               onEmailSubscribers={() => {
                 toast({
                   title: "Emails queued",
@@ -128,8 +128,8 @@ export const DashboardContent = ({ battleData }) => {
       )}
 
       <CreateBattleDialog 
-        open={showCreateDialog} 
-        onClose={() => setShowCreateDialog(false)} 
+        open={dialogOpen} 
+        onClose={() => setDialogOpen(false)} 
       />
     </div>
   );

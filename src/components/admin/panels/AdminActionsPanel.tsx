@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Week } from "@/types/admin";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useWeekManagement } from '@/hooks/use-week-management';
 import { useToast } from '@/hooks/use-toast';
-import { Plus } from 'lucide-react';
+import { Plus, Play, Stop, Trophy, ArrowRight } from 'lucide-react';
 
 interface AdminActionsPanelProps {
   currentWeek: Week;
@@ -12,6 +13,21 @@ interface AdminActionsPanelProps {
   onEmailSubscribers: () => void;
   onPublishBattle: () => void;
 }
+
+const getStatusBadgeProps = (status: string) => {
+  switch (status) {
+    case 'draft':
+      return { variant: 'secondary', children: '🟡 Draft' };
+    case 'voting':
+      return { variant: 'default', className: 'bg-green-600', children: '🟢 Voting Open' };
+    case 'active':
+      return { variant: 'default', className: 'bg-blue-600', children: '🔵 Active' };
+    case 'completed':
+      return { variant: 'default', className: 'bg-gray-600', children: '⚫ Completed' };
+    default:
+      return { variant: 'secondary', children: status };
+  }
+};
 
 export const AdminActionsPanel = ({
   currentWeek,
@@ -23,47 +39,26 @@ export const AdminActionsPanel = ({
   const { createOrUpdateWeek } = useWeekManagement(currentWeek);
   const { toast } = useToast();
 
-  const handlePublishBattle = async () => {
+  const updateWeekStatus = async (status: string) => {
     setIsLoading(true);
     try {
       await createOrUpdateWeek({
         id: currentWeek.id,
-        status: 'active'
+        status
       });
       
       toast({
-        title: "Battle Published",
-        description: "The battle is now live on the site."
+        title: "Status Updated",
+        description: `Battle week is now in ${status} status.`
       });
       
-      onPublishBattle();
+      if (status === 'active') {
+        onPublishBattle();
+      }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to publish battle. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEndVoting = async () => {
-    setIsLoading(true);
-    try {
-      await createOrUpdateWeek({
-        id: currentWeek.id,
-        status: 'completed'
-      });
-      
-      toast({
-        title: "Voting Ended",
-        description: "Voting has been closed for this battle."
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to end voting. Please try again.",
+        description: `Failed to update status to ${status}. Please try again.`,
         variant: "destructive"
       });
     } finally {
@@ -76,12 +71,13 @@ export const AdminActionsPanel = ({
     try {
       await createOrUpdateWeek({
         id: currentWeek.id,
-        winnerId: builderId
+        winnerId: builderId,
+        status: 'completed'
       });
       
       toast({
         title: "Winner Selected",
-        description: "The battle winner has been updated."
+        description: "The battle winner has been updated and battle marked as completed."
       });
     } catch (error) {
       toast({
@@ -94,9 +90,64 @@ export const AdminActionsPanel = ({
     }
   };
 
+  const renderActionButtons = () => {
+    switch (currentWeek.status) {
+      case 'draft':
+        return (
+          <>
+            <Button
+              onClick={() => updateWeekStatus('voting')}
+              className="bg-green-600 hover:bg-green-700"
+              disabled={isLoading}
+            >
+              <Play size={16} className="mr-2" />
+              Start Voting
+            </Button>
+            <Button
+              onClick={() => updateWeekStatus('active')}
+              className="bg-blue-600 hover:bg-blue-700"
+              disabled={isLoading}
+            >
+              <ArrowRight size={16} className="mr-2" />
+              Publish Battle
+            </Button>
+          </>
+        );
+      case 'voting':
+      case 'active':
+        return (
+          <>
+            <Button
+              onClick={() => updateWeekStatus('completed')}
+              variant="outline"
+              className="border-white/10"
+              disabled={isLoading}
+            >
+              <Stop size={16} className="mr-2" />
+              End Voting
+            </Button>
+            <Button
+              onClick={() => handleSelectWinner('builder_1')} // Simplified for demo
+              className="bg-sixty40-purple hover:bg-sixty40-purple/90"
+              disabled={isLoading}
+            >
+              <Trophy size={16} className="mr-2" />
+              Select Winner
+            </Button>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-background/50 backdrop-blur-lg p-6 rounded-lg border border-white/10">
-      <h2 className="text-xl font-bold">Admin Actions</h2>
+      <div className="flex items-center gap-4">
+        <h2 className="text-xl font-bold">Admin Actions</h2>
+        <Badge {...getStatusBadgeProps(currentWeek.status)} />
+      </div>
+      
       <div className="flex flex-col md:flex-row gap-4">
         <Button
           onClick={onCreateNewBattleWeek}
@@ -107,31 +158,16 @@ export const AdminActionsPanel = ({
           Create New Battle
         </Button>
         
-        <Button
-          onClick={onEmailSubscribers}
-          variant="outline"
-          className="border-white/10"
-          disabled={isLoading}
-        >
-          Email Subscribers
-        </Button>
+        {renderActionButtons()}
         
-        <Button
-          onClick={handlePublishBattle}
-          className="bg-green-600 hover:bg-green-700"
-          disabled={isLoading || currentWeek.status === 'active'}
-        >
-          Publish Battle
-        </Button>
-
-        {currentWeek.status === 'active' && (
+        {currentWeek.status !== 'draft' && (
           <Button
-            onClick={handleEndVoting}
+            onClick={onEmailSubscribers}
             variant="outline"
             className="border-white/10"
             disabled={isLoading}
           >
-            End Voting
+            Email Subscribers
           </Button>
         )}
       </div>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useWeekManagement } from '@/hooks/use-week-management';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Play, Stop, Trophy, ArrowRight } from 'lucide-react';
+import { Plus, Play, StopCircle, Trophy, ArrowRight } from 'lucide-react';
 
 interface AdminActionsPanelProps {
   currentWeek: Week;
@@ -14,20 +14,24 @@ interface AdminActionsPanelProps {
   onPublishBattle: () => void;
 }
 
-const getStatusBadgeProps = (status: string) => {
-  switch (status) {
-    case 'draft':
-      return { variant: 'secondary', children: '🟡 Draft' };
-    case 'voting':
-      return { variant: 'default', className: 'bg-green-600', children: '🟢 Voting Open' };
-    case 'active':
-      return { variant: 'default', className: 'bg-blue-600', children: '🔵 Active' };
-    case 'completed':
-      return { variant: 'default', className: 'bg-gray-600', children: '⚫ Completed' };
-    default:
-      return { variant: 'secondary', children: status };
+const statusConfig = {
+  draft: {
+    badge: { variant: "secondary" as const, label: "🟡 Draft" },
+    actions: ['voting', 'active']
+  },
+  voting: {
+    badge: { variant: "default" as const, label: "🟢 Voting Open" },
+    actions: ['active', 'completed']
+  },
+  active: {
+    badge: { variant: "outline" as const, label: "🔵 Active" },
+    actions: ['completed']
+  },
+  completed: {
+    badge: { variant: "destructive" as const, label: "⚫ Completed" },
+    actions: []
   }
-};
+} as const;
 
 export const AdminActionsPanel = ({
   currentWeek,
@@ -39,7 +43,7 @@ export const AdminActionsPanel = ({
   const { createOrUpdateWeek } = useWeekManagement(currentWeek);
   const { toast } = useToast();
 
-  const updateWeekStatus = async (status: string) => {
+  const updateWeekStatus = async (status: Week['status']) => {
     setIsLoading(true);
     try {
       await createOrUpdateWeek({
@@ -91,6 +95,8 @@ export const AdminActionsPanel = ({
   };
 
   const renderActionButtons = () => {
+    const config = statusConfig[currentWeek.status];
+    
     switch (currentWeek.status) {
       case 'draft':
         return (
@@ -123,11 +129,11 @@ export const AdminActionsPanel = ({
               className="border-white/10"
               disabled={isLoading}
             >
-              <Stop size={16} className="mr-2" />
+              <StopCircle size={16} className="mr-2" />
               End Voting
             </Button>
             <Button
-              onClick={() => handleSelectWinner('builder_1')} // Simplified for demo
+              onClick={() => handleSelectWinner('builder_1')} 
               className="bg-sixty40-purple hover:bg-sixty40-purple/90"
               disabled={isLoading}
             >
@@ -145,7 +151,7 @@ export const AdminActionsPanel = ({
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-background/50 backdrop-blur-lg p-6 rounded-lg border border-white/10">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-bold">Admin Actions</h2>
-        <Badge {...getStatusBadgeProps(currentWeek.status)} />
+        <Badge {...statusConfig[currentWeek.status].badge} />
       </div>
       
       <div className="flex flex-col md:flex-row gap-4">

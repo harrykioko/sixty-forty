@@ -7,9 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Week } from "@/types/admin";
 
 interface StatusSelectProps {
-  value: string;
+  value: Week['status'];
   onChange: (value: string) => void;
 }
 
@@ -24,7 +25,8 @@ export function StatusSelect({ value, onChange }: StatusSelectProps) {
         <SelectContent>
           <SelectItem value="draft">Draft</SelectItem>
           <SelectItem value="active">Active</SelectItem>
-          <SelectItem value="closed">Closed</SelectItem>
+          <SelectItem value="voting">Voting</SelectItem>
+          <SelectItem value="completed">Completed</SelectItem>
         </SelectContent>
       </Select>
     </div>

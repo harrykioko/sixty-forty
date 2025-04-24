@@ -6,7 +6,7 @@ export interface Week {
   number: number;
   startDate: Date;
   endDate: Date;
-  status: string;
+  status: 'draft' | 'active' | 'voting' | 'completed';
   products: Product[];
   winnerId?: string | null;
 }

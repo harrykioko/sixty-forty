@@ -1,18 +1,10 @@
 
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthProvider";
-import AdminAuth from "@/components/admin/AdminAuth";
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthProvider';
+import AdminAuth from '@/components/admin/AdminAuth';
 
 const Admin = () => {
-  const { isAuthenticated, isLoading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      navigate("/admin/dashboard");
-    }
-  }, [isAuthenticated, isLoading, navigate]);
+  const { session, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -22,7 +14,11 @@ const Admin = () => {
     );
   }
 
-  return !isAuthenticated ? <AdminAuth /> : null;
+  if (session) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return <AdminAuth />;
 };
 
 export default Admin;

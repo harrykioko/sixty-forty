@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,11 +8,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useWeekManagement } from "@/hooks/use-week-management";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface CreateBattleDialogProps {
   open: boolean;
@@ -58,8 +60,12 @@ export const CreateBattleDialog = ({ open, onClose }: CreateBattleDialogProps) =
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-background border-white/10">
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className={cn(
+        "sm:max-w-[425px] w-[95%] max-w-[500px]", 
+        "bg-background/80 backdrop-blur-md border border-white/10",
+        "animate-enter"
+      )}>
         <DialogHeader>
           <DialogTitle>New Battle</DialogTitle>
           <DialogDescription>
@@ -105,15 +111,28 @@ export const CreateBattleDialog = ({ open, onClose }: CreateBattleDialogProps) =
             />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-sixty40-purple hover:bg-sixty40-purple/90"
-            disabled={isLoading}
-          >
-            {isLoading ? "Creating..." : "Create Battle"}
-          </Button>
+          <div className="flex justify-between items-center">
+            <DialogClose asChild>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+            </DialogClose>
+
+            <Button
+              type="submit"
+              className="bg-sixty40-purple hover:bg-sixty40-purple/90"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating..." : "Create Battle"}
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
   );
 };
+

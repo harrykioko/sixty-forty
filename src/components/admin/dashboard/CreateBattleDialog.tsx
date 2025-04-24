@@ -8,17 +8,20 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useWeekManagement } from "@/hooks/use-week-management";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const CreateBattleDialog = () => {
+interface CreateBattleDialogProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const CreateBattleDialog = ({ open, onClose }: CreateBattleDialogProps) => {
   const { toast } = useToast();
   const { createOrUpdateWeek, isLoading } = useWeekManagement();
-  const [open, setOpen] = useState(false);
   const [weekNumber, setWeekNumber] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -39,11 +42,11 @@ export const CreateBattleDialog = () => {
         description: `Week ${weekNumber} has been created successfully.`,
       });
       
-      setOpen(false);
-      // Reset form
+      // Reset form and close dialog
       setWeekNumber("");
       setStartDate("");
       setEndDate("");
+      onClose();
       
     } catch (error) {
       toast({
@@ -55,13 +58,7 @@ export const CreateBattleDialog = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="mt-4 md:mt-0 bg-sixty40-purple hover:bg-sixty40-purple/90">
-          <Plus size={16} className="mr-2" />
-          Create New Battle
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px] bg-background border-white/10">
         <DialogHeader>
           <DialogTitle>New Battle</DialogTitle>

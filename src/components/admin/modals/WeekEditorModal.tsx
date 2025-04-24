@@ -1,176 +1,186 @@
-
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Week } from "@/types/admin";
-import { useWeekManagement } from "@/hooks/use-week-management";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import React, { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { WeekNumberInput } from "./components/WeekNumberInput";
-import { DatePickerField } from "./components/DatePickerField";
-import { StatusSelect } from "./components/StatusSelect";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Week } from "@/types/admin";
 import { useToast } from "@/hooks/use-toast";
-import { StopCircle } from "lucide-react";
+import { useWeekManagement } from "@/hooks/use-week-management";
 
 interface WeekEditorModalProps {
-  weekData?: Week;
-  onSave: (data: Partial<Week>) => void;
-  onClose: () => void;
   open: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentWeek: Week;
+  onSave: (weekData: Week) => void;
 }
 
-export function WeekEditorModal({ weekData, onSave, onClose, open }: WeekEditorModalProps) {
+export const WeekEditorModal = ({
+  open,
+  onOpenChange,
+  currentWeek,
+  onSave
+}: WeekEditorModalProps) => {
+  const [weekNumber, setWeekNumber] = useState<number>(currentWeek?.number || 1);
+  const [startDate, setStartDate] = useState<Date | undefined>(currentWeek?.startDate || undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(currentWeek?.endDate || undefined);
   const { toast } = useToast();
-  const { createOrUpdateWeek, isLoading: isSaving } = useWeekManagement();
-  const isEditing = Boolean(weekData);
-  
-  const [weekNumber, setWeekNumber] = useState(weekData?.number?.toString() || '');
-  const [startDate, setStartDate] = useState<Date | undefined>(weekData?.startDate);
-  const [endDate, setEndDate] = useState<Date | undefined>(weekData?.endDate);
-  const [status, setStatus] = useState<Week['status']>(weekData?.status || 'draft');
-  const [isEndingVote, setIsEndingVote] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { createOrUpdateWeek } = useWeekManagement(currentWeek);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!weekNumber) newErrors.weekNumber = "Week number is required";
-    if (!startDate) newErrors.startDate = "Start date is required";
-    if (!endDate) newErrors.endDate = "End date is required";
-    
-    if (startDate && endDate && startDate >= endDate) {
-      newErrors.endDate = "End date must be after start date";
+  useEffect(() => {
+    if (currentWeek) {
+      setWeekNumber(currentWeek.number);
+      setStartDate(currentWeek.startDate);
+      setEndDate(currentWeek.endDate);
     }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  }, [currentWeek]);
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-
+  const handleSave = async () => {
+    setIsLoading(true);
     try {
-      const weekDataToSave = {
-        id: weekData?.id || `week-${weekNumber}`,
-        number: parseInt(weekNumber, 10),
-        startDate: startDate as Date,
-        endDate: endDate as Date,
-        status,
-        products: weekData?.products || []
+      if (!startDate || !endDate) {
+        toast({
+          title: "Error",
+          description: "Please select both start and end dates.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const weekData = {
+        id: currentWeek.id,
+        number: weekNumber,
+        startDate: startDate,
+        endDate: endDate,
+        status: currentWeek.status
       };
 
-      await createOrUpdateWeek(weekDataToSave);
-      
-      toast({
-        title: `Week ${isEditing ? 'Updated' : 'Created'}`,
-        description: `Week ${weekNumber} has been ${isEditing ? 'updated' : 'created'} successfully.`
-      });
-      
-      onClose();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
+      await createOrUpdateWeek(weekData);
 
-  const handleEndVoting = async () => {
-    if (!weekData?.id) return;
-    
-    try {
-      setIsEndingVote(true);
-      await createOrUpdateWeek({
-        ...weekData,
-        status: 'completed'
-      });
-      
       toast({
-        title: "Voting Ended",
-        description: `Voting for Week ${weekData.number} has been closed.`
+        title: "Success",
+        description: "Week details saved successfully."
       });
-      
-      onClose();
+
+      onSave({
+        ...currentWeek,
+        number: weekNumber,
+        startDate: startDate,
+        endDate: endDate
+      });
+      onOpenChange(false);
     } catch (error) {
       toast({
         title: "Error",
-        description: error.message,
+        description: "Failed to save week details. Please try again.",
         variant: "destructive"
       });
     } finally {
-      setIsEndingVote(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[500px] border border-white/10 bg-background/80 backdrop-blur-lg">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-        >
-          <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Week Details" : "Create New Week"}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="grid gap-6 py-4">
-            <WeekNumberInput
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Week Details</DialogTitle>
+          <DialogDescription>
+            Make changes to the current battle week details here.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="weekNumber" className="text-right">
+              Week Number
+            </Label>
+            <Input
+              type="number"
+              id="weekNumber"
               value={weekNumber}
-              onChange={setWeekNumber}
-              error={errors.weekNumber}
-            />
-
-            <DatePickerField
-              label="Start Date"
-              date={startDate}
-              onSelect={setStartDate}
-              error={errors.startDate}
-            />
-
-            <DatePickerField
-              label="End Date"
-              date={endDate}
-              onSelect={setEndDate}
-              error={errors.endDate}
-            />
-
-            <StatusSelect
-              value={status}
-              onChange={(value) => setStatus(value as Week['status'])}
+              onChange={(e) => setWeekNumber(Number(e.target.value))}
+              className="col-span-3"
             />
           </div>
-
-          <div className="flex flex-col gap-3 mt-6">
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleSubmit}
-                disabled={isSaving}
-                className="bg-sixty40-purple hover:bg-sixty40-purple/90"
-              >
-                {isSaving ? "Saving..." : "Save Week"}
-              </Button>
-            </div>
-            
-            {weekData?.status === 'voting' && (
-              <Button
-                variant="destructive"
-                onClick={handleEndVoting}
-                disabled={isEndingVote}
-                className="w-full mt-2"
-              >
-                <StopCircle className="mr-2 h-4 w-4" />
-                {isEndingVote ? "Ending Voting..." : "End Voting"}
-              </Button>
-            )}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="startDate" className="text-right">
+              Start Date
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "col-span-3 pl-3 text-left font-normal",
+                    !startDate && "text-muted-foreground"
+                  )}
+                >
+                  {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  disabled={(date) =>
+                    date > new Date() || date < new Date('2024-01-01')
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
-        </motion.div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="endDate" className="text-right">
+              End Date
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "col-span-3 pl-3 text-left font-normal",
+                    !endDate && "text-muted-foreground"
+                  )}
+                >
+                  {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                  disabled={(date) =>
+                    date < (startDate || new Date())
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button type="submit" onClick={handleSave} disabled={isLoading}>
+            {isLoading ? "Saving..." : "Save changes"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-}
+};

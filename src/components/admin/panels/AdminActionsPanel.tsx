@@ -28,7 +28,7 @@ export const AdminActionsPanel = ({
     try {
       await createOrUpdateWeek({
         id: currentWeek.id,
-        status: 'live'
+        status: 'active'
       });
       
       toast({
@@ -53,7 +53,7 @@ export const AdminActionsPanel = ({
     try {
       await createOrUpdateWeek({
         id: currentWeek.id,
-        status: 'closed'
+        status: 'completed'
       });
       
       toast({
@@ -119,12 +119,12 @@ export const AdminActionsPanel = ({
         <Button
           onClick={handlePublishBattle}
           className="bg-green-600 hover:bg-green-700"
-          disabled={isLoading}
+          disabled={isLoading || currentWeek.status === 'active'}
         >
           Publish Battle
         </Button>
 
-        {currentWeek.status === 'live' && (
+        {currentWeek.status === 'active' && (
           <Button
             onClick={handleEndVoting}
             variant="outline"

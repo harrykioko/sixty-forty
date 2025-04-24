@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/contexts/AuthProvider";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
 import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoadingState";
@@ -15,7 +14,6 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Redirect to login page if not authenticated
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/admin");

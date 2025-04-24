@@ -12,6 +12,7 @@ import { EmptyStateModal } from "@/components/admin/panels/EmptyStateModal";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { Week, Product } from "@/types/admin";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export const DashboardContent = ({ battleData }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -32,7 +33,25 @@ export const DashboardContent = ({ battleData }) => {
           supabase.auth.signOut();
           navigate("/admin");
         }} />
-        <EmptyStateModal />
+        
+        <main className="flex-1 container mx-auto px-4 py-8 text-center">
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sixty40-purple to-sixty40-blue mb-4">build bruh</h2>
+          <p className="text-muted-foreground mb-6">
+            Start by creating a new battle week and adding some products.
+          </p>
+
+          <Button 
+            className="bg-sixty40-purple hover:bg-sixty40-purple/90"
+            onClick={() => setDialogOpen(true)}
+          >
+            Create Battle Week
+          </Button>
+        </main>
+
+        <CreateBattleDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+        />
       </div>
     );
   }

@@ -1,8 +1,8 @@
 
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
 import AdminAuth from "@/components/admin/AdminAuth";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const Admin = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -22,8 +22,7 @@ const Admin = () => {
     );
   }
 
-  return <AdminAuth />;
+  return !isAuthenticated ? <AdminAuth /> : null;
 };
 
 export default Admin;
-

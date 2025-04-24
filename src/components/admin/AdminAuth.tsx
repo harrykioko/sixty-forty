@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,36 +10,28 @@ import { supabase } from "@/integrations/supabase/client";
 
 const AdminAuth = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        console.log("Session set from login:", session);
-      }
-    });
-    
-    return () => subscription.unsubscribe();
-  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
       if (error) throw error;
 
-      toast({
-        title: "Magic link sent!",
-        description: "Check your inbox to sign in to the admin dashboard.",
-      });
+      navigate("/admin/dashboard");
     } catch (error) {
       toast({
         title: "Authentication failed",
-        description: error.message || "Please try again with an authorized email.",
+        description: error.message || "Invalid credentials",
         variant: "destructive",
       });
     } finally {
@@ -82,6 +75,20 @@ const AdminAuth = () => {
                 required
               />
             </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-1">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="bg-black/20 border-white/10"
+                required
+              />
+            </div>
             <Button
               type="submit"
               className="w-full bg-sixty40-purple hover:bg-sixty40-purple/90"
@@ -93,17 +100,13 @@ const AdminAuth = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Sending magic link...
+                  Signing in...
                 </span>
               ) : (
-                "Send Magic Link"
+                "Sign In"
               )}
             </Button>
           </form>
-
-          <p className="text-sm text-muted-foreground mt-4 text-center">
-            Admins only. A magic link will be sent to your email.
-          </p>
         </div>
 
         <div className="text-center mt-4">

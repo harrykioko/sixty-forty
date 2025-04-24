@@ -37,8 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         try {
           // Exchange the code for a session
-          await supabase.auth.exchangeCodeForSession(window.location.hash);
-          console.log("Code exchanged for session successfully");
+          const { data, error } = await supabase.auth.exchangeCodeForSession(window.location.hash);
+          if (error) throw error;
+          console.log("Code exchanged for session successfully:", data);
           
           // Clean the URL hash
           window.history.replaceState({}, document.title, window.location.pathname);
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       // Retrieve session after potential exchange
       const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+      console.log("Session retrieved from getSession:", currentSession);
       
       if (sessionError) {
         throw sessionError;

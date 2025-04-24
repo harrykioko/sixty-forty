@@ -31,7 +31,7 @@ const AdminAuth = () => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: "https://sixty40.xyz/admin/dashboard",
+          emailRedirectTo: "https://www.sixty40.xyz/admin/dashboard",
         },
       });
 

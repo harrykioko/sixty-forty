@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -8,7 +8,7 @@ import ProductList from "@/components/admin/ProductList";
 import { WeekManagerPanel } from "@/components/admin/panels/WeekManagerPanel";
 import { AdminActionsPanel } from "@/components/admin/panels/AdminActionsPanel";
 import { EmptyStateModal } from "@/components/admin/panels/EmptyStateModal";
-import CreateBattleDialog from "@/components/admin/dashboard/CreateBattleDialog";
+import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { Week, Product } from "@/types/admin";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -145,9 +145,9 @@ export const DashboardContent = ({ battleData }) => {
         />
       )}
 
-      <CreateBattleDialog 
-        open={dialogOpen} 
-        onClose={() => setDialogOpen(false)} 
+      <CreateBattleDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
       />
     </div>
   );

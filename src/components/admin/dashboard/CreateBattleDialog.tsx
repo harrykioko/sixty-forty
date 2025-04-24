@@ -18,21 +18,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { Week } from '@/types/admin';
-// Update the import of useWeekManagement - required parameter
 import { useWeekManagement } from "@/hooks/use-week-management";
 
-interface CreateBattleDialogProps {
-  onCreate: (week: Week) => void;
+export interface CreateBattleDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onCreate?: (week: Week) => void;
 }
 
-const CreateBattleDialog = ({ onCreate }: CreateBattleDialogProps) => {
+export const CreateBattleDialog = ({ open, onClose, onCreate }: CreateBattleDialogProps) => {
   const [weekNumber, setWeekNumber] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000));
-  const [open, setOpen] = useState(false);
 
-  // Inside the component, add a mock currentWeek for the initial empty state
-  // After the state declarations but before useWeekManagement is called, add:
   const emptyWeek = {
     id: '',
     number: 1,
@@ -42,10 +40,6 @@ const CreateBattleDialog = ({ onCreate }: CreateBattleDialogProps) => {
     products: []
   };
 
-  // Then update the useWeekManagement hook call to pass the emptyWeek
-  // Replace the line:
-  // const { createOrUpdateWeek } = useWeekManagement();
-  // With:
   const { createOrUpdateWeek } = useWeekManagement(emptyWeek);
 
   const handleCreate = async () => {
@@ -64,15 +58,17 @@ const CreateBattleDialog = ({ onCreate }: CreateBattleDialogProps) => {
     try {
       const createdWeek = await createOrUpdateWeek(newWeekData);
       if (createdWeek) {
-        onCreate({
-          id: createdWeek.id,
-          number: createdWeek.number,
-          startDate: new Date(createdWeek.start_date),
-          endDate: new Date(createdWeek.end_date),
-          status: createdWeek.status as 'draft' | 'active' | 'voting' | 'completed',
-          products: [],
-        });
-        setOpen(false);
+        if (onCreate) {
+          onCreate({
+            id: createdWeek.id,
+            number: createdWeek.number,
+            startDate: new Date(createdWeek.start_date),
+            endDate: new Date(createdWeek.end_date),
+            status: createdWeek.status as 'draft' | 'active' | 'voting' | 'completed',
+            products: [],
+          });
+        }
+        onClose();
       } else {
         alert('Failed to create week.');
       }
@@ -83,7 +79,7 @@ const CreateBattleDialog = ({ onCreate }: CreateBattleDialogProps) => {
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <AlertDialogTrigger asChild>
         <Button variant="outline">Create New Battle</Button>
       </AlertDialogTrigger>

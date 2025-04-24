@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar, Edit, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ export const WeekManagerPanel = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingWeek, setEditingWeek] = useState<Week | undefined>();
   const [isUpdating, setIsUpdating] = useState(false);
-  const { createOrUpdateWeek, formatDate } = useWeekManagement(currentWeek);
+  const { createOrUpdateWeek, formatDate: formatDateFromHook } = useWeekManagement(currentWeek);
   const { toast } = useToast();
 
   const isBattleActive = currentWeek.status === 'active';
@@ -137,9 +138,9 @@ export const WeekManagerPanel = ({
       </Card>
 
       <WeekEditorModal
-        weekData={editingWeek}
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onOpenChange={() => setIsModalOpen(false)}
+        currentWeek={editingWeek}
         onSave={handleSaveWeek}
       />
     </>

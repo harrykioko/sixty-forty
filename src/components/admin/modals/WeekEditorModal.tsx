@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -21,8 +22,8 @@ import { useWeekManagement } from "@/hooks/use-week-management";
 interface WeekEditorModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentWeek: Week;
-  onSave: (weekData: Week) => void;
+  currentWeek?: Week;
+  onSave: (weekData: Partial<Week>) => void;
 }
 
 export const WeekEditorModal = ({
@@ -35,7 +36,7 @@ export const WeekEditorModal = ({
   const [startDate, setStartDate] = useState<Date | undefined>(currentWeek?.startDate || undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(currentWeek?.endDate || undefined);
   const { toast } = useToast();
-  const { createOrUpdateWeek } = useWeekManagement(currentWeek);
+  const { createOrUpdateWeek } = useWeekManagement(currentWeek || {} as Week);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -59,11 +60,11 @@ export const WeekEditorModal = ({
       }
 
       const weekData = {
-        id: currentWeek.id,
+        id: currentWeek?.id,
         number: weekNumber,
         startDate: startDate,
         endDate: endDate,
-        status: currentWeek.status
+        status: currentWeek?.status
       };
 
       await createOrUpdateWeek(weekData);

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -24,6 +23,16 @@ const AdminDashboard = () => {
     }
   }, [isAuthenticated, isLoading, navigate]);
 
+  useEffect(() => {
+    if (battleError || pastBattlesError) {
+      toast({
+        title: "Error loading data",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
+  }, [battleError, pastBattlesError, toast]);
+
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -47,14 +56,6 @@ const AdminDashboard = () => {
 
   if (!isAuthenticated) {
     return <DashboardAuthCheck onLogout={handleLogout} />;
-  }
-
-  if (battleError || pastBattlesError) {
-    toast({
-      title: "Error loading data",
-      description: "Please try again later",
-      variant: "destructive",
-    });
   }
 
   const formattedPastBattles: Week[] = pastBattles?.map(battle => ({

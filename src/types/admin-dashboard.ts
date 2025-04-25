@@ -1,20 +1,10 @@
 
-import { Tables } from "@/integrations/supabase/types";
-import { Product } from "@/types/admin";
+import { Product, Week } from "@/types/admin";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
-export interface WeekData {
-  id: string;
-  number: number;
-  startDate: Date;
-  endDate: Date;
-  status: WeekStatus;
-  theme?: string;
-  totalVotes?: number;
+export interface WeekData extends Week {
   products: Product[];
-  winnerId?: string | null;
-  created_at?: string | null;
 }
 
 export interface AdminDashboardProps {

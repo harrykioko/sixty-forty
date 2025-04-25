@@ -1,12 +1,22 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { mapSupabaseProduct, mapSupabaseWeek } from '@/utils/mapSupabase';
 
 const fetchCurrentBattle = async () => {
-  // First try to fetch a 'draft' or 'active' week
   const { data: currentWeek, error: weekError } = await supabase
     .from('weeks')
-    .select('*')
+    .select(`
+      *,
+      products (
+        *,
+        builders (
+          name,
+          slug,
+          avatar_url
+        )
+      )
+    `)
     .in('status', ['draft', 'active'])
     .order('created_at', { ascending: false })
     .limit(1);
@@ -14,8 +24,6 @@ const fetchCurrentBattle = async () => {
   if (weekError) {
     throw weekError;
   }
-
-  console.log("Fetched current week from Supabase:", currentWeek);
 
   if (!currentWeek?.[0]) {
     return { 
@@ -25,30 +33,14 @@ const fetchCurrentBattle = async () => {
     };
   }
 
-  // Fetch products for the current week
-  const { data: products, error: productsError } = await supabase
-    .from('products')
-    .select(`
-      id,
-      name,
-      short_desc,
-      image_url,
-      tech_stack,
-      builder_id,
-      builders (
-        name,
-        slug,
-        avatar_url
-      )
-    `)
-    .eq('week_id', currentWeek[0].id);
-
-  if (productsError) throw productsError;
+  // Map the week and its products through our mapping functions
+  const mappedWeek = mapSupabaseWeek(currentWeek[0]);
+  const products = currentWeek[0].products?.map(mapSupabaseProduct) || [];
 
   return {
-    currentWeek: currentWeek[0],
-    products: products || [],
-    isBuildingPhase: currentWeek[0].status === 'draft'
+    currentWeek: mappedWeek,
+    products,
+    isBuildingPhase: mappedWeek.status === 'draft'
   };
 };
 

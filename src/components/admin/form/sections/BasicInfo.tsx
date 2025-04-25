@@ -1,9 +1,8 @@
-
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import ImageUpload from "../ImageUpload";
 import { useBuilders } from "@/hooks/use-builders";
+import ImageUpload from "../ImageUpload";
 import { FormValues } from "../ProductForm";
 
 interface BasicInfoProps {
@@ -14,13 +13,7 @@ interface BasicInfoProps {
   onMainImageRemove: () => void;
 }
 
-const BasicInfo = ({ 
-  register, 
-  errors, 
-  mainImage, 
-  onMainImageUpload, 
-  onMainImageRemove 
-}: BasicInfoProps) => {
+const BasicInfo = ({ register, errors, mainImage, onMainImageUpload, onMainImageRemove }: BasicInfoProps) => {
   const { data: builders = [], isLoading: buildersLoading } = useBuilders();
 
   return (

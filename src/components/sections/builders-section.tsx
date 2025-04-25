@@ -1,3 +1,4 @@
+
 import { useBuilderStats } from "@/hooks/use-builder-stats";
 import { BuilderCard } from "./builders/builder-card";
 import { BuildersSectionHeader } from "./builders/section-header";
@@ -56,7 +57,7 @@ export const BuildersSection = () => {
           {builderStats.map((builderStat, index) => (
             <BuilderCard 
               key={builderStat.id} 
-              builder={{ ...builderStat, index }} 
+              builder={{ ...builderStat, index }}
             />
           ))}
         </div>

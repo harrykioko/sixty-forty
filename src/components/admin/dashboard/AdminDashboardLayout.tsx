@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,7 +10,8 @@ import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
 import ProductForm from "@/components/admin/ProductForm";
 import { useDashboardState } from "@/hooks/use-dashboard-state";
-import { AdminDashboardProps, WeekData } from "@/types/admin-dashboard";
+import { AdminDashboardProps, DashboardState } from "@/types/admin-dashboard";
+import { Week, Product } from "@/types/admin";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
   const navigate = useNavigate();
@@ -26,18 +26,17 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     setSelectedProduct,
   } = useDashboardState();
 
-  // Format current battle data
-  const formatCurrentBattle = (): WeekData | null => {
+  const formatCurrentBattle = (): Week | null => {
     if (!currentBattle?.currentWeek) return null;
     
     return {
       id: currentBattle.currentWeek.id,
       number: currentBattle.currentWeek.number,
-      startDate: new Date(currentBattle.currentWeek.start_date),
-      endDate: new Date(currentBattle.currentWeek.end_date),
+      startDate: new Date(currentBattle.currentWeek.startDate),
+      endDate: new Date(currentBattle.currentWeek.endDate),
       status: currentBattle.currentWeek.status,
       products: currentBattle.products || [],
-      winnerId: currentBattle.currentWeek.winner_id,
+      winnerId: currentBattle.currentWeek.winnerId,
       theme: `Week ${currentBattle.currentWeek.number} Battle`,
       totalVotes: 0
     };
@@ -45,26 +44,22 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
 
   const currentFormattedBattle = formatCurrentBattle();
 
-  // Handle edit week
-  const handleEditWeek = (week: WeekData) => {
+  const handleEditWeek = (week: Week) => {
     setSelectedWeek(week);
     setWeekEditorModalOpen(true);
   };
 
-  // Handle view battle details
-  const handleViewBattleDetails = (week: WeekData) => {
+  const handleViewBattleDetails = (week: Week) => {
     setSelectedWeek(week);
     setBattleDetailsModalOpen(true);
   };
 
-  // Handle add product
-  const handleAddProduct = (week: WeekData) => {
+  const handleAddProduct = (week: Week) => {
     setSelectedWeek(week);
     setSelectedProduct(null);
     setProductFormOpen(true);
   };
 
-  // Handle end voting
   const handleEndVoting = () => {
     toast({
       title: "End Voting",
@@ -72,8 +67,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     });
   };
 
-  // Handle save week
-  const handleSaveWeek = async (weekData: Partial<WeekData>) => {
+  const handleSaveWeek = async (weekData: Partial<Week>) => {
     toast({
       title: "Week Saved",
       description: `Week ${weekData.number} has been saved.`
@@ -81,7 +75,6 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     setWeekEditorModalOpen(false);
   };
 
-  // If no current battle, show empty state
   if (!currentBattle?.currentWeek && pastBattles.length === 0) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#1a1f2c] to-[#20143a]">
@@ -154,7 +147,6 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
         )}
       </main>
 
-      {/* Modals */}
       <CreateBattleDialog
         open={state.createBattleDialogOpen}
         onClose={() => setCreateBattleDialogOpen(false)}

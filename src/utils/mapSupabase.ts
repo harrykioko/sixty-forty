@@ -1,9 +1,11 @@
 
+import { Product, Week } from "@/types/admin";
+
 export function mapSupabaseProduct(p: any): Product {
   return {
     id: p.id,
     title: p.name || '',
-    builderName: p.builders?.name || p.builder_name || '',
+    builderName: p.builders?.name || '',
     image: p.image_url || '',
     shortDescription: p.short_desc || '',
     description: p.long_desc || '',

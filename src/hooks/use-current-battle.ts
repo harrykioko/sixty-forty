@@ -34,7 +34,9 @@ const fetchCurrentBattle = async () => {
   }
 
   const mappedWeek = mapSupabaseWeek(currentWeek[0]);
-  const products = (currentWeek[0].products || []).map(mapSupabaseProduct);
+  const products = Array.isArray(currentWeek[0].products) 
+    ? currentWeek[0].products.map(mapSupabaseProduct) 
+    : [];
 
   return {
     currentWeek: mappedWeek,

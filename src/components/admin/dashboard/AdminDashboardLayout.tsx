@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,6 +12,7 @@ import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
 import ProductForm from "@/components/admin/form/ProductForm";
 import { useDashboardState } from "@/hooks/use-dashboard-state";
 import { AdminDashboardProps } from "@/types/admin-dashboard";
+import { Week } from "@/types/admin"; // Add this import
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
   const navigate = useNavigate();

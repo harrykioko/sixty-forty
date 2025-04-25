@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { useWeekManagement } from '@/hooks/use-week-management';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, CheckCircle, Hourglass, StopCircle } from 'lucide-react';
+import { StatusTimeline } from './StatusTimeline';
 
 interface AdminActionsPanelProps {
   currentWeek: Week;
@@ -72,7 +73,7 @@ export const AdminActionsPanel = ({
 
   return (
     <Card className="bg-background/50 backdrop-blur-lg border-white/10">
-      <div className="p-6 flex flex-col lg:flex-row items-start justify-between gap-6">
+      <div className="p-6 space-y-6">
         <div className="flex flex-col gap-3">
           <h2 className="text-xl font-bold tracking-tight">Admin Actions</h2>
           <div className="flex items-center gap-2">
@@ -83,7 +84,9 @@ export const AdminActionsPanel = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-auto-fit gap-3 w-full lg:w-auto min-w-[200px]">
+        <StatusTimeline currentStatus={currentWeek.status} />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-auto-fit gap-3 w-full">
           <Button
             onClick={onCreateNewBattleWeek}
             className="bg-sixty40-purple hover:bg-sixty40-purple/90 transition-colors"

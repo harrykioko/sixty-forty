@@ -15,7 +15,7 @@ export interface ProductFormValues {
   builderNotes?: string;
 }
 
-export const useProductForm = (product?: Product | null, onClose: () => void) => {
+export const useProductForm = (product: Product | null | undefined, onClose: () => void) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mainImage, setMainImage] = useState<string | null>(product?.image || null);

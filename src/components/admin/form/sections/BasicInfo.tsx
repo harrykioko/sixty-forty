@@ -4,11 +4,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useBuilders } from "@/hooks/use-builders";
 import ImageUpload from "../ImageUpload";
-import { FormValues } from "../ProductForm";
+import { ProductFormValues } from "@/hooks/use-product-form";
 
 interface BasicInfoProps {
-  register: UseFormRegister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   mainImage: string | null;
   onMainImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onMainImageRemove: () => void;

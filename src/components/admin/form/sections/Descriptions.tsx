@@ -4,11 +4,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import TechStackInput from "../TechStackInput";
 import FeaturesList from "../FeaturesList";
-import { FormValues } from "../ProductForm";
+import { ProductFormValues } from "@/hooks/use-product-form";
 
 interface DescriptionsProps {
-  register: UseFormRegister<FormValues>;
-  errors: FieldErrors<FormValues>;
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   techStack: string[];
   features: string[];
   onAddTech: (tech: string) => void;

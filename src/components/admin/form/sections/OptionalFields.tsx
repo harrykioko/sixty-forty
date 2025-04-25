@@ -4,10 +4,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import GalleryUpload from "../GalleryUpload";
-import { FormValues } from "../ProductForm";
+import { ProductFormValues } from "@/hooks/use-product-form";
 
 interface OptionalFieldsProps {
-  register: UseFormRegister<FormValues>;
+  register: UseFormRegister<ProductFormValues>;
   galleryImages: string[];
   onGalleryImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onGalleryImageRemove: (index: number) => void;

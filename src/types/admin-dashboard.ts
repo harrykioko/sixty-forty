@@ -2,12 +2,14 @@
 import { Tables } from "@/integrations/supabase/types";
 import { Product } from "@/types/admin";
 
+export type WeekStatus = "draft" | "active" | "voting" | "completed";
+
 export interface WeekData {
   id: string;
   number: number;
   startDate: Date;
   endDate: Date;
-  status: Tables<"weeks">["status"];
+  status: WeekStatus;
   theme?: string;
   totalVotes?: number;
   products: Product[];

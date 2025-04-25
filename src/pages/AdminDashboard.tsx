@@ -9,7 +9,7 @@ import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCh
 import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { WeekData } from "@/types/admin-dashboard";
+import { WeekData, WeekStatus } from "@/types/admin-dashboard";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -63,11 +63,17 @@ const AdminDashboard = () => {
     number: battle.number,
     startDate: new Date(battle.start_date),
     endDate: new Date(battle.end_date),
-    status: battle.status,
-    products: battle.products || [],
+    status: battle.status as WeekStatus,
+    products: battle.products?.map(product => ({
+      ...product,
+      techStack: product.tech_stack || [],
+      features: [],
+      votes: 0,
+      description: product.long_desc || '',
+    })) || [],
     winnerId: battle.winner_id,
     created_at: battle.created_at,
-    totalVotes: 0, // You might want to fetch this from votes table
+    totalVotes: 0,
     theme: `Week ${battle.number} Battle`
   })) || [];
 

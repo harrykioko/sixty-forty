@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar, Edit, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -142,6 +141,7 @@ export const WeekManagerPanel = ({
         onOpenChange={() => setIsModalOpen(false)}
         currentWeek={editingWeek}
         onSave={handleSaveWeek}
+        onEndVoting={onEndVoting}
       />
     </>
   );

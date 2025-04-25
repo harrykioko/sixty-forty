@@ -1,4 +1,3 @@
-
 import { Product, Week } from "@/types/admin";
 
 export function mapSupabaseProduct(p: any): Product {
@@ -15,7 +14,8 @@ export function mapSupabaseProduct(p: any): Product {
     pricing: p.pricing,
     demoLink: p.demo_url,
     builderNotes: p.builder_notes,
-    additionalImages: []
+    additionalImages: [],
+    week_id: p.week_id
   };
 }
 

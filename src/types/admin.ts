@@ -1,4 +1,3 @@
-
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
 export interface Product {
@@ -15,6 +14,7 @@ export interface Product {
   demoLink?: string;
   builderNotes?: string;
   additionalImages?: string[];
+  week_id?: string;
 }
 
 export interface Week {

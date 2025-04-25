@@ -26,7 +26,7 @@ export function StatusSelect({ value, onChange }: StatusSelectProps) {
           <SelectItem value="draft">Draft</SelectItem>
           <SelectItem value="active">Active</SelectItem>
           <SelectItem value="voting">Voting</SelectItem>
-          <SelectItem value="completed">Completed</SelectItem>
+          <SelectItem value="completed">Completed</SelectItem>   
         </SelectContent>
       </Select>
     </div>

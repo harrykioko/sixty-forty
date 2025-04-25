@@ -237,7 +237,7 @@ export type Database = {
           id?: string
           number: number
           start_date: string
-          status: string
+          status?: string
           winner_id?: string | null
         }
         Update: {

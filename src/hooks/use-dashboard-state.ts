@@ -17,13 +17,33 @@ export const useDashboardState = () => {
     setState(prev => ({ ...prev, selectedWeek: week }));
   };
 
+  const setSelectedProduct = (product: Product | null) => {
+    setState(prev => ({ ...prev, selectedProduct: product }));
+  };
+
+  const setBattleDetailsModalOpen = (open: boolean) => {
+    setState(prev => ({ ...prev, battleDetailsModalOpen: open }));
+  };
+
+  const setWeekEditorModalOpen = (open: boolean) => {
+    setState(prev => ({ ...prev, weekEditorModalOpen: open }));
+  };
+
+  const setProductFormOpen = (open: boolean) => {
+    setState(prev => ({ ...prev, productFormOpen: open }));
+  };
+
+  const setCreateBattleDialogOpen = (open: boolean) => {
+    setState(prev => ({ ...prev, createBattleDialogOpen: open }));
+  };
+
   return {
     state,
-    setCreateBattleDialogOpen: (open: boolean) => setState(prev => ({ ...prev, createBattleDialogOpen: open })),
-    setBattleDetailsModalOpen: (open: boolean) => setState(prev => ({ ...prev, battleDetailsModalOpen: open })),
-    setWeekEditorModalOpen: (open: boolean) => setState(prev => ({ ...prev, weekEditorModalOpen: open })),
-    setProductFormOpen: (open: boolean) => setState(prev => ({ ...prev, productFormOpen: open })),
     setSelectedWeek,
-    setSelectedProduct: (product: Product | null) => setState(prev => ({ ...prev, selectedProduct: product })),
+    setSelectedProduct,
+    setBattleDetailsModalOpen,
+    setWeekEditorModalOpen,
+    setProductFormOpen,
+    setCreateBattleDialogOpen,
   };
 };

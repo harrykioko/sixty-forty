@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -15,8 +14,16 @@ import { PastBattlesSection } from "@/components/admin/dashboard/sections/PastBa
 import { DashboardModals } from "@/components/admin/dashboard/modals/DashboardModals";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
-  const navigate = useNavigate();
-  const { state, setCreateBattleDialogOpen, setBattleDetailsModalOpen, setWeekEditorModalOpen, setProductFormOpen } = useDashboardState();
+  const { 
+    state, 
+    setCreateBattleDialogOpen, 
+    setBattleDetailsModalOpen, 
+    setWeekEditorModalOpen,
+    setProductFormOpen,
+    setSelectedWeek,
+    setSelectedProduct 
+  } = useDashboardState();
+
   const { 
     handleEditWeek, 
     handleViewBattleDetails, 
@@ -26,9 +33,22 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     handleSaveWeek 
   } = useDashboardActions();
 
+  const handleViewCurrentBattle = () => {
+    if (currentBattle?.currentWeek) {
+      setSelectedWeek(currentBattle.currentWeek);
+      setBattleDetailsModalOpen(true);
+    }
+  };
+
+  const handleEditCurrentBattle = () => {
+    if (currentBattle?.currentWeek) {
+      setSelectedWeek(currentBattle.currentWeek);
+      setWeekEditorModalOpen(true);
+    }
+  };
+
   const currentFormattedBattle = formatCurrentBattle(currentBattle);
 
-  // Handle empty state when no battles exist
   if (!currentBattle?.currentWeek && pastBattles.length === 0) {
     return (
       <EmptyDashboard 
@@ -47,19 +67,25 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
           onCreateBattle={() => setCreateBattleDialogOpen(true)} 
         />
         
-        {currentFormattedBattle && (
+        {currentBattle?.currentWeek && (
           <CurrentBattleSection
-            week={currentFormattedBattle}
-            onEdit={() => handleEditWeek(currentFormattedBattle)}
-            onView={() => handleViewBattleDetails(currentFormattedBattle)}
+            week={currentBattle.currentWeek}
+            onEdit={handleEditCurrentBattle}
+            onView={handleViewCurrentBattle}
           />
         )}
         
         {pastBattles.length > 0 && (
           <PastBattlesSection
             weeks={pastBattles}
-            onView={(week) => handleViewBattleDetails(week)}
-            onEdit={(week) => handleEditWeek(week)}
+            onView={(week) => {
+              setSelectedWeek(week);
+              setBattleDetailsModalOpen(true);
+            }}
+            onEdit={(week) => {
+              setSelectedWeek(week);
+              setWeekEditorModalOpen(true);
+            }}
           />
         )}
       </main>

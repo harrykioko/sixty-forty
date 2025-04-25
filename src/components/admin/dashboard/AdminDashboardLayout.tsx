@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -9,10 +8,9 @@ import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
-import ProductForm from "@/components/admin/form/ProductForm";  // Correct import path
+import ProductForm from "@/components/admin/form/ProductForm";
 import { useDashboardState } from "@/hooks/use-dashboard-state";
-import { AdminDashboardProps, DashboardState } from "@/types/admin-dashboard";
-import { Week, Product } from "@/types/admin";
+import { AdminDashboardProps } from "@/types/admin-dashboard";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
   const navigate = useNavigate();
@@ -110,17 +108,26 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
       <AdminHeader onLogout={() => navigate("/admin")} />
       
       <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <button 
-            className="bg-sixty40-purple hover:bg-sixty40-purple/90 px-4 py-2 rounded text-white"
-            onClick={() => setCreateBattleDialogOpen(true)}
-          >
-            Create New Battle
-          </button>
+        <div className="glass rounded-xl p-6 shadow-lg border border-white/10 backdrop-blur-lg">
+          <div className="flex items-center justify-between">
+            <motion.h1 
+              className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              Dashboard
+            </motion.h1>
+            <button 
+              onClick={() => setCreateBattleDialogOpen(true)}
+              className="px-6 py-3 font-semibold text-white rounded-full bg-gradient-to-r from-sixty40-purple to-sixty40-blue hover:shadow-lg hover:shadow-sixty40-purple/20 transition-all duration-300 backdrop-blur-sm"
+            >
+              Create New Battle
+            </button>
+          </div>
         </div>
         
-        {currentFormattedBattle && (
+        {currentBattle?.currentWeek && (
           <motion.section
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

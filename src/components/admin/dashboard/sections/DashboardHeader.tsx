@@ -11,7 +11,7 @@ export const DashboardHeader = ({ onCreateBattle }: DashboardHeaderProps) => {
     <div className="glass rounded-xl p-6 shadow-lg border border-white/10 backdrop-blur-lg">
       <div className="flex items-center justify-between">
         <motion.h1 
-          className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80"
+          className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}

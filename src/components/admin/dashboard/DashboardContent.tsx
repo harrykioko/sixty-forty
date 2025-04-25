@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,6 @@ export const DashboardContent = ({ battleData }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Debug log to verify dialog state
   React.useEffect(() => {
     console.log("DASHBOARD CONTENT render — dialogOpen:", dialogOpen);
   }, [dialogOpen]);
@@ -71,15 +69,12 @@ export const DashboardContent = ({ battleData }) => {
     products: battleData.products || []
   };
 
-  // Sample past battles for demonstration
   const pastWeeks: WeekData[] = [
     {
       id: 'week-14',
       number: 14,
-      startDate: new Date('2025-04-07'),
-      endDate: new Date('2025-04-14'),
-      status: 'completed',
-      products: [],
+      startDate: new Date('2025-04-07').toISOString(),
+      endDate: new Date('2025-04-14').toISOString(),
       theme: "Personal Finance Apps",
       totalVotes: 105,
       winnerName: "MoneyTracker by Marcos"
@@ -87,10 +82,8 @@ export const DashboardContent = ({ battleData }) => {
     {
       id: 'week-13',
       number: 13,
-      startDate: new Date('2025-03-31'),
-      endDate: new Date('2025-04-07'),
-      status: 'completed',
-      products: [],
+      startDate: new Date('2025-03-31').toISOString(),
+      endDate: new Date('2025-04-07').toISOString(),
       theme: "Email Automation Tools",
       totalVotes: 87,
       winnerName: "MailGenius by Harry"
@@ -98,10 +91,8 @@ export const DashboardContent = ({ battleData }) => {
     {
       id: 'week-12',
       number: 12,
-      startDate: new Date('2025-03-24'),
-      endDate: new Date('2025-03-31'),
-      status: 'completed',
-      products: [],
+      startDate: new Date('2025-03-24').toISOString(),
+      endDate: new Date('2025-03-31').toISOString(),
       theme: "Knowledge Management",
       totalVotes: 132,
       winnerName: "BrainBox by Marcos"
@@ -247,10 +238,12 @@ export const DashboardContent = ({ battleData }) => {
               builder: "Harry",
               shortDescription: "An innovative tool that helps with productivity",
               technologies: ["React", "Node.js", "MongoDB"],
-              image: "/lovable-uploads/04f69a9a-fed8-4b84-a2b4-ca270cdbf3f6.png",
-              liveDemoUrl: "https://example.com",
+              imageUrl: "/lovable-uploads/04f69a9a-fed8-4b84-a2b4-ca270cdbf3f6.png",
+              demoUrl: "https://example.com",
               features: ["Feature 1", "Feature 2", "Feature 3"],
-              isWinner: selectedBattle.winnerName?.includes("Harry") || false
+              isWinner: selectedBattle.winnerName?.includes("Harry") || false,
+              longDesc: "This is a longer description of the product that explains its features in more detail.",
+              techStack: ["React", "Node.js", "MongoDB"]
             },
             {
               id: "2",
@@ -258,10 +251,12 @@ export const DashboardContent = ({ battleData }) => {
               builder: "Marcos",
               shortDescription: "A revolutionary app for managing tasks",
               technologies: ["Vue", "Express", "PostgreSQL"],
-              image: "/lovable-uploads/b93e6079-f7de-459d-b2f7-237ae698d76f.png",
-              liveDemoUrl: "https://example.com",
+              imageUrl: "/lovable-uploads/b93e6079-f7de-459d-b2f7-237ae698d76f.png",
+              demoUrl: "https://example.com",
               features: ["Feature A", "Feature B", "Feature C"],
-              isWinner: selectedBattle.winnerName?.includes("Marcos") || false
+              isWinner: selectedBattle.winnerName?.includes("Marcos") || false,
+              longDesc: "This is a longer description of the product that explains its features in more detail.",
+              techStack: ["Vue", "Express", "PostgreSQL"]
             }
           ]}
         />

@@ -1,12 +1,16 @@
 
 export interface WeekData {
+  id?: string; // Added id field
   number: number;
   startDate: string;
   endDate: string;
   theme?: string;
+  totalVotes?: number; // Added for consistency
+  winnerName?: string; // Added for consistency
 }
 
 export interface PastProductData {
+  id?: string; // Added id field
   name: string;
   builder: string;
   isWinner: boolean;

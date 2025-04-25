@@ -3,10 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Eye } from "lucide-react";
-import { WeekData } from "@/types/admin";
+import { Week } from "@/types/admin";
 
 interface PastBattlesListProps {
-  weeks: WeekData[];
+  weeks: Week[];
 }
 
 export const PastBattlesList = ({ weeks }: PastBattlesListProps) => {
@@ -44,4 +44,4 @@ export const PastBattlesList = ({ weeks }: PastBattlesListProps) => {
       ))}
     </div>
   );
-};
+}

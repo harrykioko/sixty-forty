@@ -1,29 +1,14 @@
-
 import { Tables } from "@/integrations/supabase/types";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
-
-export interface Week {
-  id: string;
-  number: number;
-  startDate: Date;
-  endDate: Date;
-  status: 'draft' | 'active' | 'voting' | 'completed';
-  winnerId?: string | null;
-  winnerName?: string | null; // TEMPORARY: will remove when backend fully aligns
-  products?: Product[];
-  theme?: string;
-  totalVotes?: number;
-  created_at?: string;
-}
 
 export interface Product {
   id: string;
   title: string;
   builderName: string;
-  image: string; // Supabase 'image_url'
-  shortDescription: string; // Supabase 'short_desc'
-  description: string; // Supabase 'long_desc'
+  image: string;
+  shortDescription: string;
+  description: string;
   techStack: string[];
   features: string[];
   votes: number;
@@ -31,6 +16,20 @@ export interface Product {
   demoLink?: string;
   builderNotes?: string;
   additionalImages?: string[];
+}
+
+export interface Week {
+  id: string;
+  number: number;
+  startDate: Date;
+  endDate: Date;
+  status: WeekStatus;
+  winnerId?: string | null;
+  winnerName?: string | null;
+  products?: Product[];
+  theme?: string;
+  totalVotes?: number;
+  created_at?: string;
 }
 
 export interface SubmissionStatus {

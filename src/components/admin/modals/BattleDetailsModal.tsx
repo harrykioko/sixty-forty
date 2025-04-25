@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, Edit, Plus } from "lucide-react";
 import { Week, Product } from "@/types/admin";
 import { StatusTimeline } from "@/components/admin/panels/StatusTimeline";
-import { PastProductData } from "@/components/ui/past-battle-modal/types";
 import { format } from "date-fns";
+import { mapSupabaseProduct } from "@/utils/mapSupabase";
 
 interface BattleDetailsModalProps {
   week: Week;
@@ -112,49 +112,52 @@ export const BattleDetailsModal = ({
                   </div>
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {week.products.map(product => (
-                      <div 
-                        key={product.id}
-                        className="glass-card p-4 hover:bg-white/5 transition-colors cursor-pointer"
-                        onClick={() => onEditProduct(product)}
-                      >
-                        <div className="flex items-start gap-4">
-                          {product.image_url || product.image ? (
-                            <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20">
-                              <img 
-                                src={product.image_url || product.image} 
-                                alt={product.name || product.title || "Product"} 
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ) : (
-                            <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20 flex items-center justify-center">
-                              <span className="text-muted-foreground text-xs">No Image</span>
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <Badge className="mb-2 bg-gray-700">
-                              {product.builders?.name || product.builderName || "Unknown Builder"}
-                            </Badge>
-                            <h4 className="text-lg font-semibold truncate">
-                              {product.name || product.title || "Untitled Product"}
-                            </h4>
-                            {product.short_desc && (
-                              <p className="text-muted-foreground text-sm line-clamp-2">
-                                {product.short_desc}
-                              </p>
+                    {week.products.map(product => {
+                      const mappedProduct = mapSupabaseProduct(product);
+                      return (
+                        <div 
+                          key={mappedProduct.id}
+                          className="glass-card p-4 hover:bg-white/5 transition-colors cursor-pointer"
+                          onClick={() => onEditProduct(mappedProduct)}
+                        >
+                          <div className="flex items-start gap-4">
+                            {mappedProduct.image ? (
+                              <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20">
+                                <img 
+                                  src={mappedProduct.image} 
+                                  alt={mappedProduct.title} 
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20 flex items-center justify-center">
+                                <span className="text-muted-foreground text-xs">No Image</span>
+                              </div>
                             )}
+                            <div className="flex-1 min-w-0">
+                              <Badge className="mb-2 bg-gray-700">
+                                {mappedProduct.builderName}
+                              </Badge>
+                              <h4 className="text-lg font-semibold truncate">
+                                {mappedProduct.title}
+                              </h4>
+                              {mappedProduct.shortDescription && (
+                                <p className="text-muted-foreground text-sm line-clamp-2">
+                                  {mappedProduct.shortDescription}
+                                </p>
+                              )}
+                            </div>
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              className="flex-shrink-0"
+                            >
+                              <Edit size={14} />
+                            </Button>
                           </div>
-                          <Button 
-                            size="sm" 
-                            variant="ghost"
-                            className="flex-shrink-0"
-                          >
-                            <Edit size={14} />
-                          </Button>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ) : (

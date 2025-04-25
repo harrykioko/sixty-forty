@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Product } from "@/types/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useBuilders } from "@/hooks/use-builders";
+import { useProductSubmission } from "@/hooks/use-product-submission";
 
 export interface ProductFormValues {
   title: string;
@@ -15,7 +15,11 @@ export interface ProductFormValues {
   builderNotes?: string;
 }
 
-export const useProductForm = (product: Product | null | undefined, onClose: () => void) => {
+export const useProductForm = (
+  product: Product | null | undefined, 
+  onClose: () => void,
+  selectedWeek?: { id: string }
+) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mainImage, setMainImage] = useState<string | null>(product?.image || null);
@@ -23,6 +27,7 @@ export const useProductForm = (product: Product | null | undefined, onClose: () 
   const [techStack, setTechStack] = useState<string[]>(product?.techStack || []);
   const [features, setFeatures] = useState<string[]>(product?.features || []);
   const { data: builders = [] } = useBuilders();
+  const { submitProduct } = useProductSubmission();
 
   const form = useForm<ProductFormValues>({
     defaultValues: product ? {
@@ -60,7 +65,7 @@ export const useProductForm = (product: Product | null | undefined, onClose: () 
     }
   };
 
-  const onSubmit = (data: ProductFormValues) => {
+  const onSubmit = async (data: ProductFormValues) => {
     if (!mainImage) {
       toast({
         title: "Hero image required",
@@ -90,15 +95,43 @@ export const useProductForm = (product: Product | null | undefined, onClose: () 
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: product ? "Product updated" : "Product created",
-        description: `${data.title} has been ${product ? "updated" : "added"} successfully`,
+    try {
+      const builder = builders.find(b => b.name === data.builderName);
+      if (!builder) {
+        throw new Error("Builder not found");
+      }
+
+      const week_id = product?.week_id || selectedWeek?.id;
+      if (!week_id) {
+        throw new Error("Week ID is required");
+      }
+
+      await submitProduct({
+        id: product?.id,
+        name: data.title,
+        builder_id: builder.id,
+        week_id,
+        short_desc: data.shortDescription,
+        long_desc: data.description,
+        image_url: mainImage,
+        features,
+        tech_stack: techStack,
+        pricing: data.pricing,
+        demo_url: data.demoLink,
+        builder_notes: data.builderNotes
       });
+
       onClose();
-    }, 1500);
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save product. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return {

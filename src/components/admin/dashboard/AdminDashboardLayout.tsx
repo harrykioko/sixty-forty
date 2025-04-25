@@ -43,22 +43,18 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
       <AdminHeader onLogout={() => navigate("/admin")} />
       
       <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
-        {/* Dashboard Header */}
         <DashboardHeader 
           onCreateBattle={() => setCreateBattleDialogOpen(true)} 
         />
         
-        {/* Current Battle Section */}
         {currentFormattedBattle && (
           <CurrentBattleSection
             week={currentFormattedBattle}
             onEdit={() => handleEditWeek(currentFormattedBattle)}
             onView={() => handleViewBattleDetails(currentFormattedBattle)}
-            onEndVoting={handleEndVoting}
           />
         )}
         
-        {/* Past Battles Section */}
         {pastBattles.length > 0 && (
           <PastBattlesSection
             weeks={pastBattles}
@@ -68,7 +64,6 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
         )}
       </main>
 
-      {/* Modals */}
       <DashboardModals
         createBattleDialogOpen={state.createBattleDialogOpen}
         battleDetailsModalOpen={state.battleDetailsModalOpen}
@@ -93,6 +88,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
           setBattleDetailsModalOpen(false);
         }}
         onSaveWeek={handleSaveWeek}
+        onEndVoting={handleEndVoting}
       />
     </div>
   );

@@ -20,6 +20,7 @@ interface DashboardModalsProps {
   onAddProductFromDetails: () => void;
   onEditProductFromDetails: (product: Product) => void;
   onSaveWeek: (weekData: Partial<Week>) => void;
+  onEndVoting: () => void;
 }
 
 export const DashboardModals = ({
@@ -37,6 +38,7 @@ export const DashboardModals = ({
   onAddProductFromDetails,
   onEditProductFromDetails,
   onSaveWeek,
+  onEndVoting,
 }: DashboardModalsProps) => {
   return (
     <>
@@ -62,6 +64,7 @@ export const DashboardModals = ({
           onOpenChange={onCloseWeekEditor}
           currentWeek={selectedWeek}
           onSave={onSaveWeek}
+          onEndVoting={onEndVoting}
         />
       )}
       

@@ -24,13 +24,15 @@ interface WeekEditorModalProps {
   onOpenChange: (open: boolean) => void;
   currentWeek?: Week;
   onSave: (weekData: Partial<Week>) => void;
+  onEndVoting: () => void;
 }
 
 export const WeekEditorModal = ({
   open,
   onOpenChange,
   currentWeek,
-  onSave
+  onSave,
+  onEndVoting
 }: WeekEditorModalProps) => {
   const [weekNumber, setWeekNumber] = useState<number>(currentWeek?.number || 1);
   const [startDate, setStartDate] = useState<Date | undefined>(currentWeek?.startDate || undefined);
@@ -174,6 +176,16 @@ export const WeekEditorModal = ({
           </div>
         </div>
         <DialogFooter>
+          {currentWeek?.status === 'voting' && (
+            <Button 
+              type="button" 
+              variant="destructive" 
+              onClick={onEndVoting}
+              className="mr-auto"
+            >
+              End Voting Early
+            </Button>
+          )}
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>

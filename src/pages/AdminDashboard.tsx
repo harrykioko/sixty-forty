@@ -1,16 +1,19 @@
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
+import { usePastBattles } from "@/hooks/use-past-battles";
 import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoadingState";
 import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCheck";
-import { DashboardContent } from "@/components/admin/dashboard/DashboardContent";
+import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboardLayout"; 
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const { data: battleData, isLoading: battleLoading, error } = useCurrentBattle();
+  const { data: battleData, isLoading: battleLoading, error: battleError } = useCurrentBattle();
+  const { data: pastBattles, isLoading: pastBattlesLoading, error: pastBattlesError } = usePastBattles();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -37,7 +40,7 @@ const AdminDashboard = () => {
     }
   };
 
-  if (isLoading || battleLoading) {
+  if (isLoading || battleLoading || pastBattlesLoading) {
     return <DashboardLoadingState onLogout={handleLogout} />;
   }
 
@@ -45,7 +48,7 @@ const AdminDashboard = () => {
     return <DashboardAuthCheck onLogout={handleLogout} />;
   }
 
-  if (error) {
+  if (battleError || pastBattlesError) {
     toast({
       title: "Error loading data",
       description: "Please try again later",
@@ -53,7 +56,12 @@ const AdminDashboard = () => {
     });
   }
 
-  return <DashboardContent battleData={battleData} />;
+  return (
+    <AdminDashboardLayout 
+      currentBattle={battleData} 
+      pastBattles={pastBattles || []} 
+    />
+  );
 };
 
 export default AdminDashboard;

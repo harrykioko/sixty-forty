@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,7 @@ import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDia
 import { Week, Product } from "@/types/admin";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 
 export const DashboardContent = ({ battleData }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -55,6 +57,7 @@ export const DashboardContent = ({ battleData }) => {
     );
   }
 
+  // Convert string dates to Date objects
   const formattedWeek: Week = {
     id: battleData.currentWeek.id,
     number: battleData.currentWeek.number,
@@ -98,7 +101,7 @@ export const DashboardContent = ({ battleData }) => {
               currentWeek={formattedWeek}
               onEndVoting={() => {}}
               onCreateNewWeek={() => {}}
-              formatDate={(date) => date.toLocaleDateString()}
+              formatDate={(date) => format(date, "MMM d, yyyy")}
             />
           </motion.section>
           

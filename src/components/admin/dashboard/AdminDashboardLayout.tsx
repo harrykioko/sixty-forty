@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -14,6 +15,7 @@ import { PastBattlesSection } from "@/components/admin/dashboard/sections/PastBa
 import { DashboardModals } from "@/components/admin/dashboard/modals/DashboardModals";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
+  const navigate = useNavigate(); // Add this line to fix navigation
   const { 
     state, 
     setCreateBattleDialogOpen, 
@@ -53,7 +55,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     return (
       <EmptyDashboard 
         onCreateBattle={() => setCreateBattleDialogOpen(true)}
-        onLogout={() => navigate("/admin")}
+        onLogout={() => navigate("/admin")} // Use navigate here
       />
     );
   }
@@ -119,3 +121,4 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     </div>
   );
 };
+

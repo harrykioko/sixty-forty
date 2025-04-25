@@ -7,14 +7,12 @@ interface CurrentBattleSectionProps {
   week: Week | null;
   onEdit: () => void;
   onView: () => void;
-  onEndVoting: () => void;
 }
 
 export const CurrentBattleSection = ({ 
   week, 
   onEdit, 
-  onView, 
-  onEndVoting 
+  onView 
 }: CurrentBattleSectionProps) => {
   if (!week) return null;
   
@@ -29,7 +27,6 @@ export const CurrentBattleSection = ({
         week={week}
         onEdit={onEdit}
         onView={onView}
-        onEndVoting={onEndVoting}
       />
     </motion.section>
   );

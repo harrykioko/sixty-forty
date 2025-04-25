@@ -1,22 +1,21 @@
 
-import { Calendar, Eye, Edit, AlertTriangle } from "lucide-react";
+import { Calendar, Eye, Edit } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { StatusTimeline } from "@/components/admin/panels/StatusTimeline";
 import { WeekData } from "@/types/admin";
 
 interface ProductWeekCardProps {
   week: WeekData;
   onEdit: () => void;
   onView: () => void;
-  onEndVoting: () => void;
 }
 
 export const ProductWeekCard = ({ 
   week, 
   onEdit, 
-  onView, 
-  onEndVoting 
+  onView,
 }: ProductWeekCardProps) => {
   return (
     <Card className="bg-transparent border-white/10">
@@ -46,20 +45,12 @@ export const ProductWeekCard = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="bg-black/20 p-4 flex justify-between border-t border-white/10">
+      <CardFooter className="bg-black/20 p-4 flex flex-col gap-4 border-t border-white/10">
         <div className="text-sm text-muted-foreground flex items-center">
           <Calendar size={14} className="mr-2" />
           Created on {new Date(week.startDate).toLocaleDateString()}
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onEndVoting}
-          className="text-red-500 border-red-500/30 hover:bg-red-500/10"
-        >
-          <AlertTriangle size={14} className="mr-2" />
-          End Voting Early
-        </Button>
+        <StatusTimeline currentStatus={week.status} />
       </CardFooter>
     </Card>
   );

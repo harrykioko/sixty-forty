@@ -2,36 +2,28 @@ import { Tables } from "@/integrations/supabase/types";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
-export interface Week {
-  id: string;
-  number: number;
-  startDate: Date;
-  endDate: Date;
-  status: WeekStatus;
-  products: Product[];
-  winnerId?: string | null;
-}
-
 export interface Product {
   id: string;
   name: string;
   title: string;
-  short_desc?: string | null;
+  shortDescription: string;
   description: string;
-  image_url?: string | null;
-  image?: string;
-  tech_stack?: string[];
+  image: string;
   techStack: string[];
   features: string[];
-  votes: number;
+  builderName: string;
   builder_id?: string | null;
+  week_id?: string | null;
+  pricing?: string;
+  demoLink?: string;
+  builderNotes?: string;
+  additionalImages?: string[];
+  votes: number;
   builders?: {
     name: string;
     slug?: string;
     avatar_url?: string | null;
   } | null;
-  builderName?: string;
-  shortDescription?: string;
 }
 
 export interface SubmissionStatus {
@@ -64,10 +56,32 @@ export interface WeekData {
   number: number;
   startDate: Date;
   endDate: Date;
-  status: string;
+  status: WeekStatus;
   products: Product[];
   theme?: string;
   totalVotes?: number;
   winnerName?: string | null;
+  winnerId?: string | null;
   created_at?: string | null;
+}
+
+export function mapSupabaseProduct(p: any): Product {
+  return {
+    id: p.id,
+    name: p.name,
+    title: p.name,
+    shortDescription: p.short_desc || '',
+    description: p.long_desc || '',
+    image: p.image_url || '',
+    techStack: p.tech_stack || [],
+    features: p.features || [],
+    builderName: p.builders?.name || '',
+    builder_id: p.builder_id,
+    week_id: p.week_id,
+    pricing: p.pricing,
+    demoLink: p.demo_url,
+    builderNotes: p.builder_notes,
+    votes: 0,
+    builders: p.builders
+  };
 }

@@ -15,9 +15,11 @@ export interface Week {
 export interface Product {
   id: string;
   name: string;
+  title: string;
   short_desc?: string | null;
   description: string;
   image_url?: string | null;
+  image?: string;
   tech_stack?: string[];
   techStack: string[];
   features: string[];
@@ -28,10 +30,8 @@ export interface Product {
     slug?: string;
     avatar_url?: string | null;
   } | null;
-  title?: string;
   builderName?: string;
   shortDescription?: string;
-  image?: string;
 }
 
 export interface SubmissionStatus {

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -10,6 +9,7 @@ import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboar
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { WeekData, WeekStatus } from "@/types/admin-dashboard";
+import { Product } from "@/types/admin";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -57,7 +57,6 @@ const AdminDashboard = () => {
     });
   }
 
-  // Transform past battles to match WeekData interface
   const formattedPastBattles: WeekData[] = pastBattles?.map(battle => ({
     id: battle.id,
     number: battle.number,
@@ -65,11 +64,21 @@ const AdminDashboard = () => {
     endDate: new Date(battle.end_date),
     status: battle.status as WeekStatus,
     products: battle.products?.map(product => ({
-      ...product,
+      id: product.id,
+      name: product.name,
+      title: product.name,
+      description: product.long_desc || '',
+      short_desc: product.short_desc,
+      image_url: product.image_url,
+      image: product.image_url,
+      tech_stack: product.tech_stack || [],
       techStack: product.tech_stack || [],
       features: [],
       votes: 0,
-      description: product.long_desc || '',
+      builder_id: product.builder_id,
+      builders: product.builders,
+      builderName: product.builders?.name || '',
+      shortDescription: product.short_desc || ''
     })) || [],
     winnerId: battle.winner_id,
     created_at: battle.created_at,
@@ -77,9 +86,33 @@ const AdminDashboard = () => {
     theme: `Week ${battle.number} Battle`
   })) || [];
 
+  const currentBattleData = battleData ? {
+    currentWeek: {
+      ...battleData.currentWeek,
+      status: battleData.currentWeek.status as WeekStatus
+    },
+    products: battleData.products?.map(product => ({
+      id: product.id,
+      name: product.name,
+      title: product.name,
+      description: product.long_desc || '',
+      short_desc: product.short_desc,
+      image_url: product.image_url,
+      image: product.image_url,
+      tech_stack: product.tech_stack || [],
+      techStack: product.tech_stack || [],
+      features: [],
+      votes: 0,
+      builder_id: product.builder_id,
+      builders: product.builders,
+      builderName: product.builders?.name || '',
+      shortDescription: product.short_desc || ''
+    })) || []
+  } : null;
+
   return (
     <AdminDashboardLayout 
-      currentBattle={battleData} 
+      currentBattle={currentBattleData} 
       pastBattles={formattedPastBattles}
     />
   );

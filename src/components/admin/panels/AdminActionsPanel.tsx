@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Week } from "@/types/admin";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useWeekManagement } from '@/hooks/use-week-management';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, CheckCircle, Hourglass, StopCircle } from 'lucide-react';
+import { Plus, Mail, CheckCircle } from 'lucide-react';
 import { StatusTimeline } from './StatusTimeline';
 
 interface AdminActionsPanelProps {
@@ -64,29 +65,19 @@ export const AdminActionsPanel = ({
     }
   };
 
-  const statusToVariant = {
-    draft: "secondary",
-    active: "default",
-    voting: "outline",
-    completed: "destructive"
-  } as const;
-
   return (
     <Card className="bg-background/50 backdrop-blur-lg border-white/10">
       <div className="p-6 space-y-6">
         <div className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold tracking-tight">Admin Actions</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Status:</span>
-            <Badge variant={statusToVariant[currentWeek.status]} className="capitalize">
-              {currentWeek.status}
-            </Badge>
-          </div>
+          <h2 className="text-xl font-bold tracking-tight">Battle Management</h2>
+          <StatusTimeline 
+            currentStatus={currentWeek.status} 
+            onStatusChange={handleStatusUpdate}
+            isEditable={true}
+          />
         </div>
 
-        <StatusTimeline currentStatus={currentWeek.status} />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-auto-fit gap-3 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <Button
             onClick={onCreateNewBattleWeek}
             className="bg-sixty40-purple hover:bg-sixty40-purple/90 transition-colors"
@@ -102,42 +93,9 @@ export const AdminActionsPanel = ({
             className="border-white/10 hover:bg-white/5 transition-colors"
             disabled={isLoading}
           >
+            <Mail className="h-4 w-4 mr-2" />
             Email Subscribers
           </Button>
-
-          {currentWeek.status === 'draft' && (
-            <Button
-              onClick={() => handleStatusUpdate('active')}
-              className="bg-emerald-600 hover:bg-emerald-700 transition-colors"
-              disabled={isLoading}
-            >
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Publish Battle
-            </Button>
-          )}
-
-          {currentWeek.status === 'active' && (
-            <Button
-              onClick={() => handleStatusUpdate('voting')}
-              className="bg-sixty40-blue hover:bg-sixty40-blue/90 transition-colors"
-              disabled={isLoading}
-            >
-              <Hourglass className="h-4 w-4 mr-2" />
-              Start Voting
-            </Button>
-          )}
-
-          {currentWeek.status === 'voting' && (
-            <Button
-              onClick={() => handleStatusUpdate('completed')}
-              variant="outline"
-              className="border-white/10 hover:bg-white/5 transition-colors"
-              disabled={isLoading}
-            >
-              <StopCircle className="h-4 w-4 mr-2" />
-              End Voting
-            </Button>
-          )}
 
           {currentWeek.status === 'completed' && (
             <Button
@@ -146,6 +104,7 @@ export const AdminActionsPanel = ({
               className="border-white/10 hover:bg-white/5 transition-colors"
               disabled={isLoading}
             >
+              <CheckCircle className="h-4 w-4 mr-2" />
               Select Winner
             </Button>
           )}

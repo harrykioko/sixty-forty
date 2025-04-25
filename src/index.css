@@ -84,4 +84,18 @@
   .animate-hover {
     @apply transition-all duration-300 hover:scale-105;
   }
+
+  /* New slow pulse animation for status timeline */
+  .animate-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
 }

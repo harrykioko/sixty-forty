@@ -229,6 +229,7 @@ export type Database = {
           number: number
           start_date: string
           status: string
+          updated_at: string | null
           winner_id: string | null
         }
         Insert: {
@@ -238,6 +239,7 @@ export type Database = {
           number: number
           start_date: string
           status?: string
+          updated_at?: string | null
           winner_id?: string | null
         }
         Update: {
@@ -247,6 +249,7 @@ export type Database = {
           number?: number
           start_date?: string
           status?: string
+          updated_at?: string | null
           winner_id?: string | null
         }
         Relationships: [

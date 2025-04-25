@@ -170,6 +170,9 @@ export default {
         'bounce-slow': 'bounce 3s infinite',
         'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
         'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out'
+			},
+			boxShadow: {
+				'glow': '0 0 15px rgba(14, 165, 233, 0.5)',
 			}
 		}
 	},

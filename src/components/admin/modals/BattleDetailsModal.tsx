@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -26,19 +25,18 @@ export const BattleDetailsModal = ({
   onAddProduct,
   onEditProduct
 }: BattleDetailsModalProps) => {
-  // Convert admin products to the format expected by PastProductColumn
   const formatProducts = (products: Product[]): PastProductData[] => {
     return products.map(product => ({
       name: product.name || product.title || "",
       builder: product.builders?.name || product.builderName || "",
       isWinner: product.id === week.winnerId,
-      imageUrl: product.image_url || product.image || "",
-      longDesc: product.short_desc || "",
-      features: product.tech_stack || [],
-      techStack: product.tech_stack || [],
-      pricing: "",
-      demoUrl: "",
-      builderNotes: ""
+      imageUrl: product.image || "",
+      longDesc: product.shortDescription || "",
+      features: product.features || [],
+      techStack: product.techStack || [],
+      pricing: product.pricing || "",
+      demoUrl: product.demoLink || "",
+      builderNotes: product.builderNotes || ""
     }));
   };
 
@@ -60,7 +58,6 @@ export const BattleDetailsModal = ({
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
             <div className="p-6 border-b border-white/10">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -95,12 +92,10 @@ export const BattleDetailsModal = ({
               </div>
             </div>
             
-            {/* Status Timeline */}
             <div className="bg-black/20 border-b border-white/10 p-4">
               <StatusTimeline currentStatus={week.status} />
             </div>
             
-            {/* Product Section */}
             <div className="flex-1 overflow-y-auto">
               {week.products && week.products.length > 0 ? (
                 <div className="p-6">

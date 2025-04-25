@@ -1,6 +1,20 @@
+
 import { Tables } from "@/integrations/supabase/types";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
+
+export interface Week {
+  id: string;
+  number: number;
+  startDate: Date;
+  endDate: Date;
+  status: WeekStatus;
+  products: Product[];
+  theme?: string;
+  totalVotes?: number;
+  winnerId?: string | null;
+  created_at?: string | null;
+}
 
 export interface Product {
   id: string;
@@ -51,19 +65,7 @@ export interface AdminActionsProps {
   onPublishBattle: () => void;
 }
 
-export interface WeekData {
-  id: string;
-  number: number;
-  startDate: Date;
-  endDate: Date;
-  status: WeekStatus;
-  products: Product[];
-  theme?: string;
-  totalVotes?: number;
-  winnerName?: string | null;
-  winnerId?: string | null;
-  created_at?: string | null;
-}
+export interface WeekData extends Week {}
 
 export function mapSupabaseProduct(p: any): Product {
   return {

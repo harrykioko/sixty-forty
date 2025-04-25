@@ -8,36 +8,29 @@ export interface Week {
   number: number;
   startDate: Date;
   endDate: Date;
-  status: WeekStatus;
-  products: Product[];
+  status: 'draft' | 'active' | 'voting' | 'completed';
+  winnerId?: string | null;
+  winnerName?: string | null; // TEMPORARY: will remove when backend fully aligns
+  products?: Product[];
   theme?: string;
   totalVotes?: number;
-  winnerId?: string | null;
-  created_at?: string | null;
+  created_at?: string;
 }
 
 export interface Product {
   id: string;
-  name: string;
   title: string;
-  shortDescription: string;
-  description: string;
-  image: string;
+  builderName: string;
+  image: string; // Supabase 'image_url'
+  shortDescription: string; // Supabase 'short_desc'
+  description: string; // Supabase 'long_desc'
   techStack: string[];
   features: string[];
-  builderName: string;
-  builder_id?: string | null;
-  week_id?: string | null;
+  votes: number;
   pricing?: string;
   demoLink?: string;
   builderNotes?: string;
   additionalImages?: string[];
-  votes: number;
-  builders?: {
-    name: string;
-    slug?: string;
-    avatar_url?: string | null;
-  } | null;
 }
 
 export interface SubmissionStatus {

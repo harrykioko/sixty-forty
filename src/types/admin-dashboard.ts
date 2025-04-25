@@ -3,16 +3,14 @@ import { Product, Week } from "@/types/admin";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
-export interface WeekData extends Week {
-  products: Product[];
-}
+// Removing WeekData interface since we're using Week from admin.ts
 
 export interface AdminDashboardProps {
   currentBattle: {
-    currentWeek: any;
+    currentWeek: Week | null;
     products: Product[];
   } | null;
-  pastBattles: WeekData[];
+  pastBattles: Week[];
 }
 
 export interface DashboardState {
@@ -20,6 +18,6 @@ export interface DashboardState {
   battleDetailsModalOpen: boolean;
   weekEditorModalOpen: boolean;
   productFormOpen: boolean;
-  selectedWeek: WeekData | null;
+  selectedWeek: Week | null;
   selectedProduct: Product | null;
 }

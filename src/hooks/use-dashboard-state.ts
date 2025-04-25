@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { DashboardState } from '@/types/admin-dashboard';
 import { Product, Week } from '@/types/admin';
@@ -13,37 +12,17 @@ export const useDashboardState = () => {
     selectedProduct: null,
   });
 
-  const setCreateBattleDialogOpen = (open: boolean) => {
-    setState(prev => ({ ...prev, createBattleDialogOpen: open }));
-  };
-
-  const setBattleDetailsModalOpen = (open: boolean) => {
-    setState(prev => ({ ...prev, battleDetailsModalOpen: open }));
-  };
-
-  const setWeekEditorModalOpen = (open: boolean) => {
-    setState(prev => ({ ...prev, weekEditorModalOpen: open }));
-  };
-
-  const setProductFormOpen = (open: boolean) => {
-    setState(prev => ({ ...prev, productFormOpen: open }));
-  };
-
   const setSelectedWeek = (week: Week | null) => {
     setState(prev => ({ ...prev, selectedWeek: week }));
   };
 
-  const setSelectedProduct = (product: Product | null) => {
-    setState(prev => ({ ...prev, selectedProduct: product }));
-  };
-
   return {
     state,
-    setCreateBattleDialogOpen,
-    setBattleDetailsModalOpen,
-    setWeekEditorModalOpen,
-    setProductFormOpen,
+    setCreateBattleDialogOpen: (open: boolean) => setState(prev => ({ ...prev, createBattleDialogOpen: open })),
+    setBattleDetailsModalOpen: (open: boolean) => setState(prev => ({ ...prev, battleDetailsModalOpen: open })),
+    setWeekEditorModalOpen: (open: boolean) => setState(prev => ({ ...prev, weekEditorModalOpen: open })),
+    setProductFormOpen: (open: boolean) => setState(prev => ({ ...prev, productFormOpen: open })),
     setSelectedWeek,
-    setSelectedProduct,
+    setSelectedProduct: (product: Product | null) => setState(prev => ({ ...prev, selectedProduct: product })),
   };
 };

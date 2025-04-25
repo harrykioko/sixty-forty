@@ -33,9 +33,8 @@ const fetchCurrentBattle = async () => {
     };
   }
 
-  // Map the week and its products through our mapping functions
   const mappedWeek = mapSupabaseWeek(currentWeek[0]);
-  const products = currentWeek[0].products?.map(mapSupabaseProduct) || [];
+  const products = (currentWeek[0].products || []).map(mapSupabaseProduct);
 
   return {
     currentWeek: mappedWeek,

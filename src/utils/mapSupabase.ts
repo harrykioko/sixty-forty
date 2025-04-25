@@ -1,6 +1,4 @@
 
-import { Product, Week } from "@/types/admin";
-
 export function mapSupabaseProduct(p: any): Product {
   return {
     id: p.id,

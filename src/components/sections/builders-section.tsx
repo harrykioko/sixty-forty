@@ -1,4 +1,3 @@
-
 import { useBuilderStats } from "@/hooks/use-builder-stats";
 import { BuilderCard } from "./builders/builder-card";
 import { BuildersSectionHeader } from "./builders/section-header";
@@ -54,8 +53,11 @@ export const BuildersSection = () => {
       <div className="container mx-auto max-w-screen-xl">
         <BuildersSectionHeader />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {builderStats.map((builder, index) => (
-            <BuilderCard key={builder.id} builder={builder} index={index} />
+          {builderStats.map((builderStat, index) => (
+            <BuilderCard 
+              key={builderStat.id} 
+              builder={{ ...builderStat, index }} 
+            />
           ))}
         </div>
       </div>

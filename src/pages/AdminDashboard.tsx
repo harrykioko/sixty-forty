@@ -6,9 +6,10 @@ import { useCurrentBattle } from "@/hooks/use-current-battle";
 import { usePastBattles } from "@/hooks/use-past-battles";
 import { DashboardLoadingState } from "@/components/admin/dashboard/DashboardLoadingState";
 import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCheck";
-import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboardLayout"; 
+import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { WeekData } from "@/types/admin-dashboard";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -56,10 +57,24 @@ const AdminDashboard = () => {
     });
   }
 
+  // Transform past battles to match WeekData interface
+  const formattedPastBattles: WeekData[] = pastBattles?.map(battle => ({
+    id: battle.id,
+    number: battle.number,
+    startDate: new Date(battle.start_date),
+    endDate: new Date(battle.end_date),
+    status: battle.status,
+    products: battle.products || [],
+    winnerId: battle.winner_id,
+    created_at: battle.created_at,
+    totalVotes: 0, // You might want to fetch this from votes table
+    theme: `Week ${battle.number} Battle`
+  })) || [];
+
   return (
     <AdminDashboardLayout 
       currentBattle={battleData} 
-      pastBattles={pastBattles || []} 
+      pastBattles={formattedPastBattles}
     />
   );
 };

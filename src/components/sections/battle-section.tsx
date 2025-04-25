@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -7,18 +8,18 @@ import VotingResults from '@/components/ui/voting-results';
 import SocialShare from '@/components/ui/social-share';
 import { useToast } from '@/components/ui/use-toast';
 import { useCurrentBattle } from '@/hooks/use-current-battle';
-import { ProductData } from '@/data/mock-data';
+import { Product } from '@/types/admin';
 
 export const BattleSection = () => {
   const { toast } = useToast();
   const { data: battleData, isLoading, error } = useCurrentBattle();
-  const [selectedProduct, setSelectedProduct] = useState<ProductData | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showVoteResults, setShowVoteResults] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [votedForId, setVotedForId] = useState<string | null>(null);
   const [productVotes, setProductVotes] = useState<{ [key: string]: number }>({});
 
-  const openProductModal = (product: ProductData) => {
+  const openProductModal = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
@@ -124,12 +125,12 @@ export const BattleSection = () => {
             <ProductCard
               key={product.id}
               id={product.id}
-              title={product.name}
-              builderName={product.builders?.name || ''}
-              shortDescription={product.short_desc || ''}
-              image={product.image_url || ''}
-              techStack={product.tech_stack || []}
-              onClick={() => openProductModal(product as unknown as ProductData)}
+              title={product.title}
+              builderName={product.builderName}
+              shortDescription={product.shortDescription}
+              image={product.image}
+              techStack={product.techStack}
+              onClick={() => openProductModal(product)}
             />
           ))}
         </div>
@@ -140,15 +141,15 @@ export const BattleSection = () => {
               <VotingResults
                 productA={{
                   id: battleData.products[0].id,
-                  title: battleData.products[0].name,
+                  title: battleData.products[0].title,
                   votes: productVotes[battleData.products[0].id] || 0,
-                  builderName: battleData.products[0].builders?.name || '',
+                  builderName: battleData.products[0].builderName,
                 }}
                 productB={{
                   id: battleData.products[1].id,
-                  title: battleData.products[1].name,
+                  title: battleData.products[1].title,
                   votes: productVotes[battleData.products[1].id] || 0,
-                  builderName: battleData.products[1].builders?.name || '',
+                  builderName: battleData.products[1].builderName,
                 }}
                 hasVoted={!!votedForId}
                 votedForId={votedForId || undefined}
@@ -159,7 +160,7 @@ export const BattleSection = () => {
                   <SocialShare
                     title="I just voted in this week's micro-SaaS battle on Sixty40!"
                     text={`I voted for ${
-                      battleData.products.find(p => p.id === votedForId)?.name
+                      battleData.products.find(p => p.id === votedForId)?.title
                     } in this week's battle. Check it out and cast your vote too!`}
                   />
                 </div>

@@ -70,6 +70,7 @@ export type Database = {
       }
       builders: {
         Row: {
+          admin_id: string | null
           avatar_url: string | null
           created_at: string | null
           id: string
@@ -78,6 +79,7 @@ export type Database = {
           tagline: string | null
         }
         Insert: {
+          admin_id?: string | null
           avatar_url?: string | null
           created_at?: string | null
           id?: string
@@ -86,6 +88,7 @@ export type Database = {
           tagline?: string | null
         }
         Update: {
+          admin_id?: string | null
           avatar_url?: string | null
           created_at?: string | null
           id?: string
@@ -182,6 +185,7 @@ export type Database = {
           id: string
           metadata: Json | null
           product_id: string | null
+          voter_id: string | null
           week_id: string | null
         }
         Insert: {
@@ -189,6 +193,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           product_id?: string | null
+          voter_id?: string | null
           week_id?: string | null
         }
         Update: {
@@ -196,6 +201,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           product_id?: string | null
+          voter_id?: string | null
           week_id?: string | null
         }
         Relationships: [

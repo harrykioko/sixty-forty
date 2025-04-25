@@ -1,26 +1,22 @@
 
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { Week } from "@/types/admin";
 
 interface OlderBattlesListProps {
-  battles: Array<{
-    id: string;
-    number: number;
-    start_date: string;
-    end_date: string;
-    winner_id: string;
-    products: Array<{
-      id: string;
-      name: string;
-      builders?: {
-        name: string;
-      };
-    }>;
-  }>;
+  battles: Week[];
   onSelectBattle: (index: number) => void;
 }
 
 export const OlderBattlesList = ({ battles, onSelectBattle }: OlderBattlesListProps) => {
+  if (!battles || battles.length === 0) {
+    return (
+      <div className="p-4 text-center">
+        <p className="text-muted-foreground">No additional battles available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
       {battles.map((battle, index) => (
@@ -31,17 +27,17 @@ export const OlderBattlesList = ({ battles, onSelectBattle }: OlderBattlesListPr
         >
           <div className="flex items-center justify-between mb-2">
             <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
-              {format(new Date(battle.start_date), 'MMM d')} - {format(new Date(battle.end_date), 'MMM d, yyyy')}
+              {format(battle.startDate, 'MMM d')} - {format(battle.endDate, 'MMM d, yyyy')}
             </Badge>
             <Badge className="bg-sixty40-purple/20 text-sixty40-purple border border-sixty40-purple/30">
               Week {battle.number}
             </Badge>
           </div>
           <h4 className="font-medium mb-1">
-            {battle.products?.find(p => p.id === battle.winner_id)?.name || 'Unknown Winner'}
+            {battle.products?.find(p => p.id === battle.winnerId)?.title || 'Unknown Winner'}
           </h4>
           <div className="text-sm text-muted-foreground">
-            Winner: {battle.products?.find(p => p.id === battle.winner_id)?.builders?.name || 'Unknown'}
+            Winner: {battle.products?.find(p => p.id === battle.winnerId)?.builderName || 'Unknown'}
           </div>
         </div>
       ))}

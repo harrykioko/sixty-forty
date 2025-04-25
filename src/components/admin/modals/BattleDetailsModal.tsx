@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,21 +25,6 @@ export const BattleDetailsModal = ({
   onAddProduct,
   onEditProduct
 }: BattleDetailsModalProps) => {
-  const formatProducts = (products: Product[]): PastProductData[] => {
-    return products.map(product => ({
-      name: product.name || product.title || "",
-      builder: product.builders?.name || product.builderName || "",
-      isWinner: product.id === week.winnerId,
-      imageUrl: product.image || "",
-      longDesc: product.shortDescription || "",
-      features: product.features || [],
-      techStack: product.techStack || [],
-      pricing: product.pricing || "",
-      demoUrl: product.demoLink || "",
-      builderNotes: product.builderNotes || ""
-    }));
-  };
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -112,52 +97,49 @@ export const BattleDetailsModal = ({
                   </div>
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {week.products.map(product => {
-                      const mappedProduct = mapSupabaseProduct(product);
-                      return (
-                        <div 
-                          key={mappedProduct.id}
-                          className="glass-card p-4 hover:bg-white/5 transition-colors cursor-pointer"
-                          onClick={() => onEditProduct(mappedProduct)}
-                        >
-                          <div className="flex items-start gap-4">
-                            {mappedProduct.image ? (
-                              <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20">
-                                <img 
-                                  src={mappedProduct.image} 
-                                  alt={mappedProduct.title} 
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20 flex items-center justify-center">
-                                <span className="text-muted-foreground text-xs">No Image</span>
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <Badge className="mb-2 bg-gray-700">
-                                {mappedProduct.builderName}
-                              </Badge>
-                              <h4 className="text-lg font-semibold truncate">
-                                {mappedProduct.title}
-                              </h4>
-                              {mappedProduct.shortDescription && (
-                                <p className="text-muted-foreground text-sm line-clamp-2">
-                                  {mappedProduct.shortDescription}
-                                </p>
-                              )}
+                    {week.products.map(product => (
+                      <div 
+                        key={product.id}
+                        className="glass-card p-4 hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() => onEditProduct(product)}
+                      >
+                        <div className="flex items-start gap-4">
+                          {product.image ? (
+                            <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20">
+                              <img 
+                                src={product.image} 
+                                alt={product.title} 
+                                className="w-full h-full object-cover"
+                              />
                             </div>
-                            <Button 
-                              size="sm" 
-                              variant="ghost"
-                              className="flex-shrink-0"
-                            >
-                              <Edit size={14} />
-                            </Button>
+                          ) : (
+                            <div className="w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-black/20 flex items-center justify-center">
+                              <span className="text-muted-foreground text-xs">No Image</span>
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <Badge className="mb-2 bg-gray-700">
+                              {product.builderName}
+                            </Badge>
+                            <h4 className="text-lg font-semibold truncate">
+                              {product.title}
+                            </h4>
+                            {product.shortDescription && (
+                              <p className="text-muted-foreground text-sm line-clamp-2">
+                                {product.shortDescription}
+                              </p>
+                            )}
                           </div>
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            className="flex-shrink-0"
+                          >
+                            <Edit size={14} />
+                          </Button>
                         </div>
-                      );
-                    })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (

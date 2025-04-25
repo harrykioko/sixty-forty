@@ -4,29 +4,17 @@ import { Star, Trophy } from "lucide-react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Week } from "@/types/admin";
 
 interface BattleCardProps {
-  battle: {
-    id: string;
-    number: number;
-    start_date: string;
-    end_date: string;
-    winner_id: string;
-    products: Array<{
-      id: string;
-      name: string;
-      builders?: {
-        name: string;
-      };
-    }>;
-  };
+  battle: Week;
   index: number;
   onViewDetails: () => void;
 }
 
 export const BattleCard = ({ battle, index, onViewDetails }: BattleCardProps) => {
-  const winner = battle.products?.find(p => p.id === battle.winner_id);
-  const runnerUp = battle.products?.find(p => p.id !== battle.winner_id);
+  const winner = battle.products?.find(p => p.id === battle.winnerId);
+  const runnerUp = battle.products?.find(p => p.id !== battle.winnerId);
 
   return (
     <motion.div
@@ -37,7 +25,7 @@ export const BattleCard = ({ battle, index, onViewDetails }: BattleCardProps) =>
       viewport={{ once: true }}
     >
       <Badge className="mb-2 bg-gray-800/70 text-white">
-        {format(new Date(battle.start_date), 'MMM d')} - {format(new Date(battle.end_date), 'MMM d, yyyy')}
+        {format(battle.startDate, 'MMM d')} - {format(battle.endDate, 'MMM d, yyyy')}
       </Badge>
       <h3 className="text-xl font-bold mb-2">Week {battle.number}</h3>
       <div className="space-y-3 mb-4">
@@ -47,8 +35,8 @@ export const BattleCard = ({ battle, index, onViewDetails }: BattleCardProps) =>
               <Trophy size={16} className="text-white" />
             </div>
             <div>
-              <p className="font-medium">{winner.name}</p>
-              <p className="text-xs text-muted-foreground">by {winner.builders?.name}</p>
+              <p className="font-medium">{winner.title}</p>
+              <p className="text-xs text-muted-foreground">by {winner.builderName}</p>
             </div>
           </div>
         )}
@@ -58,8 +46,8 @@ export const BattleCard = ({ battle, index, onViewDetails }: BattleCardProps) =>
               <Star size={16} className="text-white" />
             </div>
             <div>
-              <p className="font-medium">{runnerUp.name}</p>
-              <p className="text-xs text-muted-foreground">by {runnerUp.builders?.name}</p>
+              <p className="font-medium">{runnerUp.title}</p>
+              <p className="text-xs text-muted-foreground">by {runnerUp.builderName}</p>
             </div>
           </div>
         )}

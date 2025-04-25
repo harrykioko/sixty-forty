@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,11 +23,10 @@ const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
     });
   };
 
-  // Handle different product data structures
-  const productTitle = product.title || product.name;
+  const productTitle = product.title;
   const productDescription = product.shortDescription;
   const productImage = product.image;
-  const builderName = product.builderName || (product.builders?.name || "Unknown");
+  const builderName = product.builderName;
   
   // Ensure techStack is an array
   const techStack = product.techStack || [];

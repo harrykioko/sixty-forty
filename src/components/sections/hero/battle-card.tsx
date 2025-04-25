@@ -26,8 +26,8 @@ export const BattleCard = () => {
     return <BattleEmptyState />;
   }
 
-  const isBattleActive = battleData.currentWeek.status === 'live';
-  const isBuilding = battleData.isBuildingPhase || battleData.currentWeek.status === 'building';
+  const isBattleActive = battleData.currentWeek.status === 'active';
+  const isBuilding = battleData.isBuildingPhase || battleData.currentWeek.status === 'draft';
 
   return (
     <motion.div
@@ -46,7 +46,7 @@ export const BattleCard = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {battleData.products.map((product) => {
-              const isHarry = product.builders?.name.toLowerCase().includes('harry');
+              const isHarry = product.builderName.toLowerCase().includes('harry');
               const stats = builderStats.find(
                 (stat: any) => stat.builder?.name.toLowerCase().includes(isHarry ? 'harry' : 'marcos')
               );
@@ -54,12 +54,12 @@ export const BattleCard = () => {
               return (
                 <BuilderProfileCard
                   key={product.id}
-                  name={product.builders?.name || ''}
-                  avatar_url={product.builders?.avatar_url}
+                  name={product.builderName}
+                  avatar_url={stats?.builder?.avatar_url}
                   tagline={stats?.builder?.tagline}
                   wins={stats?.wins || 0}
                   products_launched={stats?.products_launched || 0}
-                  product={isBattleActive ? { name: product.name } : null}
+                  product={isBattleActive ? { name: product.title } : null}
                   isHarry={isHarry}
                   isBattleActive={isBattleActive}
                 />
@@ -95,7 +95,7 @@ export const BattleCard = () => {
           <BattleActions 
             isBattleActive={isBattleActive}
             isBuilding={isBuilding}
-            endDate={battleData.currentWeek.end_date}
+            endDate={battleData.currentWeek.endDate}
           />
         </div>
       </div>

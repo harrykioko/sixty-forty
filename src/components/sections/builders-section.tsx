@@ -1,16 +1,61 @@
 
-import { BUILDERS } from "@/data/mock-data";
+import { useBuilderStats } from "@/hooks/use-builder-stats";
 import { BuilderCard } from "./builders/builder-card";
 import { BuildersSectionHeader } from "./builders/section-header";
 
 export const BuildersSection = () => {
+  const { data: builderStats = [], isLoading, error } = useBuilderStats();
+
+  // If loading, show loading state
+  if (isLoading) {
+    return (
+      <section id="builders" className="py-16 px-4 bg-black/20">
+        <div className="container mx-auto max-w-screen-xl">
+          <BuildersSectionHeader />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="glass-card p-6 h-64 animate-pulse" />
+            <div className="glass-card p-6 h-64 animate-pulse" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // If error, show error state
+  if (error) {
+    return (
+      <section id="builders" className="py-16 px-4 bg-black/20">
+        <div className="container mx-auto max-w-screen-xl">
+          <BuildersSectionHeader />
+          <div className="glass-card p-6 text-center">
+            <p className="text-red-400">Failed to load builder information</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // If no builders, show empty state
+  if (!builderStats.length) {
+    return (
+      <section id="builders" className="py-16 px-4 bg-black/20">
+        <div className="container mx-auto max-w-screen-xl">
+          <BuildersSectionHeader />
+          <div className="glass-card p-6 text-center">
+            <p className="text-muted-foreground">No builders available at the moment</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="builders" className="py-16 px-4 bg-black/20">
       <div className="container mx-auto max-w-screen-xl">
         <BuildersSectionHeader />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {BUILDERS.map((builder, index) => (
-            <BuilderCard key={builder.name} builder={builder} index={index} />
+          {builderStats.map((builder, index) => (
+            <BuilderCard key={builder.id} builder={builder} index={index} />
           ))}
         </div>
       </div>

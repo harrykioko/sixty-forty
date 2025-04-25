@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -8,7 +9,7 @@ import { DashboardAuthCheck } from "@/components/admin/dashboard/DashboardAuthCh
 import { AdminDashboardLayout } from "@/components/admin/dashboard/AdminDashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { WeekData, WeekStatus, mapSupabaseProduct, Product } from "@/types/admin";
+import { WeekData } from "@/types/admin-dashboard";
 
 const AdminDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -57,24 +58,13 @@ const AdminDashboard = () => {
   }
 
   const formattedPastBattles: WeekData[] = pastBattles?.map(battle => ({
-    id: battle.id,
-    number: battle.number,
-    startDate: new Date(battle.start_date),
-    endDate: new Date(battle.end_date),
-    status: battle.status as WeekStatus,
-    products: battle.products?.map(mapSupabaseProduct) || [],
-    winnerId: battle.winner_id,
-    created_at: battle.created_at,
-    totalVotes: 0,
-    theme: `Week ${battle.number} Battle`
+    ...battle,
+    products: battle.products || []
   })) || [];
 
   const currentBattleData = battleData ? {
-    currentWeek: {
-      ...battleData.currentWeek,
-      status: battleData.currentWeek.status as WeekStatus
-    },
-    products: battleData.products?.map(mapSupabaseProduct) || []
+    currentWeek: battleData.currentWeek,
+    products: battleData.products || []
   } : null;
 
   return (

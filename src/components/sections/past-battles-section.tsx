@@ -15,6 +15,7 @@ import { OlderBattlesList } from "./past-battles/older-battles-list";
 import { LoadingState } from "./past-battles/loading-state";
 import { ErrorState } from "./past-battles/error-state";
 import { EmptyState } from "./past-battles/empty-state";
+import { format } from "date-fns";
 
 export const PastBattlesSection = () => {
   const { data: pastBattles, isLoading, error } = usePastBattles();
@@ -119,22 +120,22 @@ export const PastBattlesSection = () => {
         <PastBattleModal 
           week={{
             number: pastBattles[selectedWeek].number,
-            startDate: pastBattles[selectedWeek].start_date,
-            endDate: pastBattles[selectedWeek].end_date,
-            theme: `Week ${pastBattles[selectedWeek].number} Battle`
+            startDate: format(pastBattles[selectedWeek].startDate, "yyyy-MM-dd"),
+            endDate: format(pastBattles[selectedWeek].endDate, "yyyy-MM-dd"),
+            theme: pastBattles[selectedWeek].theme || `Week ${pastBattles[selectedWeek].number} Battle`
           }}
-          products={pastBattles[selectedWeek].products.map(product => ({
-            name: product.name,
-            builder: product.builders?.name || 'Unknown',
-            isWinner: product.id === pastBattles[selectedWeek].winner_id,
-            imageUrl: product.image_url || 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2',
-            longDesc: 'Product description will be added soon.',
-            features: ['Feature coming soon'],
-            techStack: ['Tech stack coming soon'],
-            pricing: 'Pricing info coming soon',
-            demoUrl: '#',
-            builderNotes: 'Builder notes coming soon'
-          }))}
+          products={pastBattles[selectedWeek].products?.map(product => ({
+            name: product.title,
+            builder: product.builderName,
+            isWinner: product.id === pastBattles[selectedWeek].winnerId,
+            imageUrl: product.image || 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2',
+            longDesc: product.description || 'Product description will be added soon.',
+            features: product.features || ['Feature coming soon'],
+            techStack: product.techStack || ['Tech stack coming soon'],
+            pricing: product.pricing || 'Pricing info coming soon',
+            demoUrl: product.demoLink || '#',
+            builderNotes: product.builderNotes || 'Builder notes coming soon'
+          })) || []}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />

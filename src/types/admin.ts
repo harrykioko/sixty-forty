@@ -1,4 +1,3 @@
-import { Tables } from "@/integrations/supabase/types";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
@@ -58,24 +57,3 @@ export interface AdminActionsProps {
 }
 
 export interface WeekData extends Week {}
-
-export function mapSupabaseProduct(p: any): Product {
-  return {
-    id: p.id,
-    name: p.name,
-    title: p.name,
-    shortDescription: p.short_desc || '',
-    description: p.long_desc || '',
-    image: p.image_url || '',
-    techStack: p.tech_stack || [],
-    features: p.features || [],
-    builderName: p.builders?.name || '',
-    builder_id: p.builder_id,
-    week_id: p.week_id,
-    pricing: p.pricing,
-    demoLink: p.demo_url,
-    builderNotes: p.builder_notes,
-    votes: 0,
-    builders: p.builders
-  };
-}

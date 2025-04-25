@@ -1,107 +1,40 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { useToast } from "@/hooks/use-toast";
-import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
-import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal";
-import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
-import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
-import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
-import ProductForm from "@/components/admin/form/ProductForm";
-import { useDashboardState } from "@/hooks/use-dashboard-state";
 import { AdminDashboardProps } from "@/types/admin-dashboard";
-import { Week } from "@/types/admin"; // Add this import
+import { Week } from "@/types/admin";
+import { useDashboardState } from "@/hooks/use-dashboard-state";
+import { useDashboardActions } from "@/hooks/dashboard/useDashboardActions";
+import { formatCurrentBattle } from "@/utils/battle-formatter";
+import { DashboardHeader } from "@/components/admin/dashboard/sections/DashboardHeader";
+import { EmptyDashboard } from "@/components/admin/dashboard/sections/EmptyDashboard";
+import { CurrentBattleSection } from "@/components/admin/dashboard/sections/CurrentBattleSection";
+import { PastBattlesSection } from "@/components/admin/dashboard/sections/PastBattlesSection";
+import { DashboardModals } from "@/components/admin/dashboard/modals/DashboardModals";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const {
-    state,
-    setCreateBattleDialogOpen,
-    setBattleDetailsModalOpen,
-    setWeekEditorModalOpen,
-    setProductFormOpen,
-    setSelectedWeek,
-    setSelectedProduct,
-  } = useDashboardState();
+  const { state, setCreateBattleDialogOpen, setBattleDetailsModalOpen, setWeekEditorModalOpen, setProductFormOpen } = useDashboardState();
+  const { 
+    handleEditWeek, 
+    handleViewBattleDetails, 
+    handleAddProduct, 
+    handleEditProduct, 
+    handleEndVoting, 
+    handleSaveWeek 
+  } = useDashboardActions();
 
-  const formatCurrentBattle = (): Week | null => {
-    if (!currentBattle?.currentWeek) return null;
-    
-    return {
-      id: currentBattle.currentWeek.id,
-      number: currentBattle.currentWeek.number,
-      startDate: new Date(currentBattle.currentWeek.startDate),
-      endDate: new Date(currentBattle.currentWeek.endDate),
-      status: currentBattle.currentWeek.status,
-      products: currentBattle.products || [],
-      winnerId: currentBattle.currentWeek.winnerId,
-      theme: `Week ${currentBattle.currentWeek.number} Battle`,
-      totalVotes: 0
-    };
-  };
+  const currentFormattedBattle = formatCurrentBattle(currentBattle);
 
-  const currentFormattedBattle = formatCurrentBattle();
-
-  const handleEditWeek = (week: Week) => {
-    setSelectedWeek(week);
-    setWeekEditorModalOpen(true);
-  };
-
-  const handleViewBattleDetails = (week: Week) => {
-    setSelectedWeek(week);
-    setBattleDetailsModalOpen(true);
-  };
-
-  const handleAddProduct = (week: Week) => {
-    setSelectedWeek(week);
-    setSelectedProduct(null);
-    setProductFormOpen(true);
-  };
-
-  const handleEndVoting = () => {
-    toast({
-      title: "End Voting",
-      description: "This would end the voting period and determine a winner."
-    });
-  };
-
-  const handleSaveWeek = async (weekData: Partial<Week>) => {
-    toast({
-      title: "Week Saved",
-      description: `Week ${weekData.number} has been saved.`
-    });
-    setWeekEditorModalOpen(false);
-  };
-
+  // Handle empty state when no battles exist
   if (!currentBattle?.currentWeek && pastBattles.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#1a1f2c] to-[#20143a]">
-        <AdminHeader onLogout={() => navigate("/admin")} />
-        
-        <main className="flex-1 container mx-auto px-4 py-8 text-center">
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sixty40-purple to-sixty40-blue mb-4">
-            Welcome to Sixty40 Admin
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Start by creating a new battle week and adding some products.
-          </p>
-
-          <button 
-            className="bg-sixty40-purple hover:bg-sixty40-purple/90 px-4 py-2 rounded text-white"
-            onClick={() => setCreateBattleDialogOpen(true)}
-          >
-            Create Battle Week
-          </button>
-        </main>
-
-        <CreateBattleDialog
-          open={state.createBattleDialogOpen}
-          onClose={() => setCreateBattleDialogOpen(false)}
-        />
-      </div>
+      <EmptyDashboard 
+        onCreateBattle={() => setCreateBattleDialogOpen(true)}
+        onLogout={() => navigate("/admin")}
+      />
     );
   }
 
@@ -110,94 +43,57 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
       <AdminHeader onLogout={() => navigate("/admin")} />
       
       <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
-        <div className="glass rounded-xl p-6 shadow-lg border border-white/10 backdrop-blur-lg">
-          <div className="flex items-center justify-between">
-            <motion.h1 
-              className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              Dashboard
-            </motion.h1>
-            <button 
-              onClick={() => setCreateBattleDialogOpen(true)}
-              className="px-6 py-3 font-semibold text-white rounded-full bg-gradient-to-r from-sixty40-purple to-sixty40-blue hover:shadow-lg hover:shadow-sixty40-purple/20 transition-all duration-300 backdrop-blur-sm"
-            >
-              Create New Battle
-            </button>
-          </div>
-        </div>
+        {/* Dashboard Header */}
+        <DashboardHeader 
+          onCreateBattle={() => setCreateBattleDialogOpen(true)} 
+        />
         
-        {currentBattle?.currentWeek && (
-          <motion.section
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <h2 className="text-xl font-semibold mb-4">Current Battle</h2>
-            <ProductWeekCard
-              week={currentFormattedBattle}
-              onEdit={() => handleEditWeek(currentFormattedBattle)}
-              onView={() => handleViewBattleDetails(currentFormattedBattle)}
-              onEndVoting={handleEndVoting}
-            />
-          </motion.section>
+        {/* Current Battle Section */}
+        {currentFormattedBattle && (
+          <CurrentBattleSection
+            week={currentFormattedBattle}
+            onEdit={() => handleEditWeek(currentFormattedBattle)}
+            onView={() => handleViewBattleDetails(currentFormattedBattle)}
+            onEndVoting={handleEndVoting}
+          />
         )}
         
+        {/* Past Battles Section */}
         {pastBattles.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <h2 className="text-xl font-semibold mb-4">Past Battles</h2>
-            <PastBattlesList weeks={pastBattles} />
-          </motion.section>
+          <PastBattlesSection
+            weeks={pastBattles}
+            onView={(week) => handleViewBattleDetails(week)}
+            onEdit={(week) => handleEditWeek(week)}
+          />
         )}
       </main>
 
-      <CreateBattleDialog
-        open={state.createBattleDialogOpen}
-        onClose={() => setCreateBattleDialogOpen(false)}
+      {/* Modals */}
+      <DashboardModals
+        createBattleDialogOpen={state.createBattleDialogOpen}
+        battleDetailsModalOpen={state.battleDetailsModalOpen}
+        weekEditorModalOpen={state.weekEditorModalOpen}
+        productFormOpen={state.productFormOpen}
+        selectedWeek={state.selectedWeek}
+        selectedProduct={state.selectedProduct}
+        onCloseCreateBattle={() => setCreateBattleDialogOpen(false)}
+        onCloseBattleDetails={() => setBattleDetailsModalOpen(false)}
+        onCloseWeekEditor={() => setWeekEditorModalOpen(false)}
+        onCloseProductForm={() => setProductFormOpen(false)}
+        onEditWeekFromDetails={() => {
+          setBattleDetailsModalOpen(false);
+          setWeekEditorModalOpen(true);
+        }}
+        onAddProductFromDetails={() => {
+          setBattleDetailsModalOpen(false);
+          setProductFormOpen(true);
+        }}
+        onEditProductFromDetails={(product) => {
+          handleEditProduct(product);
+          setBattleDetailsModalOpen(false);
+        }}
+        onSaveWeek={handleSaveWeek}
       />
-      
-      {state.selectedWeek && (
-        <BattleDetailsModal
-          week={state.selectedWeek}
-          isOpen={state.battleDetailsModalOpen}
-          onClose={() => setBattleDetailsModalOpen(false)}
-          onEditWeek={() => {
-            setBattleDetailsModalOpen(false);
-            setWeekEditorModalOpen(true);
-          }}
-          onAddProduct={() => {
-            setBattleDetailsModalOpen(false);
-            setProductFormOpen(true);
-          }}
-          onEditProduct={(product) => {
-            setSelectedProduct(product);
-            setBattleDetailsModalOpen(false);
-            setProductFormOpen(true);
-          }}
-        />
-      )}
-      
-      {state.selectedWeek && (
-        <WeekEditorModal
-          open={state.weekEditorModalOpen}
-          onOpenChange={() => setWeekEditorModalOpen(false)}
-          currentWeek={state.selectedWeek}
-          onSave={handleSaveWeek}
-        />
-      )}
-      
-      {state.productFormOpen && (
-        <ProductForm
-          product={state.selectedProduct}
-          onClose={() => setProductFormOpen(false)}
-        />
-      )}
     </div>
   );
 };

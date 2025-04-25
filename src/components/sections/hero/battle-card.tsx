@@ -95,7 +95,7 @@ export const BattleCard = () => {
           <BattleActions 
             isBattleActive={isBattleActive}
             isBuilding={isBuilding}
-            endDate={battleData.currentWeek.endDate}
+            endDate={battleData.currentWeek.endDate.toISOString()}
           />
         </div>
       </div>

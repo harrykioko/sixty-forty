@@ -6,13 +6,14 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ProductData, BUILDERS } from "@/data/mock-data";
+import { Product } from "@/types/admin";
 import BasicInfo from "./sections/BasicInfo";
 import Descriptions from "./sections/Descriptions";
 import OptionalFields from "./sections/OptionalFields";
+import { useBuilders } from "@/hooks/use-builders";
 
 interface ProductFormProps {
-  product?: ProductData | null;
+  product?: Product | null;
   onClose: () => void;
 }
 
@@ -33,6 +34,7 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
   const [galleryImages, setGalleryImages] = useState<string[]>(product?.additionalImages || []);
   const [techStack, setTechStack] = useState<string[]>(product?.techStack || []);
   const [features, setFeatures] = useState<string[]>(product?.features || []);
+  const { data: builders = [] } = useBuilders();
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     defaultValues: product ? {
@@ -44,7 +46,7 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
       demoLink: product.demoLink,
       builderNotes: product.builderNotes,
     } : {
-      builderName: BUILDERS[0].name
+      builderName: builders[0]?.name || ''
     }
   });
 

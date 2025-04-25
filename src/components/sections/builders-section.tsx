@@ -57,7 +57,8 @@ export const BuildersSection = () => {
           {builderStats.map((builderStat, index) => (
             <BuilderCard 
               key={builderStat.id} 
-              builder={{ ...builderStat, index }}
+              builder={{...builderStat, index}}
+              index={index}
             />
           ))}
         </div>

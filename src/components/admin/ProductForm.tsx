@@ -9,14 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ProductData, BUILDERS } from "@/data/mock-data";
+import { Product } from "@/types/admin";
 import ImageUpload from "./form/ImageUpload";
 import GalleryUpload from "./form/GalleryUpload";
 import TechStackInput from "./form/TechStackInput";
 import FeaturesList from "./form/FeaturesList";
+import { useBuilders } from "@/hooks/use-builders";
 
 interface ProductFormProps {
-  product?: ProductData | null;
+  product?: Product | null;
   onClose: () => void;
 }
 
@@ -32,6 +33,7 @@ interface FormValues {
 
 const ProductForm = ({ product, onClose }: ProductFormProps) => {
   const { toast } = useToast();
+  const { data: builders = [], isLoading: buildersLoading } = useBuilders();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mainImage, setMainImage] = useState<string | null>(product?.image || null);
   const [galleryImages, setGalleryImages] = useState<string[]>(product?.additionalImages || []);
@@ -48,7 +50,7 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
       demoLink: product.demoLink,
       builderNotes: product.builderNotes,
     } : {
-      builderName: BUILDERS[0].name
+      builderName: builders[0]?.name || ''
     }
   });
 
@@ -153,12 +155,19 @@ const ProductForm = ({ product, onClose }: ProductFormProps) => {
                   id="builderName"
                   className="w-full mt-1 px-3 py-2 bg-black/20 border border-white/10 rounded-md text-white"
                   {...register("builderName", { required: "Builder is required" })}
+                  disabled={buildersLoading}
                 >
-                  {BUILDERS.map((builder) => (
-                    <option key={builder.name} value={builder.name}>
-                      {builder.name}
-                    </option>
-                  ))}
+                  {buildersLoading ? (
+                    <option value="">Loading builders...</option>
+                  ) : builders.length > 0 ? (
+                    builders.map((builder) => (
+                      <option key={builder.id} value={builder.name}>
+                        {builder.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No builders available</option>
+                  )}
                 </select>
                 {errors.builderName && (
                   <p className="text-red-500 text-sm mt-1">{errors.builderName.message}</p>

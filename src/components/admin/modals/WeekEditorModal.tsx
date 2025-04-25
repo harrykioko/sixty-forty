@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -8,13 +10,10 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { WeekDatePicker } from "@/components/admin/modals/components/WeekDatePicker";
+import { WeekNumberInput } from "@/components/admin/modals/components/WeekNumberInput";
+import { StatusSelect } from "@/components/admin/modals/components/StatusSelect";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import { Week } from "@/types/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useWeekManagement } from "@/hooks/use-week-management";
@@ -35,8 +34,9 @@ export const WeekEditorModal = ({
   onEndVoting
 }: WeekEditorModalProps) => {
   const [weekNumber, setWeekNumber] = useState<number>(currentWeek?.number || 1);
-  const [startDate, setStartDate] = useState<Date | undefined>(currentWeek?.startDate || undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(currentWeek?.endDate || undefined);
+  const [startDate, setStartDate] = useState<Date | undefined>(currentWeek?.startDate);
+  const [endDate, setEndDate] = useState<Date | undefined>(currentWeek?.endDate);
+  const [status, setStatus] = useState<Week['status']>(currentWeek?.status || 'draft');
   const { toast } = useToast();
   const { createOrUpdateWeek } = useWeekManagement(currentWeek || {} as Week);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +46,7 @@ export const WeekEditorModal = ({
       setWeekNumber(currentWeek.number);
       setStartDate(currentWeek.startDate);
       setEndDate(currentWeek.endDate);
+      setStatus(currentWeek.status);
     }
   }, [currentWeek]);
 
@@ -64,25 +65,19 @@ export const WeekEditorModal = ({
       const weekData = {
         id: currentWeek?.id,
         number: weekNumber,
-        startDate: startDate,
-        endDate: endDate,
-        status: currentWeek?.status
+        startDate,
+        endDate,
+        status
       };
 
       await createOrUpdateWeek(weekData);
-
+      onSave(weekData);
+      onOpenChange(false);
+      
       toast({
         title: "Success",
         description: "Week details saved successfully."
       });
-
-      onSave({
-        ...currentWeek,
-        number: weekNumber,
-        startDate: startDate,
-        endDate: endDate
-      });
-      onOpenChange(false);
     } catch (error) {
       toast({
         title: "Error",
@@ -94,104 +89,69 @@ export const WeekEditorModal = ({
     }
   };
 
+  const handleStatusChange = (newStatus: Week['status']) => {
+    setStatus(newStatus);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="glass border border-white/10 shadow-xl backdrop-blur-lg sm:max-w-[425px] animate-in fade-in-0 zoom-in-95">
         <DialogHeader>
-          <DialogTitle>Edit Week Details</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="gradient-text text-2xl">
+            Edit Week Details
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Make changes to the current battle week details here.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="weekNumber" className="text-right">
-              Week Number
-            </Label>
-            <Input
-              type="number"
-              id="weekNumber"
-              value={weekNumber}
-              onChange={(e) => setWeekNumber(Number(e.target.value))}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="startDate" className="text-right">
-              Start Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "col-span-3 pl-3 text-left font-normal",
-                    !startDate && "text-muted-foreground"
-                  )}
-                >
-                  {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date('2024-01-01')
-                  }
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="endDate" className="text-right">
-              End Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "col-span-3 pl-3 text-left font-normal",
-                    !endDate && "text-muted-foreground"
-                  )}
-                >
-                  {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  disabled={(date) =>
-                    date < (startDate || new Date())
-                  }
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+
+        <div className="space-y-6 py-4">
+          <WeekNumberInput 
+            value={weekNumber.toString()} 
+            onChange={(value) => setWeekNumber(Number(value))}
+          />
+
+          <WeekDatePicker
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+          />
+
+          <StatusSelect
+            value={status}
+            onChange={handleStatusChange}
+          />
         </div>
-        <DialogFooter>
-          {currentWeek?.status === 'voting' && (
-            <Button 
-              type="button" 
-              variant="destructive" 
+
+        <DialogFooter className="flex justify-between items-center border-t border-white/10 pt-4 mt-4">
+          {status === 'voting' && (
+            <Button
               onClick={onEndVoting}
-              className="mr-auto"
+              variant="outline"
+              className="glass-button-destructive"
             >
+              <X className="w-4 h-4 mr-2" />
               End Voting Early
             </Button>
           )}
-          <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button type="submit" onClick={handleSave} disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save changes"}
-          </Button>
+          <div className="flex gap-3 ml-auto">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="glass-button"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={isLoading}
+              className="gradient-button"
+            >
+              {isLoading ? "Saving..." : "Save changes"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

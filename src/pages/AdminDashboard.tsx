@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
@@ -17,23 +18,32 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Auth check effect - separate dependency list
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/admin");
     }
   }, [isAuthenticated, isLoading, navigate]);
 
+  // Error handling effect - separate with memoized errors to prevent infinite loops
   useEffect(() => {
-    if (battleError || pastBattlesError) {
+    const hasError = battleError || pastBattlesError;
+    
+    if (hasError) {
+      const errorMessage = battleError?.message || pastBattlesError?.message || "Unknown error";
+      
       toast({
         title: "Error loading data",
-        description: "Please try again later",
+        description: `Error details: ${errorMessage}`,
         variant: "destructive",
       });
+      
+      console.error("Battle error:", battleError);
+      console.error("Past battles error:", pastBattlesError);
     }
   }, [battleError, pastBattlesError, toast]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await supabase.auth.signOut();
       toast({
@@ -48,7 +58,7 @@ const AdminDashboard = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast, navigate]);
 
   if (isLoading || battleLoading || pastBattlesLoading) {
     return <DashboardLoadingState onLogout={handleLogout} />;

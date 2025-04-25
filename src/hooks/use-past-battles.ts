@@ -9,7 +9,7 @@ const fetchPastBattles = async (): Promise<Week[]> => {
     .from('weeks')
     .select(`
       *,
-      products (
+      products!fk_products_week_id (
         *,
         builders (
           name,
@@ -20,7 +20,10 @@ const fetchPastBattles = async (): Promise<Week[]> => {
     .eq('status', 'completed')
     .order('number', { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error fetching past battles:', error);
+    throw error;
+  }
   
   return (data || []).map(mapSupabaseWeek);
 };

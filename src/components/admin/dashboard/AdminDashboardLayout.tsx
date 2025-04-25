@@ -9,7 +9,7 @@ import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
 import { PastBattlesList } from "@/components/admin/dashboard/PastBattlesList";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
-import ProductForm from "@/components/admin/form/ProductForm";  // Updated import path
+import ProductForm from "@/components/admin/form/ProductForm";  // Correct import path
 import { useDashboardState } from "@/hooks/use-dashboard-state";
 import { AdminDashboardProps, DashboardState } from "@/types/admin-dashboard";
 import { Week, Product } from "@/types/admin";

@@ -8,7 +8,7 @@ const fetchCurrentBattle = async () => {
     .from('weeks')
     .select(`
       *,
-      products (
+      products!fk_products_week_id (
         *,
         builders (
           name,
@@ -22,6 +22,7 @@ const fetchCurrentBattle = async () => {
     .limit(1);
 
   if (weekError) {
+    console.error('Error fetching current battle:', weekError);
     throw weekError;
   }
 

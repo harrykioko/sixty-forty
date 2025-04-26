@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Edit, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -20,9 +19,10 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
       transition={{ duration: 0.4 }}
       className="transition-all duration-300"
     >
-      <Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-6">
+      <Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
+        
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start justify-between mb-10">
           <h4 className="text-3xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
             Week {week.number} Battle
           </h4>
@@ -55,8 +55,8 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
         />
 
         {/* Status Message */}
-        <div className="text-center mb-8">
-          <p className="text-white/60 text-lg">
+        <div className="text-center my-10">
+          <p className="text-white/70 text-base">
             {week.products?.length ? 
               `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
               "No entries yet – nudge Harry and Marcos to submit!"}
@@ -64,8 +64,8 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
         </div>
 
         {/* Metadata Row */}
-        <div className="flex items-center justify-between px-4 py-3 rounded-lg bg-black/20 backdrop-blur-sm border border-white/5">
-          <div className="px-4 py-1.5 rounded-full bg-sixty40-blue/20 text-white/80 text-sm">
+        <div className="flex items-center justify-between px-8 py-5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10">
+          <div className="px-6 py-2 rounded-full bg-sixty40-blue/20 text-white/80 text-sm">
             {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
           </div>
           
@@ -77,6 +77,7 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
             Created on {format(week.startDate, 'M/d/yyyy')}
           </div>
         </div>
+        
       </Card>
     </motion.div>
   );

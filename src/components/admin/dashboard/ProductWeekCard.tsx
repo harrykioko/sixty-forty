@@ -1,13 +1,10 @@
 
 import { motion } from "framer-motion";
-import { Calendar, Eye, Edit } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Edit, Eye } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { StatusTimeline } from "@/components/admin/panels/StatusTimeline";
 import { WeekData } from "@/types/admin";
-import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { format } from "date-fns";
 
 interface ProductWeekCardProps {
   week: WeekData;
@@ -21,85 +18,65 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      whileHover={{ scale: 1.01 }}
       className="transition-all duration-300"
     >
-      <Card className="overflow-hidden bg-gradient-to-br from-black/40 to-black/20 hover:from-black/50 hover:to-black/30 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300">
-        <CardContent className="p-4">
-          <div className="space-y-4">
-            {/* Title and Week Number */}
-            <div className="mb-4">
-              <h4 className="text-2xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-                Week {week.number} Battle
-              </h4>
-            </div>
-
-            {/* Status Row */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <Badge 
-                  className={cn(
-                    "px-3 py-1 text-xs font-medium rounded-full",
-                    week.status === 'active' ? 'bg-sixty40-blue text-white' : 
-                    week.status === 'voting' ? 'bg-sixty40-purple text-white' : 
-                    'bg-white/10 text-white/60'
-                  )}
-                >
-                  {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
-                </Badge>
-                <div className="flex items-center gap-2 text-white/60 text-xs">
-                  <span>{week.products?.length || 0} Entries</span>
-                  <span>•</span>
-                  <span>{week.totalVotes || 0} Votes</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={onEdit}
-                  className="hover:bg-white/5 transition-colors"
-                >
-                  <Edit size={16} className="mr-2" />
-                  Edit
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={onView}
-                  className="hover:bg-white/5 transition-colors"
-                >
-                  <Eye size={16} className="mr-2" />
-                  View
-                </Button>
-              </div>
-            </div>
-
-            {/* Timeline Section */}
-            <StatusTimeline 
-              currentStatus={week.status} 
-              startDate={week.startDate}
-              endDate={week.endDate}
-            />
+      <Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-6">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-6">
+          <h4 className="text-3xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+            Week {week.number} Battle
+          </h4>
+          
+          <div className="flex gap-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onEdit}
+              className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              <Edit className="w-4 h-4 text-white/60" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onView}
+              className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              <Eye className="w-4 h-4 text-white/60" />
+            </motion.button>
           </div>
-        </CardContent>
+        </div>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <CardFooter className="bg-black/40 p-3 flex items-center border-t border-white/5">
-                <div className="text-sm text-white/40 flex items-center">
-                  <Calendar size={14} className="mr-2" />
-                  Created on {new Date(week.startDate).toLocaleDateString()}
-                </div>
-              </CardFooter>
-            </TooltipTrigger>
-            <TooltipContent className="bg-black/90 border-white/10">
-              <p>Battle created on {new Date(week.startDate).toLocaleDateString()}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {/* Timeline */}
+        <StatusTimeline 
+          currentStatus={week.status} 
+          startDate={week.startDate}
+          endDate={week.endDate}
+        />
+
+        {/* Status Message */}
+        <div className="text-center mb-8">
+          <p className="text-white/60 text-lg">
+            {week.products?.length ? 
+              `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
+              "No entries yet – nudge Harry and Marcos to submit!"}
+          </p>
+        </div>
+
+        {/* Metadata Row */}
+        <div className="flex items-center justify-between px-4 py-3 rounded-lg bg-black/20 backdrop-blur-sm border border-white/5">
+          <div className="px-4 py-1.5 rounded-full bg-sixty40-blue/20 text-white/80 text-sm">
+            {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
+          </div>
+          
+          <div className="text-white/60 text-sm">
+            {format(week.startDate, 'MMM d')} – {format(week.endDate, 'MMM d, yyyy')}
+          </div>
+          
+          <div className="text-white/60 text-sm">
+            Created on {format(week.startDate, 'M/d/yyyy')}
+          </div>
+        </div>
       </Card>
     </motion.div>
   );

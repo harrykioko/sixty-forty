@@ -1,9 +1,7 @@
-
 import React from "react";
 import { Check, Clock, Flag, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
 import { Week } from "@/types/admin";
 
 interface StatusTimelineProps {
@@ -19,48 +17,84 @@ const steps = [
   { status: "completed", label: "Completed", Icon: CheckCircle },
 ] as const;
 
-export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTimelineProps) => {
-  const getCurrentStepIndex = () => {
-    return steps.findIndex((step) => step.status === currentStatus);
-  };
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
 
-  const currentStepIndex = getCurrentStepIndex();
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 10 },
+  show: { opacity: 1, scale: 1, y: 0 },
+};
+
+export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTimelineProps) => {
+  const currentStepIndex = steps.findIndex((step) => step.status === currentStatus);
 
   return (
-    <div className="relative py-8">
-      {/* Progress line background */}
-      <div className="absolute top-1/2 left-0 right-0 h-[2px] -translate-y-1/2 bg-white/5" />
-      
-      {/* Animated progress gradient */}
+    <div className="relative py-10">
+      {/* Base progress line background */}
+      <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/10 -translate-y-1/2" />
+
+      {/* Animated progress line with shimmer */}
       <motion.div 
-        className="absolute top-1/2 left-0 h-[2px] -translate-y-1/2 bg-gradient-to-r from-sixty40-blue via-sixty40-purple to-sixty40-blue"
+        className="absolute top-1/2 left-0 h-[2px] overflow-hidden rounded-full -translate-y-1/2"
         initial={{ width: "0%" }}
         animate={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-      />
+      >
+        <motion.div
+          className="h-full w-full bg-gradient-to-r from-sixty40-blue via-sixty40-blue/20 to-sixty40-purple"
+          initial={{ backgroundPositionX: "0%" }}
+          animate={{ backgroundPositionX: "200%" }}
+          transition={{ 
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 4,
+            ease: "linear"
+          }}
+          style={{
+            backgroundSize: "200% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+      </motion.div>
 
       {/* Steps */}
-      <div className="relative flex justify-between">
+      <motion.div 
+        className="relative flex justify-between items-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {steps.map((step, index) => {
           const isCurrent = index === currentStepIndex;
           const isComplete = index < currentStepIndex;
-          
+
           return (
-            <div key={step.status} className="flex flex-col items-center">
+            <motion.div 
+              key={step.status} 
+              variants={itemVariants}
+              className="flex flex-col items-center relative"
+            >
               {isCurrent && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-2 px-3 py-1 text-xs font-medium bg-sixty40-blue/20 text-sixty40-blue rounded-full"
+                  className="absolute -top-6 px-3 py-1 text-xs font-semibold bg-sixty40-blue/30 text-sixty40-blue rounded-full backdrop-blur-md"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                 >
                   NOW
                 </motion.div>
               )}
               <motion.div
                 className={cn(
-                  "relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300",
-                  isCurrent && "scale-105",
-                  isCurrent ? "bg-sixty40-blue/20" : "bg-black/40"
+                  "flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300",
+                  isCurrent ? "bg-sixty40-blue/20 scale-105" : "bg-white/10"
                 )}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ 
@@ -71,12 +105,12 @@ export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTime
               >
                 {isCurrent && (
                   <motion.div 
-                    className="absolute inset-0 rounded-full bg-sixty40-blue/20"
+                    className="absolute inset-0 rounded-full bg-sixty40-blue/10"
                     animate={{ 
                       scale: [1, 1.2, 1],
-                      opacity: [0.5, 0, 0.5] 
+                      opacity: [0.4, 0, 0.4]
                     }}
-                    transition={{ 
+                    transition={{
                       duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut"
@@ -94,17 +128,16 @@ export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTime
               </motion.div>
               <span
                 className={cn(
-                  "mt-2 text-sm transition-colors",
-                  isCurrent && "text-white font-medium",
-                  !isCurrent && "text-white/60"
+                  "mt-3 text-sm transition-colors",
+                  isCurrent ? "text-white font-semibold" : "text-white/60"
                 )}
               >
                 {step.label}
               </span>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 };

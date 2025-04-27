@@ -22,7 +22,7 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
       <Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
         
         {/* Header */}
-        <div className="flex items-start justify-between mb-10">
+        <div className="flex items-start justify-between mb-12">
           <h4 className="text-3xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
             Week {week.number} Battle
           </h4>
@@ -47,20 +47,24 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
           </div>
         </div>
 
-        {/* Timeline */}
-        <StatusTimeline 
-          currentStatus={week.status} 
-          startDate={week.startDate}
-          endDate={week.endDate}
-        />
+        {/* Timeline + Status Message Grouped */}
+        <div className="flex flex-col items-center gap-12 mb-12">
+          <div className="w-full">
+            <StatusTimeline 
+              currentStatus={week.status} 
+              startDate={week.startDate}
+              endDate={week.endDate}
+            />
+          </div>
 
-        {/* Status Message */}
-        <div className="text-center my-10">
-          <p className="text-white/70 text-base">
-            {week.products?.length ? 
-              `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
-              "No entries yet – nudge Harry and Marcos to submit!"}
-          </p>
+          {/* Status Message */}
+          <div className="text-center">
+            <p className="text-white/70 text-base">
+              {week.products?.length ? 
+                `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
+                "No entries yet – nudge Harry and Marcos to submit!"}
+            </p>
+          </div>
         </div>
 
         {/* Metadata Row */}

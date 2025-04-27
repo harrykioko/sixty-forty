@@ -38,7 +38,7 @@ export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTime
 
   return (
     <div className="relative py-16">
-      {/* Progress Line */}
+      {/* Progress Line (Background) */}
       <div className="absolute top-[60%] left-0 right-0 h-[2px] bg-white/5" />
 
       {/* Progress Line Shimmer */}

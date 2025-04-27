@@ -1,64 +1,145 @@
-<Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
+import React from "react";
+import { Check, Clock, Flag, CheckCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { Week } from "@/types/admin";
 
-  {/* Header */}
-  <div className="flex items-start justify-between mb-12">
-    <h4 className="text-3xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-      Week {week.number} Battle
-    </h4>
-    
-    <div className="flex gap-2">
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onEdit}
-        className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+interface StatusTimelineProps {
+  currentStatus: Week["status"];
+  startDate?: Date;
+  endDate?: Date;
+}
+
+const steps = [
+  { status: "draft", label: "Draft", Icon: Check },
+  { status: "active", label: "Active", Icon: Clock },
+  { status: "voting", label: "Voting", Icon: Flag },
+  { status: "completed", label: "Completed", Icon: CheckCircle },
+] as const;
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 10 },
+  show: { opacity: 1, scale: 1, y: 0 },
+};
+
+export const StatusTimeline = ({ currentStatus, startDate, endDate }: StatusTimelineProps) => {
+  const currentStepIndex = steps.findIndex((step) => step.status === currentStatus);
+
+  return (
+    <div className="relative py-16">
+      {/* Progress Line */}
+      <div className="absolute top-[60%] left-0 right-0 h-[2px] bg-white/5" />
+
+      {/* Progress Line Shimmer */}
+      <motion.div 
+        className="absolute top-[60%] left-0 h-[2px] overflow-hidden rounded-full"
+        initial={{ width: "0%" }}
+        animate={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
       >
-        <Edit className="w-4 h-4 text-white/60" />
-      </motion.button>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onView}
-        className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+        <motion.div
+          className="h-full w-full bg-gradient-to-r from-sixty40-blue via-sixty40-blue/20 to-sixty40-purple"
+          initial={{ backgroundPositionX: "0%" }}
+          animate={{ backgroundPositionX: "200%" }}
+          transition={{ 
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 5,
+            ease: "linear"
+          }}
+          style={{
+            backgroundSize: "200% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+      </motion.div>
+
+      {/* Steps */}
+      <motion.div 
+        className="relative flex justify-between items-start"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
       >
-        <Eye className="w-4 h-4 text-white/60" />
-      </motion.button>
-    </div>
-  </div>
+        {steps.map((step, index) => {
+          const isCurrent = index === currentStepIndex;
+          const isComplete = index < currentStepIndex;
 
-  {/* Timeline + Status Message Grouped */}
-  <div className="flex flex-col items-center gap-12 mb-12">
-    <div className="w-full">
-      <StatusTimeline 
-        currentStatus={week.status} 
-        startDate={week.startDate}
-        endDate={week.endDate}
-      />
-    </div>
+          return (
+            <motion.div 
+              key={step.status} 
+              variants={itemVariants}
+              className="flex flex-col items-center relative -mt-6"
+            >
+              {isCurrent && (
+                <motion.div
+                  className="mb-2 px-3 py-1 text-xs font-semibold bg-sixty40-blue/30 text-sixty40-blue rounded-full backdrop-blur-md"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  NOW
+                </motion.div>
+              )}
 
-    {/* Status Message */}
-    <div className="text-center">
-      <p className="text-white/70 text-base">
-        {week.products?.length ? 
-          `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
-          "No entries yet – nudge Harry and Marcos to submit!"}
-      </p>
-    </div>
-  </div>
+              <motion.div
+                className={cn(
+                  "flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300",
+                  isCurrent ? "bg-sixty40-blue/20 scale-105" : "bg-white/10"
+                )}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ 
+                  scale: isCurrent ? 1.05 : 1, 
+                  opacity: 1 
+                }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {isCurrent && (
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-sixty40-blue/10"
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      opacity: [0.4, 0, 0.4]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                )}
+                <step.Icon
+                  className={cn(
+                    "w-5 h-5 transition-colors",
+                    isComplete && "text-sixty40-blue",
+                    isCurrent && "text-sixty40-blue",
+                    !isComplete && !isCurrent && "text-white/50"
+                  )}
+                />
+              </motion.div>
 
-  {/* Metadata Row */}
-  <div className="flex items-center justify-between px-8 py-5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10">
-    <div className="px-6 py-2 rounded-full bg-sixty40-blue/20 text-white/80 text-sm">
-      {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
+              <span
+                className={cn(
+                  "mt-4 text-sm transition-colors text-center",
+                  isCurrent ? "text-white font-semibold" : "text-white/60"
+                )}
+              >
+                {step.label}
+              </span>
+            </motion.div>
+          );
+        })}
+      </motion.div>
     </div>
-    
-    <div className="text-white/60 text-sm">
-      {format(week.startDate, 'MMM d')} – {format(week.endDate, 'MMM d, yyyy')}
-    </div>
-    
-    <div className="text-white/60 text-sm">
-      Created on {format(week.startDate, 'M/d/yyyy')}
-    </div>
-  </div>
-
-</Card>
+  );
+};

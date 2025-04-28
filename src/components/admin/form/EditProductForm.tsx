@@ -1,23 +1,20 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/types/admin";
 import { useProductForm } from "@/hooks/use-product-form";
-import BasicInfo from "./sections/BasicInfo";
-import Descriptions from "./sections/Descriptions";
-import OptionalFields from "./sections/OptionalFields";
+import ProductFormFields from "./sections/ProductFormFields";
 import { FormActions } from "./sections/FormActions";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface ProductFormProps {
-  product?: Product | null;
+interface EditProductFormProps {
+  product: Product;
   onClose: () => void;
   selectedWeek?: { id: string } | null;
 }
 
-const ProductForm = ({ product, onClose, selectedWeek }: ProductFormProps) => {
+const EditProductForm = ({ product, onClose, selectedWeek }: EditProductFormProps) => {
   const {
-    form: { register, handleSubmit, formState: { errors } },
+    form,
     isSubmitting,
     mainImage,
     galleryImages,
@@ -49,49 +46,43 @@ const ProductForm = ({ product, onClose, selectedWeek }: ProductFormProps) => {
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-                  {product ? "Edit Product" : "Add New Product"}
+                  Edit Product
                 </h2>
                 <Badge className="mt-2 bg-sixty40-purple/20 text-sixty40-purple border-sixty40-purple/30">
-                  {product ? "Editing" : "New"}
+                  Editing
                 </Badge>
               </div>
             </div>
 
             <Card className="glass-card border-white/10">
               <CardContent className="p-6 space-y-6">
-                <BasicInfo
-                  register={register}
-                  errors={errors}
+                <ProductFormFields
+                  form={form}
+                  errors={form.formState.errors}
                   mainImage={mainImage}
-                  onMainImageUpload={handleMainImageUpload}
-                  onMainImageRemove={() => setMainImage(null)}
-                />
-
-                <Descriptions
-                  register={register}
-                  errors={errors}
+                  galleryImages={galleryImages}
                   techStack={techStack}
                   features={features}
+                  onMainImageUpload={handleMainImageUpload}
+                  onMainImageRemove={() => setMainImage(null)}
+                  onGalleryImageUpload={handleGalleryImageUpload}
+                  onGalleryImageRemove={(index) => setGalleryImages(galleryImages.filter((_, i) => i !== index))}
                   onAddTech={(tech) => setTechStack([...techStack, tech])}
                   onRemoveTech={(tech) => setTechStack(techStack.filter(t => t !== tech))}
                   onAddFeature={(feature) => setFeatures([...features, feature])}
                   onRemoveFeature={(feature) => setFeatures(features.filter(f => f !== feature))}
-                />
-
-                <OptionalFields
-                  register={register}
-                  galleryImages={galleryImages}
-                  onGalleryImageUpload={handleGalleryImageUpload}
-                  onGalleryImageRemove={(index) => setGalleryImages(galleryImages.filter((_, i) => i !== index))}
+                  mode="edit"
                 />
               </CardContent>
             </Card>
 
-            <FormActions onClose={onClose} isSubmitting={isSubmitting} />
+            <div className="mt-6">
+              <FormActions onClose={onClose} isSubmitting={isSubmitting} />
+            </div>
           </form>
         </motion.div>
       </motion.div>
@@ -99,4 +90,4 @@ const ProductForm = ({ product, onClose, selectedWeek }: ProductFormProps) => {
   );
 };
 
-export default ProductForm;
+export default EditProductForm; 

@@ -2,7 +2,8 @@ import { Week, Product } from "@/types/admin";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
-import ProductForm from "@/components/admin/form/ProductForm";
+import CreateProductForm from "@/components/admin/form/CreateProductForm";
+import EditProductForm from "@/components/admin/form/EditProductForm";
 
 interface DashboardModalsProps {
   createBattleDialogOpen: boolean;
@@ -67,9 +68,14 @@ export const DashboardModals = ({
         />
       )}
       
-      {productFormOpen && (
-        <ProductForm
+      {productFormOpen && selectedProduct ? (
+        <EditProductForm
           product={selectedProduct}
+          onClose={onCloseProductForm}
+          selectedWeek={selectedWeek}
+        />
+      ) : productFormOpen && (
+        <CreateProductForm
           onClose={onCloseProductForm}
           selectedWeek={selectedWeek}
         />

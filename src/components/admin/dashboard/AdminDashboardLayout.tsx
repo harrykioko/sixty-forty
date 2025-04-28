@@ -101,17 +101,21 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
         onCloseCreateBattle={() => setCreateBattleDialogOpen(false)}
         onCloseBattleDetails={() => setBattleDetailsModalOpen(false)}
         onCloseWeekEditor={() => setWeekEditorModalOpen(false)}
-        onCloseProductForm={() => setProductFormOpen(false)}
+        onCloseProductForm={() => {
+          setProductFormOpen(false);
+          setSelectedProduct(null);
+        }}
         onEditWeekFromDetails={() => {
           setBattleDetailsModalOpen(false);
           setWeekEditorModalOpen(true);
         }}
         onAddProductFromDetails={() => {
           setBattleDetailsModalOpen(false);
+          setSelectedProduct(null);
           setProductFormOpen(true);
         }}
         onEditProductFromDetails={(product) => {
-          handleEditProduct(product);
+          setSelectedProduct(product);
           setProductFormOpen(true);
         }}
         onSaveWeek={handleSaveWeek}

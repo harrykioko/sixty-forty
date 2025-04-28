@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/components/admin/AdminHeader";
-import ProductForm from "@/components/admin/form/ProductForm";
 import ProductList from "@/components/admin/ProductList";
 import { WeekManagerPanel } from "@/components/admin/panels/WeekManagerPanel";
 import { AdminActionsPanel } from "@/components/admin/panels/AdminActionsPanel";

@@ -40,9 +40,15 @@ _This is a living document. Update as you make progress._
 
 ### Battle Details Page & Product Modal Redesign
 - [x] Product Modal overlay for editing products (edit button opens ProductForm as overlay, battle details modal remains open)
-- [ ] Fix ProductForm edit mode:
-  - [ ] Prepopulate form fields with selected product data
-  - [ ] Ensure save updates the existing product, not create a new one
+- [x] Split Product Form into Create and Edit flows:
+  - [x] Extract shared field components (ProductFormFields, etc.)
+  - [x] Refactor ProductForm to use ProductFormFields
+  - [x] Create CreateProductForm (empty/default values, create logic)
+  - [x] Create EditProductForm (prepopulated, update logic)
+  - [x] Refactor modal state management to distinguish add vs. edit
+  - [x] Update parent handlers to open correct form/modal
+  - [x] Test add, edit, and cancel flows for both forms
+  - [x] Remove legacy ProductForm and related code (after successful migration and testing)
 - [ ] Header: Show week pill, date range pill, and new status/stage pill (replaces timeline)
 - [ ] Product Overview: 
   - [ ] If 2+ products: show side-by-side in responsive grid
@@ -98,3 +104,8 @@ _This is a living document. Update as you make progress._
   - Track should be fully transparent
   - Scope only to modal containers
   - Revisit after higher-priority issues are addressed
+
+## 🗑️ Files/Components to Delete After Migration
+- `src/components/admin/form/ProductForm.tsx` (after both new forms are live)
+- Any now-unused hooks or modal logic related to the old ProductForm
+- Any legacy test files for the old ProductForm

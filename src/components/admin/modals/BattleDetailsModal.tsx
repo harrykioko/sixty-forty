@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,36 +43,38 @@ export const BattleDetailsModal = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-white/10">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge className="bg-sixty40-purple text-white">
-                      <Calendar size={14} className="mr-1" />
-                      Week {week.number}
-                    </Badge>
-                    <Badge variant="outline" className="bg-sixty40-dark/30 border-white/20">
-                      {format(week.startDate, "MMM d")} - {format(week.endDate, "MMM d, yyyy")}
-                    </Badge>
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold">Battle #{week.number} Details</h2>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    className="border-white/20 hover:bg-white/10"
-                    onClick={onClose}
-                  >
-                    <ArrowLeft size={16} className="mr-2" />
-                    Back
-                  </Button>
-                  <Button
-                    className="bg-sixty40-purple hover:bg-sixty40-purple/90"
-                    onClick={onEditWeek}
-                  >
-                    <Edit size={16} className="mr-2" />
-                    Edit Week
-                  </Button>
-                </div>
+              <div className="flex items-center gap-4 mb-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground hover:text-white"
+                  onClick={onClose}
+                >
+                  <ArrowLeft size={16} className="mr-2" />
+                  Back
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-white/20 hover:bg-white/10"
+                  onClick={onEditWeek}
+                >
+                  <Edit size={16} className="mr-2" />
+                  Edit Week
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Badge className="bg-sixty40-purple/20 text-sixty40-purple border-sixty40-purple/30">
+                  Week {week.number}
+                </Badge>
+                <Badge className="bg-white/10 text-white border-white/20">
+                  <Calendar size={14} className="mr-2" />
+                  {format(new Date(week.startDate), "MMM d")} - {format(new Date(week.endDate), "MMM d, yyyy")}
+                </Badge>
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                  {week.status}
+                </Badge>
               </div>
             </div>
             
@@ -81,7 +82,7 @@ export const BattleDetailsModal = ({
               <StatusTimeline currentStatus={week.status} />
             </div>
             
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 hover:scrollbar-thumb-white/20 scrollbar-track-transparent scrollbar-corner-transparent !scrollbar-w-1.5 !scrollbar-thumb-rounded-full">
               {week.products && week.products.length > 0 ? (
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-6">
@@ -97,7 +98,7 @@ export const BattleDetailsModal = ({
                   </div>
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {week.products.map(product => (
+                    {week.products.map((product) => (
                       <div 
                         key={product.id}
                         className="glass-card p-4 hover:bg-white/5 transition-colors cursor-pointer"

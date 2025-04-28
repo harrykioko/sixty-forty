@@ -1,6 +1,6 @@
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Product } from "@/types/admin";
 import { useProductForm } from "@/hooks/use-product-form";
 import BasicInfo from "./sections/BasicInfo";
@@ -49,11 +49,16 @@ const ProductForm = ({ product, onClose, selectedWeek }: ProductFormProps) => {
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <form onSubmit={handleSubmit(onSubmit)} className="p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-                {product ? "Edit Product" : "Add New Product"}
-              </h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  {product ? "Edit Product" : "Add New Product"}
+                </h2>
+                <Badge className="mt-2 bg-sixty40-purple/20 text-sixty40-purple border-sixty40-purple/30">
+                  {product ? "Editing" : "New"}
+                </Badge>
+              </div>
             </div>
 
             <Card className="glass-card border-white/10">

@@ -112,7 +112,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
         }}
         onEditProductFromDetails={(product) => {
           handleEditProduct(product);
-          setBattleDetailsModalOpen(false);
+          setProductFormOpen(true);
         }}
         onSaveWeek={handleSaveWeek}
         onEndVoting={handleEndVoting}

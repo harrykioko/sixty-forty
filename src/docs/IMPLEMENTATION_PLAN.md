@@ -37,17 +37,12 @@ _This is a living document. Update as you make progress._
   - [x] Improved scrollbar styling for better UX
   - [x] Added smooth animations and transitions
   - [x] Implemented click outside to close
-- [ ] **Polish Scrollbar and Close Button**
-  - [ ] Make scrollbar ultra-minimalist: thinner, more translucent, rounded, and trackless
-  - [ ] Remove top-right "X" close button for a cleaner look
-  - [ ] Ensure modal can still be closed via outside click and Cancel button
-
-### Bugfix: ProductForm 'Failed to save product' (week_id missing)
-- [ ] Pass the current/selected week as a prop to ProductForm wherever it is used
-- [ ] Update ProductForm and useProductForm to accept and use the week prop
-- [ ] Test that new products can be saved and are associated with the correct week
 
 ### Battle Details Page & Product Modal Redesign
+- [x] Product Modal overlay for editing products (edit button opens ProductForm as overlay, battle details modal remains open)
+- [ ] Fix ProductForm edit mode:
+  - [ ] Prepopulate form fields with selected product data
+  - [ ] Ensure save updates the existing product, not create a new one
 - [ ] Header: Show week pill, date range pill, and new status/stage pill (replaces timeline)
 - [ ] Product Overview: 
   - [ ] If 2+ products: show side-by-side in responsive grid

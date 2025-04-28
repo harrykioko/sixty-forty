@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Product } from "@/types/admin";
 import { useToast } from "@/hooks/use-toast";
@@ -42,6 +42,40 @@ export const useProductForm = (
       builderName: builders[0]?.name || ''
     }
   });
+
+  // Reset form and state when product changes
+  useEffect(() => {
+    if (product) {
+      form.reset({
+        title: product.title,
+        builderName: product.builderName,
+        shortDescription: product.shortDescription,
+        description: product.description,
+        pricing: product.pricing,
+        demoLink: product.demoLink,
+        builderNotes: product.builderNotes,
+      });
+      setMainImage(product.image || null);
+      setGalleryImages(product.additionalImages || []);
+      setTechStack(product.techStack || []);
+      setFeatures(product.features || []);
+    } else {
+      form.reset({
+        title: '',
+        builderName: builders[0]?.name || '',
+        shortDescription: '',
+        description: '',
+        pricing: '',
+        demoLink: '',
+        builderNotes: '',
+      });
+      setMainImage(null);
+      setGalleryImages([]);
+      setTechStack([]);
+      setFeatures([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
   const handleMainImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

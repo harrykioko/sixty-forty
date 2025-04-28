@@ -1,25 +1,22 @@
 # 📝 Sixty40 Admin Dashboard – Session Handoff
 
-## What Was Accomplished
-- **Battle Card Visual Polish:**
-  - Glassmorphism, padding, border, and card styling improved
-  - Hierarchy, section separation, and meta row polished
-  - Edit/view buttons made glassy, accessible, and tooltipped
-  - Responsiveness and accessibility ensured
-- **TimelineStepper Redesign:**
-  - Icons above the line, thicker/animated progress line
-  - Improved spacing, accessibility, and glassmorphic polish
-- **General Dashboard Layout Polish:**
-  - Removed persistent "Create New Battle" footer button
-  - Ensured consistent glassmorphic effects across all panels
-  - Streamlined layout, spacing, and alignment for clarity and usability
+## What Was Accomplished (Previous Session)
+- Battle Card visual polish (glassmorphism, layout, accessibility)
+- TimelineStepper redesign
+- General dashboard layout improvements
+- Add/Edit Product modal bugfix (week_id association)
 
 ## What to Focus on Next
-- **Center and Glassify "Add New Product" Modal**
-  - Move modal to true center of screen
-  - Apply glassmorphism styling (backdrop-blur, translucent background, soft shadow)
-  - Ensure modal is responsive and accessible
-  - Polish modal header, form fields, and action buttons for consistency
+- **Battle Details Page & Product Modal Redesign**
+  - Header: Show week pill, date range pill, and new status/stage pill (replaces timeline)
+  - Product Overview:
+    - If 2+ products: show side-by-side in responsive grid
+    - If 1 product: center card, add prominent Add Product button
+    - If 0 products: center Add Product button with CTA
+  - Product Card: Builder pill, name, hero image, short description, edit/view button
+  - Product Modal: Remove timeline, add status pill near title, prioritize product info at top, glassmorphic styling
+  - Responsive: Grid collapses to 1 column on mobile, all elements accessible
+  - Test: Add, edit, and view flows for all product states
 
 ## Relevant Documents & Files
 - [Implementation Plan](./IMPLEMENTATION_PLAN.md)

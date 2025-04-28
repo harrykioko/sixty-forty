@@ -1,0 +1,141 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 🚦 Cursor Project Rules for Sixty40 Admin Dashboard
+
+This document defines the development rules and standards that MUST be followed when assisting on the Sixty40 Admin Dashboard project inside Cursor.
+
+---
+
+## 🛠️ Tech Stack and Frameworks
+
+- React 18 (functional components and hooks only)
+- TypeScript (strict, no `any` unless unavoidable)
+- Vite bundler
+- TailwindCSS (utility-first styling)
+- shadcn/ui (based on Radix primitives) for advanced components
+- Supabase for backend (Auth, DB, Storage)
+
+---
+
+## 🧩 File and Folder Structure
+
+- Pages: `/src/pages/`
+- Reusable components: `/src/components/`
+- Admin-specific components: `/src/components/admin/`
+- Hooks: `/src/hooks/`
+- Utilities: `/src/lib/`
+- Constants: `/src/constants/`
+- Context Providers: `/src/context/`
+
+> ❗ Keep folder structure shallow and logical. Avoid deep nesting.
+
+---
+
+## 🎨 Styling and Design Rules
+
+- Default styling must use **TailwindCSS** utilities.
+- Use **shadcn/ui** components for modals, popovers, dropdowns, and complex interactions.
+- Apply **glassmorphism** principles:
+  - `backdrop-blur`, translucent backgrounds (e.g., `bg-white/5`)
+  - Soft shadows (`shadow-2xl`), rounded corners (`rounded-xl`)
+
+- Primary Color Palette:
+  - Sixty40 Blue: `#0EA5E9`
+  - Sixty40 Purple: `#9B87F5`
+  - Background Dark: `#1A1F2C`
+
+- Typography:
+  - Heading font: `Space Grotesk`
+  - Body font: `Inter`
+
+- Spacing:
+  - Card padding: `p-6` to `p-10`
+  - Section gaps: `gap-8`
+  - Button padding: `px-4 py-2`
+
+> ❗ Prefer utility classes. Avoid custom CSS unless absolutely necessary.
+
+---
+
+## 🧹 Code Style and Cleanliness Rules
+
+- Use named PascalCase for components.
+- Hooks must start with `use` and use camelCase.
+- Always use `interface` for props (not `type` alias unless justified).
+- Explicit return types for non-trivial functions.
+- Limit component file size to ~300 lines max.
+- Prefer splitting large logic into custom hooks or subcomponents.
+
+---
+
+## 📝 Commit Message Guidelines
+
+Use **clear, descriptive commit messages**.
+
+**Format:**
+```plaintext
+[type]: short message
+
+(optional longer body if needed)
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `refactor`: Code cleanup
+- `style`: UI/Visual-only changes
+- `chore`: Maintenance tasks
+
+**Examples:**
+```plaintext
+feat: create PastWeekCard component
+fix: correct battle timeline rendering bug
+style: polish hover effects for action buttons
+```
+
+---
+
+## 🛡️ Security and Auth Rules
+
+- Admin dashboard must only allow email/password login (Supabase).
+- No public signup allowed.
+- All `/admin` routes must be protected behind authentication check.
+
+---
+
+## 🚫 Global Prohibitions
+
+- ❌ No emojis in commits, prompts, UI text.
+- ❌ No redundant components.
+- ❌ No unapproved external libraries.
+- ❌ No CSS-in-JS or styled-components unless explicitly approved.
+
+---
+
+## ⚡ Behavior on Uncertainty
+
+If multiple options exist, Cursor must:
+
+1. Prefer simpler, more reusable solution.
+2. Prioritize clarity, maintainability, and visual consistency.
+3. Align to Sixty40 visual and UX principles.
+4. Leave a short code comment if an assumption is made.
+
+---
+
+# 🧠 Summary
+
+Cursor should behave like a thoughtful senior engineer:
+
+- Code must be clean, reusable, and consistent.
+- Styling must match Sixty40's glassmorphic aesthetic.
+- Structure must be logical and flat.
+- Functionality must prioritize clarity, user experience, and scalability.
+
+When unsure, **choose the option that is more elegant, clear, and sustainable.**
+
+Welcome to Sixty40 Dev Standards. 🚀
+

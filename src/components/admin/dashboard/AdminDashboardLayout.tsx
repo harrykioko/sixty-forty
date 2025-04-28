@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -64,7 +63,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#1a1f2c] to-[#20143a]">
       <AdminHeader onLogout={() => navigate("/admin")} />
       
-      <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
+      <main className="flex-1 container mx-auto px-4 md:px-6 py-8 space-y-8">
         <DashboardHeader 
           onCreateBattle={() => setCreateBattleDialogOpen(true)} 
         />

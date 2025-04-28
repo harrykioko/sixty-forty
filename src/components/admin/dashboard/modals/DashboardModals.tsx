@@ -1,4 +1,3 @@
-
 import { Week, Product } from "@/types/admin";
 import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
 import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal";
@@ -72,6 +71,7 @@ export const DashboardModals = ({
         <ProductForm
           product={selectedProduct}
           onClose={onCloseProductForm}
+          selectedWeek={selectedWeek}
         />
       )}
     </>

@@ -4,7 +4,14 @@ import { Card } from "@/components/ui/card";
 import { StatusTimeline } from "@/components/admin/panels/StatusTimeline";
 import { WeekData } from "@/types/admin";
 import { format } from "date-fns";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
+/**
+ * ProductWeekCard displays the current battle week with timeline, status, and admin actions.
+ * - Glassmorphic card styling
+ * - Edit/View buttons with tooltips and accessibility
+ * - Responsive and accessible
+ */
 interface ProductWeekCardProps {
   week: WeekData;
   onEdit: () => void;
@@ -19,33 +26,52 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
       transition={{ duration: 0.4 }}
       className="transition-all duration-300"
     >
-      <Card className="relative overflow-hidden bg-[#0A0B14]/80 hover:bg-[#0A0B14]/90 backdrop-blur-xl border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
-        
-        {/* Header */}
-        <div className="flex items-start justify-between mb-12">
-          <h4 className="text-3xl font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-            Week {week.number} Battle
-          </h4>
-          
-          <div className="flex gap-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onEdit}
-              className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
-            >
-              <Edit className="w-4 h-4 text-white/60" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onView}
-              className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
-            >
-              <Eye className="w-4 h-4 text-white/60" />
-            </motion.button>
+      <Card className="relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
+        <TooltipProvider>
+          {/* Header */}
+          <div className="flex items-start justify-between mb-12">
+            <h4 className="text-3xl font-space-grotesk font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              Week {week.number} Battle
+            </h4>
+            <div className="flex gap-2">
+              {/* Edit Button with Tooltip */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={onEdit}
+                    aria-label="Edit week"
+                    className="p-2 rounded-full bg-white/10 hover:bg-sixty40-blue/20 focus-visible:ring-2 focus-visible:ring-sixty40-blue focus-visible:ring-offset-2 shadow transition-colors outline-none"
+                  >
+                    <Edit className="w-5 h-5 text-white/80" />
+                  </motion.button>
+                </TooltipTrigger>
+                {/* Use side='left' for consistency and to prevent overflow */}
+                <TooltipContent side="left">
+                  Edit week
+                </TooltipContent>
+              </Tooltip>
+              {/* View Button with Tooltip */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={onView}
+                    aria-label="View or edit products"
+                    className="p-2 rounded-full bg-white/10 hover:bg-sixty40-blue/20 focus-visible:ring-2 focus-visible:ring-sixty40-blue focus-visible:ring-offset-2 shadow transition-colors outline-none"
+                  >
+                    <Eye className="w-5 h-5 text-white/80" />
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  View/edit products
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
-        </div>
+        </TooltipProvider>
 
         {/* Timeline + Status Message Grouped */}
         <div className="flex flex-col items-center gap-12 mb-12">
@@ -67,21 +93,21 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
           </div>
         </div>
 
+        {/* Divider for section separation */}
+        <div className="border-t border-white/10 my-6 w-full" />
+
         {/* Metadata Row */}
-        <div className="flex items-center justify-between px-8 py-5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10">
-          <div className="px-6 py-2 rounded-full bg-sixty40-blue/20 text-white/80 text-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10">
+          <div className="px-6 py-2 rounded-full bg-sixty40-blue/20 text-white/80 text-sm text-center min-w-[120px]">
             {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
           </div>
-          
-          <div className="text-white/60 text-sm">
+          <div className="text-white/60 text-sm text-center">
             {format(week.startDate, 'MMM d')} – {format(week.endDate, 'MMM d, yyyy')}
           </div>
-          
-          <div className="text-white/60 text-sm">
+          <div className="text-white/60 text-sm text-center">
             Created on {format(week.startDate, 'M/d/yyyy')}
           </div>
         </div>
-        
       </Card>
     </motion.div>
   );

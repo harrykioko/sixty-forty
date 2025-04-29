@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Week, Product } from "@/types/admin";
@@ -9,7 +8,7 @@ export const useDashboardActions = () => {
   const { toast } = useToast();
   const {
     state,
-    setCreateBattleDialogOpen,
+    setCreateBattleModalOpen,
     setBattleDetailsModalOpen,
     setWeekEditorModalOpen,
     setProductFormOpen,
@@ -57,9 +56,19 @@ export const useDashboardActions = () => {
     navigate("/admin");
   };
 
+  const handleCreateBattle = async (data: CreateBattleFormData) => {
+    try {
+      // ... existing code ...
+      setCreateBattleModalOpen(false);
+      // ... existing code ...
+    } catch (error) {
+      // ... existing code ...
+    }
+  };
+
   return {
     state,
-    setCreateBattleDialogOpen,
+    setCreateBattleModalOpen,
     handleEditWeek,
     handleViewBattleDetails,
     handleAddProduct,

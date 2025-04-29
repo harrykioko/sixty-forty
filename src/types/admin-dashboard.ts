@@ -1,4 +1,3 @@
-
 import { Product, Week } from "@/types/admin";
 
 export type WeekStatus = "draft" | "active" | "voting" | "completed";
@@ -12,7 +11,7 @@ export interface AdminDashboardProps {
 }
 
 export interface DashboardState {
-  createBattleDialogOpen: boolean;
+  createBattleModalOpen: boolean;
   battleDetailsModalOpen: boolean;
   weekEditorModalOpen: boolean;
   productFormOpen: boolean;

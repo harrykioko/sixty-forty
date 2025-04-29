@@ -17,7 +17,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
   const navigate = useNavigate(); // Add this line to fix navigation
   const { 
     state, 
-    setCreateBattleDialogOpen, 
+    setCreateBattleModalOpen, 
     setBattleDetailsModalOpen, 
     setWeekEditorModalOpen,
     setProductFormOpen,
@@ -53,7 +53,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
   if (!currentBattle?.currentWeek && pastBattles.length === 0) {
     return (
       <EmptyDashboard 
-        onCreateBattle={() => setCreateBattleDialogOpen(true)}
+        onCreateBattle={() => setCreateBattleModalOpen(true)}
         onLogout={() => navigate("/admin")} // Use navigate here
       />
     );
@@ -65,7 +65,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
       
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 space-y-8">
         <DashboardHeader 
-          onCreateBattle={() => setCreateBattleDialogOpen(true)} 
+          onCreateBattle={() => setCreateBattleModalOpen(true)} 
         />
         
         {currentBattle?.currentWeek && (
@@ -92,13 +92,13 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
       </main>
 
       <DashboardModals
-        createBattleDialogOpen={state.createBattleDialogOpen}
+        createBattleModalOpen={state.createBattleModalOpen}
         battleDetailsModalOpen={state.battleDetailsModalOpen}
         weekEditorModalOpen={state.weekEditorModalOpen}
         productFormOpen={state.productFormOpen}
         selectedWeek={state.selectedWeek}
         selectedProduct={state.selectedProduct}
-        onCloseCreateBattle={() => setCreateBattleDialogOpen(false)}
+        onCloseCreateBattle={() => setCreateBattleModalOpen(false)}
         onCloseBattleDetails={() => setBattleDetailsModalOpen(false)}
         onCloseWeekEditor={() => setWeekEditorModalOpen(false)}
         onCloseProductForm={() => {

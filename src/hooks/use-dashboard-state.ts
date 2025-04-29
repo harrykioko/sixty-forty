@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { DashboardState } from '@/types/admin-dashboard';
 import { Product, Week } from '@/types/admin';
 
 export const useDashboardState = () => {
   const [state, setState] = useState<DashboardState>({
-    createBattleDialogOpen: false,
+    createBattleModalOpen: false,
     battleDetailsModalOpen: false,
     weekEditorModalOpen: false,
     productFormOpen: false,
@@ -33,8 +32,8 @@ export const useDashboardState = () => {
     setState(prev => ({ ...prev, productFormOpen: open }));
   };
 
-  const setCreateBattleDialogOpen = (open: boolean) => {
-    setState(prev => ({ ...prev, createBattleDialogOpen: open }));
+  const setCreateBattleModalOpen = (open: boolean) => {
+    setState(prev => ({ ...prev, createBattleModalOpen: open }));
   };
 
   return {
@@ -44,6 +43,6 @@ export const useDashboardState = () => {
     setBattleDetailsModalOpen,
     setWeekEditorModalOpen,
     setProductFormOpen,
-    setCreateBattleDialogOpen,
+    setCreateBattleModalOpen,
   };
 };

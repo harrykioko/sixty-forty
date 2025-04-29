@@ -1,10 +1,10 @@
 import * as React from "react"
-import { type DialogProps } from "@radix-ui/react-dialog"
+import { type ModalProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive } from "cmdk"
 import { Search } from "lucide-react"
 
+import { Modal, ModalContent } from "@/components/ui/Modal"
 import { cn } from "@/lib/utils"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -21,17 +21,17 @@ const Command = React.forwardRef<
 ))
 Command.displayName = CommandPrimitive.displayName
 
-interface CommandDialogProps extends DialogProps {}
+interface CommandModalProps extends ModalProps {}
 
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+const CommandModal = ({ children, ...props }: CommandModalProps) => {
   return (
-    <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg">
+    <Modal {...props}>
+      <ModalContent className="overflow-hidden p-0 shadow-lg">
         <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
         </Command>
-      </DialogContent>
-    </Dialog>
+      </ModalContent>
+    </Modal>
   )
 }
 
@@ -142,7 +142,7 @@ CommandShortcut.displayName = "CommandShortcut"
 
 export {
   Command,
-  CommandDialog,
+  CommandModal,
   CommandInput,
   CommandList,
   CommandEmpty,

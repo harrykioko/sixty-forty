@@ -1,15 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalDescription,
+  ModalFooter,
+  ModalTrigger,
+} from "@/components/ui/Modal";
 import { WeekDatePicker } from "@/components/admin/modals/components/WeekDatePicker";
 import { WeekNumberInput } from "@/components/admin/modals/components/WeekNumberInput";
 import { StatusSelect } from "@/components/admin/modals/components/StatusSelect";
@@ -94,16 +94,16 @@ export const WeekEditorModal = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass border border-white/10 shadow-xl backdrop-blur-lg sm:max-w-[425px] animate-in fade-in-0 zoom-in-95">
-        <DialogHeader>
-          <DialogTitle className="gradient-text text-2xl">
+    <Modal open={open} onOpenChange={onOpenChange}>
+      <ModalContent className="glass border border-white/10 shadow-xl backdrop-blur-lg sm:max-w-[425px] animate-in fade-in-0 zoom-in-95">
+        <ModalHeader>
+          <ModalTitle className="gradient-text text-2xl">
             Edit Week Details
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
+          </ModalTitle>
+          <ModalDescription className="text-muted-foreground">
             Make changes to the current battle week details here.
-          </DialogDescription>
-        </DialogHeader>
+          </ModalDescription>
+        </ModalHeader>
 
         <div className="space-y-6 py-4">
           <WeekNumberInput 
@@ -124,7 +124,7 @@ export const WeekEditorModal = ({
           />
         </div>
 
-        <DialogFooter className="flex justify-between items-center border-t border-white/10 pt-4 mt-4">
+        <ModalFooter className="flex justify-between items-center border-t border-white/10 pt-4 mt-4">
           {status === 'voting' && (
             <Button
               onClick={onEndVoting}
@@ -152,8 +152,8 @@ export const WeekEditorModal = ({
               {isLoading ? "Saving..." : "Save changes"}
             </Button>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };

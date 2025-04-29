@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import { Edit, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { StatusTimeline } from "@/components/admin/panels/StatusTimeline";
 import { WeekData } from "@/types/admin";
 import { format } from "date-fns";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 /**
- * ProductWeekCard displays the current battle week with timeline, status, and admin actions.
+ * ProductWeekCard displays the current battle week with status and admin actions.
  * - Glassmorphic card styling
  * - Edit/View buttons with tooltips and accessibility
  * - Responsive and accessible
@@ -29,7 +28,7 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
       <Card className="relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 shadow-2xl transition-colors duration-300 p-10 rounded-2xl">
         <TooltipProvider>
           {/* Header */}
-          <div className="flex items-start justify-between mb-12">
+          <div className="flex items-start justify-between mb-8">
             <h4 className="text-3xl font-space-grotesk font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
               Week {week.number} Battle
             </h4>
@@ -47,7 +46,6 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
                     <Edit className="w-5 h-5 text-white/80" />
                   </motion.button>
                 </TooltipTrigger>
-                {/* Use side='left' for consistency and to prevent overflow */}
                 <TooltipContent side="left">
                   Edit week
                 </TooltipContent>
@@ -73,31 +71,20 @@ export const ProductWeekCard = ({ week, onEdit, onView }: ProductWeekCardProps) 
           </div>
         </TooltipProvider>
 
-        {/* Timeline + Status Message Grouped */}
-        <div className="flex flex-col items-center gap-12 mb-12">
-          <div className="w-full">
-            <StatusTimeline 
-              currentStatus={week.status} 
-              startDate={week.startDate}
-              endDate={week.endDate}
-            />
-          </div>
-
-          {/* Status Message */}
-          <div className="text-center">
-            <p className="text-white/70 text-base">
-              {week.products?.length ? 
-                `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
-                "No entries yet – nudge Harry and Marcos to submit!"}
-            </p>
-          </div>
+        {/* Status Message */}
+        <div className="text-center mb-8">
+          <p className="text-white/70 text-base">
+            {week.products?.length ? 
+              `${week.products.length} Entries • ${week.totalVotes || 0} Votes` :
+              "No entries yet – nudge Harry and Marcos to submit!"}
+          </p>
         </div>
 
         {/* Divider for section separation */}
         <div className="border-t border-white/10 my-6 w-full" />
 
         {/* Metadata Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="px-6 py-2 rounded-full bg-sixty40-blue/20 text-white/80 text-sm text-center min-w-[120px]">
             {week.status.charAt(0).toUpperCase() + week.status.slice(1)}
           </div>

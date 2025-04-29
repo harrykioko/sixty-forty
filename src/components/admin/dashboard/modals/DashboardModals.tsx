@@ -1,12 +1,12 @@
 import { Week, Product } from "@/types/admin";
-import { CreateBattleDialog } from "@/components/admin/dashboard/CreateBattleDialog";
+import { CreateBattleModal } from "@/components/admin/dashboard/CreateBattleModal";
 import { BattleDetailsModal } from "@/components/admin/modals/BattleDetailsModal";
 import { WeekEditorModal } from "@/components/admin/modals/WeekEditorModal";
 import CreateProductForm from "@/components/admin/form/CreateProductForm";
 import EditProductForm from "@/components/admin/form/EditProductForm";
 
 interface DashboardModalsProps {
-  createBattleDialogOpen: boolean;
+  createBattleModalOpen: boolean;
   battleDetailsModalOpen: boolean;
   weekEditorModalOpen: boolean;
   productFormOpen: boolean;
@@ -24,7 +24,7 @@ interface DashboardModalsProps {
 }
 
 export const DashboardModals = ({
-  createBattleDialogOpen,
+  createBattleModalOpen,
   battleDetailsModalOpen,
   weekEditorModalOpen,
   productFormOpen,
@@ -42,8 +42,8 @@ export const DashboardModals = ({
 }: DashboardModalsProps) => {
   return (
     <>
-      <CreateBattleDialog
-        open={createBattleDialogOpen}
+      <CreateBattleModal
+        open={createBattleModalOpen}
         onClose={onCloseCreateBattle}
       />
       

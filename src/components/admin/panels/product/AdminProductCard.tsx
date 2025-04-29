@@ -1,10 +1,9 @@
-
 import { motion } from "framer-motion";
 import { Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertModal, AlertModalAction, AlertModalCancel, AlertModalContent, AlertModalDescription, AlertModalFooter, AlertModalHeader, AlertModalTitle, AlertModalTrigger } from "@/components/ui/AlertModal";
 import { useToast } from "@/hooks/use-toast";
 import { Product } from "@/types/admin";
 
@@ -80,31 +79,31 @@ const AdminProductCard = ({ product, onEdit }: AdminProductCardProps) => {
                 Edit
               </Button>
               
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              <AlertModal>
+                <AlertModalTrigger asChild>
                   <Button variant="destructive" size="sm">
                     <Trash2 size={16} className="mr-2" />
                     Delete
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="glass-card border-white/10">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete product</AlertDialogTitle>
-                    <AlertDialogDescription>
+                </AlertModalTrigger>
+                <AlertModalContent className="glass-card border-white/10">
+                  <AlertModalHeader>
+                    <AlertModalTitle>Delete product</AlertModalTitle>
+                    <AlertModalDescription>
                       Are you sure you want to delete "{productTitle}"? This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-transparent border-white/20 hover:bg-white/10">Cancel</AlertDialogCancel>
-                    <AlertDialogAction 
+                    </AlertModalDescription>
+                  </AlertModalHeader>
+                  <AlertModalFooter>
+                    <AlertModalCancel className="bg-transparent border-white/20 hover:bg-white/10">Cancel</AlertModalCancel>
+                    <AlertModalAction 
                       className="bg-red-500 hover:bg-red-600" 
                       onClick={() => handleDelete(product.id)}
                     >
                       Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                    </AlertModalAction>
+                  </AlertModalFooter>
+                </AlertModalContent>
+              </AlertModal>
             </div>
           </div>
         </CardContent>

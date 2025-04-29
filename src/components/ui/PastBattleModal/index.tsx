@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Calendar, ExternalLink } from "lucide-react";
-import { PastBattleModalProps } from "./types";
-import { PastProductColumn } from "./PastProductColumn";
+import type { PastBattleModalProps } from "@/components/ui/PastBattleModal/Types";
+import { PastProductColumn } from "@/components/ui/PastBattleModal/PastProductColumn";
 
 export const PastBattleModal = ({
   week,
@@ -91,4 +91,4 @@ export const PastBattleModal = ({
   );
 };
 
-export default PastBattleModal;
+export default PastBattleModal; 

@@ -1,12 +1,11 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-import ProductCard from '@/components/ui/product-card';
+import ProductCard from '@/components/ui/ProductCard';
 import ProductModal from '@/components/ui/product-modal';
-import VotingResults from '@/components/ui/voting-results';
-import SocialShare from '@/components/ui/social-share';
-import { useToast } from '@/components/ui/use-toast';
+import VotingResults from '@/components/ui/VotingResults';
+import SocialShare from '@/components/ui/SocialShare';
+import { useToast } from '@/hooks/use-toast';
 import { useCurrentBattle } from '@/hooks/use-current-battle';
 import { Product } from '@/types/admin';
 

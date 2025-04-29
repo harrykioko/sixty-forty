@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Copy, Twitter, Linkedin, MessageCircle, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface SocialShareProps {
   title: string;

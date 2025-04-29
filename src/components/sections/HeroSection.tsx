@@ -1,7 +1,7 @@
-
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 import React from 'react';
-import { HeroContent } from './hero/hero-content';
-import { BattleCard } from './hero/battle-card';
+import { HeroContent } from './hero/HeroContent';
+import { BattleCard } from './hero/BattleCard';
 
 export const HeroSection = () => {
   return (

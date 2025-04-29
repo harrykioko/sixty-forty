@@ -1,14 +1,13 @@
-
 import { motion } from "framer-motion";
 import { Construction } from "lucide-react";
 import { useBuilderStats } from "@/hooks/use-builder-stats";
 import { useCurrentBattle } from "@/hooks/use-current-battle";
-import { BattleLoadingState } from "./battle-states/loading-state";
-import { BattleErrorState } from "./battle-states/error-state";
-import { BattleEmptyState } from "./battle-states/empty-state";
-import { BattleHeader } from "./battle-header";
-import { BuilderProfileCard } from "./builder-profile-card";
-import { BattleActions } from "./battle-actions";
+import { BattleLoadingState } from "./battle-states/LoadingState";
+import { BattleErrorState } from "./battle-states/ErrorState";
+import { BattleEmptyState } from "./battle-states/EmptyState";
+import { BattleHeader } from "./BattleHeader";
+import { BuilderProfileCard } from "./BuilderProfileCard";
+import { BattleActions } from "./BattleActions";
 
 export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats();

@@ -1,13 +1,12 @@
-
 import { useEffect } from "react";
-import Navbar from "@/components/ui/navbar";
-import { HeroSection } from "@/components/sections/hero-section";
-import { BattleSection } from "@/components/sections/battle-section";
-import { HowItWorksSection } from "@/components/sections/how-it-works-section";
-import { PastBattlesSection } from "@/components/sections/past-battles-section";
-import { BuildersSection } from "@/components/sections/builders-section";
-import { SiteFooter } from "@/components/layouts/site-footer";
-import { StickyCta } from "@/components/ui/sticky-cta";
+import Navbar from "@/components/ui/Navbar";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { BattleSection } from "@/components/sections/BattleSection";
+import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
+import { PastBattlesSection } from "@/components/sections/PastBattlesSection";
+import { BuildersSection } from "@/components/sections/BuildersSection";
+import { SiteFooter } from "@/components/layouts/SiteFooter";
+import { StickyCta } from "@/components/ui/StickyCta";
 
 const Index = () => {
   return (

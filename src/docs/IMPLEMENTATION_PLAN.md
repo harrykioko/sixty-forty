@@ -100,6 +100,33 @@ _This is a living document. Update as you make progress._
 - [ ] Responsive: Grid collapses to 1 column on mobile, all elements accessible
 - [ ] Test: Add, edit, and view flows for all product states
 
+### Import Path Standardization
+- [ ] Fix hook import paths
+  - [x] Update toast import in SocialShare component
+  - [ ] Audit all hook imports across codebase
+  - [ ] Create list of components using incorrect hook paths
+  - [ ] Fix remaining hook import issues
+- [ ] Standardize component import paths
+  - [ ] Audit current import patterns
+  - [ ] Document components with incorrect imports
+  - [ ] Update imports to follow conventions
+  - [ ] Test all components after updates
+- [ ] Create automated import checker
+  - [ ] Write script to verify import paths
+  - [ ] Add import path rules to ESLint config
+  - [ ] Document common import patterns
+
+### Hook Naming Standardization
+- [ ] Convert all hook files to camelCase
+  - [ ] Create list of hooks using kebab-case
+  - [ ] Plan rename sequence to minimize conflicts
+  - [ ] Update imports in all dependent files
+  - [ ] Test functionality after renaming
+- [ ] Document hook naming convention
+  - [ ] Update style guide
+  - [ ] Add examples of correct naming
+  - [ ] Create migration guide for future hooks
+
 ---
 
 ## ✅ Completed
@@ -128,6 +155,10 @@ _This is a living document. Update as you make progress._
   - [x] Renamed `CreateBattleDialog.tsx` to `CreateBattleModal.tsx`
   - [x] Updated all imports and references
   - [x] Updated documentation to reflect changes
+- [x] Fixed toast import in SocialShare component
+- [x] Documented common import issues
+- [x] Updated component structure documentation
+- [x] Added import pattern guidelines
 
 ---
 
@@ -140,6 +171,10 @@ _This is a living document. Update as you make progress._
 - [ ] Create "Nudge Builders" Button (admin action for reminders)
 - [ ] Accessibility & Color Contrast Audit (ensure all new UI changes meet standards)
 - [ ] Add/Update Unit & Integration Tests (cover new UI logic and layout changes)
+- [ ] Complete hook naming standardization
+- [ ] Fix remaining import path issues
+- [ ] Implement automated import checking
+- [ ] Update component documentation
 
 ---
 
@@ -308,3 +343,79 @@ _This is a living document. Update as you make progress._
 - Phase 6: 1-2 days
 
 Total estimated time: 7-12 days
+
+## Current Sprint Focus: Import Error Resolution & Component Standardization
+
+### Completed Tasks
+1. ✅ Standardized modal naming conventions
+2. ✅ Fixed import issues in several components
+3. ✅ Renamed `DropdownMenu.tsx` to `dropdown-menu.tsx`
+4. ✅ Documented component export patterns
+5. ✅ Updated component structure documentation
+
+### In Progress
+1. 🔄 Resolving import errors across components
+2. 🔄 Standardizing component export patterns
+3. 🔄 Updating import statements to match new conventions
+
+### Next Steps
+
+#### Phase 1: Error Resolution
+1. Document and categorize all import errors
+2. Create prioritized list of components to fix
+3. Update import statements following documented patterns
+4. Test components after import fixes
+5. Document any breaking changes
+
+#### Phase 2: Component Standardization
+1. Review all component exports
+2. Update exports to match documented patterns
+3. Standardize file naming across components
+4. Update import statements project-wide
+5. Verify component functionality
+
+#### Phase 3: Testing & Documentation
+1. Test all modified components
+2. Update component documentation
+3. Create automated tests for critical components
+4. Document export patterns in component files
+5. Update development guidelines
+
+### Technical Debt Items
+1. Inconsistent export patterns
+2. Mixed file naming conventions
+3. Outdated import statements
+4. Missing component documentation
+5. Incomplete test coverage
+
+### Quality Gates
+1. No import errors in console
+2. All components follow naming conventions
+3. Export patterns match documentation
+4. Tests pass for modified components
+5. Documentation is up to date
+
+### Risk Mitigation
+1. Maintain list of modified components
+2. Create backup branches before major changes
+3. Test components in isolation
+4. Document all breaking changes
+5. Regular progress updates
+
+## Timeline
+- Phase 1: 2-3 days
+- Phase 2: 2-3 days
+- Phase 3: 1-2 days
+
+## Dependencies
+1. shadcn/ui component patterns
+2. TypeScript configuration
+3. Vite build settings
+4. Component test suite
+
+## Success Criteria
+1. Zero import errors in console
+2. Consistent component patterns
+3. Updated documentation
+4. Passing tests
+5. Improved developer experience

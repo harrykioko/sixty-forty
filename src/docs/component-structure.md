@@ -126,6 +126,74 @@ Components for data input and editing.
 - ✅ Use **kebab-case** only for config files and folders (e.g., `tailwind.config.ts`, `/admin/modals/`)
 - ❌ Avoid mixing PascalCase and kebab-case in the same directory
 
+## Export Patterns
+
+### Component Export Rules
+1. **Custom UI Components**
+   - Use default exports for reusable UI components
+   - Example: `export default ProductCard`
+
+2. **Section Components**
+   - Use named exports for page sections
+   - Example: `export const BattleSection = () => {}`
+
+3. **Layout Components**
+   - Use default exports for layout wrappers
+   - Example: `export default AdminLayout`
+
+4. **Form Components**
+   - Use default exports for form components
+   - Example: `export default CreateProductForm`
+
+5. **Modal Components**
+   - Use default exports for modal components
+   - Example: `export default ProductModal`
+
+6. **shadcn/ui Components**
+   - Use named exports to match shadcn/ui patterns
+   - Example: `export { Button, type ButtonProps }`
+
+### File Naming Conventions
+
+1. **Custom Components**
+   - Use PascalCase for all custom component files
+   - Example: `ProductCard.tsx`, `BattleSection.tsx`
+
+2. **shadcn/ui Components**
+   - Use kebab-case to match shadcn/ui conventions
+   - Example: `dropdown-menu.tsx`, `alert-dialog.tsx`
+
+3. **Hooks and Utilities**
+   - Use camelCase for all utility files
+   - Example: `useToast.ts`, `formatDate.ts`
+
+4. **Configuration Files**
+   - Use kebab-case for config files
+   - Example: `tailwind.config.ts`
+
+### Import Patterns
+
+1. **Default Exports**
+   ```typescript
+   import ProductCard from '@/components/ui/ProductCard';
+   ```
+
+2. **Named Exports**
+   ```typescript
+   import { Button } from '@/components/ui/button';
+   import { BattleSection } from '@/components/sections/BattleSection';
+   ```
+
+3. **Multiple Named Exports**
+   ```typescript
+   import { Badge, type BadgeProps } from '@/components/ui/badge';
+   ```
+
+4. **Hooks**
+   ```typescript
+   import { useToast } from '@/hooks/useToast';
+   ```
+
 ## Improvement Recommendations
 
 ### Renaming Suggestions
@@ -143,6 +211,12 @@ Components for data input and editing.
 2. Group modal components in a single location
 3. Standardize file naming convention across all components
 
+### Export Pattern Improvements
+1. Standardize export patterns across similar component types
+2. Update imports to match standardized export patterns
+3. Document export decisions in component comments
+4. Create automated checks for export consistency
+
 ## Next Steps
 
 1. Standardize file naming to PascalCase for components
@@ -158,3 +232,53 @@ Components for data input and editing.
 3. Document any new components added to the codebase
 4. Review and update this documentation when making structural changes
 5. Ensure all components follow the established patterns and conventions 
+
+## Common Import Issues and Solutions
+
+### Import Path Issues
+1. **Hook Imports**
+   - ✅ Correct: `import { toast } from "@/hooks/use-toast";`
+   - ❌ Incorrect: `import { toast } from "@/components/ui/use-toast";`
+   - Note: Hooks should be imported from `/hooks` directory, not `/components`
+
+2. **UI Component Imports**
+   - ✅ Correct: `import { Button } from "@/components/ui/button";`
+   - ❌ Incorrect: `import { Button } from "@/components/Button";`
+   - Note: shadcn/ui components use kebab-case filenames
+
+3. **Custom Component Imports**
+   - ✅ Correct: `import { SocialShare } from "@/components/ui/SocialShare";`
+   - ❌ Incorrect: `import { social-share } from "@/components/ui/social-share";`
+   - Note: Custom components use PascalCase filenames
+
+### Common Patterns to Watch
+1. **Toast Usage**
+   - Always import from hooks directory
+   - Use the kebab-case filename (`use-toast.ts`)
+   - Will be renamed to camelCase in future (`useToast.ts`)
+
+2. **Button Component**
+   - Always import from shadcn/ui location
+   - Use kebab-case for the import path
+   - Maintain consistent variant usage
+
+3. **Modal Components**
+   - Use `Modal` suffix (not `Dialog`)
+   - Import from appropriate directory based on scope
+   - Follow PascalCase naming
+
+### Known Issues to Address
+1. **Inconsistent Hook Naming**
+   - Some hooks use kebab-case (`use-toast.ts`)
+   - Others use camelCase (`useToast.ts`)
+   - Plan to standardize all to camelCase
+
+2. **Mixed Component Locations**
+   - Some UI components in root `/components`
+   - Others in `/components/ui`
+   - Need to consolidate locations
+
+3. **Import Path Confusion**
+   - Multiple possible locations for similar components
+   - Need to establish clear import patterns
+   - Document exceptions to rules 

@@ -1,7 +1,6 @@
-
 import { useBuilderStats } from "@/hooks/use-builder-stats";
-import { BuilderCard } from "./builders/builder-card";
-import { BuildersSectionHeader } from "./builders/section-header";
+import { BuilderCard } from "./builders/BuilderCard";
+import { BuildersSectionHeader } from "./builders/SectionHeader";
 
 export const BuildersSection = () => {
   const { data: builderStats = [], isLoading, error } = useBuilderStats();

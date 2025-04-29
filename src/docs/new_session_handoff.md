@@ -1,53 +1,67 @@
 # 📝 Sixty40 Admin Dashboard – Session Handoff
 
 ## What Was Accomplished (Previous Session)
-- ✅ Extracted shared `ProductFormFields` component for product add/edit flows
-- ✅ Updated implementation plan to split product form into `CreateProductForm` and `EditProductForm`
-- ✅ Refactored legacy `ProductForm` to use `ProductFormFields`
-- ✅ Implemented `CreateProductForm` (empty/default values, create logic)
-- ✅ Implemented `EditProductForm` (prepopulated, update logic)
-- ✅ Refactored modal state management to distinguish add vs. edit
-- ✅ Updated parent handlers to open correct form/modal
-- ✅ Added comprehensive tests for both forms
-- ✅ Removed legacy `ProductForm` and related code
-- ✅ Maintained all changes in line with Sixty40 admin dashboard standards
+- ✅ Fixed import issues in several components:
+  - Fixed toast import in SocialShare component
+  - Updated import path from UI components to hooks directory
+  - Documented common import patterns and issues
+- ✅ Updated documentation:
+  - Added import issues section to component-structure.md
+  - Updated implementation plan with import standardization tasks
+  - Created guidelines for import paths and naming conventions
+- ✅ Identified patterns in import errors:
+  - Hook imports from incorrect directories
+  - Inconsistent use of kebab-case vs PascalCase
+  - Mixed component locations causing confusion
 
 ## What to Focus on Next
-- Standardize PastBattlesSection component:
-  - Resolve type mismatch between AdminDashboardLayout and DashboardContent usage
-  - Implement consistent prop interface and event handler naming
-  - Add proper TypeScript types and test coverage
-- Implement Header improvements:
-  - Show week pill
-  - Add date range pill
-  - Add new status/stage pill (replaces timeline)
-- Implement Product Overview improvements:
-  - Show side-by-side in responsive grid for 2+ products
-  - Center card and add prominent Add Product button for 1 product
-  - Center Add Product button with CTA for 0 products
-- Implement Product Card improvements:
-  - Add builder pill
-  - Show name, hero image, short description
-  - Add edit/view button
-- Implement Product Modal improvements:
-  - Remove timeline
-  - Add status pill near title
-  - Prioritize product info at top
-  - Apply glassmorphic styling
-- Improve responsiveness across all new components
-- Test all new UI changes for accessibility and color contrast
+- Continue fixing import errors throughout the codebase:
+  - Audit and fix all hook imports
+  - Standardize component import paths
+  - Create automated import checking
+- Standardize hook naming:
+  - Convert remaining kebab-case hooks to camelCase
+  - Update all dependent imports
+  - Document naming conventions
+- Improve development workflow:
+  - Add ESLint rules for import paths
+  - Create scripts for import verification
+  - Update documentation with new standards
 
-## Relevant Documents & Files
-- [Implementation Plan](./IMPLEMENTATION_PLAN.md)
-- [ProductFormFields Component](../components/admin/form/sections/ProductFormFields.tsx)
-- [CreateProductForm Component](../components/admin/form/CreateProductForm.tsx)
-- [EditProductForm Component](../components/admin/form/EditProductForm.tsx)
+## Current Import Issues
+1. Hook Location Issues:
+   - Some hooks imported from `/components/ui` instead of `/hooks`
+   - Inconsistent hook file naming (kebab-case vs camelCase)
+   - Need to standardize import paths
+2. Component Import Patterns:
+   - Mixed use of kebab-case and PascalCase in imports
+   - Inconsistent component locations
+   - Need clear guidelines for import paths
+3. Documentation Gaps:
+   - Missing examples of correct import patterns
+   - Unclear guidelines for component locations
+   - Need better error documentation
+
+## Next Immediate Tasks
+1. Create comprehensive list of all import errors
+2. Plan hook renaming sequence
+3. Update import paths in affected components
+4. Add automated import checking
+5. Update documentation with new standards
+6. Test all components after changes
 
 ## Guidelines
-- Continue following Sixty40 glassmorphic and UX standards
-- Use TailwindCSS utilities and shadcn/ui for advanced components
-- Reference the implementation plan for current priorities and completed work
-- Update this handoff doc after major session transitions
+- Follow new import path conventions
+- Use correct casing based on component type
+- Test components after import updates
+- Document any breaking changes
+- Update related documentation
+
+## Relevant Files
+- [Component Structure](./component-structure.md)
+- [Implementation Plan](./IMPLEMENTATION_PLAN.md)
+- [UI Components](../components/ui/)
+- [Hooks Directory](../hooks/)
 
 ---
 _Last updated: June 2, 2025_ 

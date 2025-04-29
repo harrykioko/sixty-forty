@@ -78,12 +78,12 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
         
         {pastBattles.length > 0 && (
           <PastBattlesSection
-            weeks={pastBattles}
-            onView={(week) => {
+            pastWeeks={pastBattles}
+            onViewBattle={(week) => {
               setSelectedWeek(week);
               setBattleDetailsModalOpen(true);
             }}
-            onEdit={(week) => {
+            onEditBattle={(week) => {
               setSelectedWeek(week);
               setWeekEditorModalOpen(true);
             }}

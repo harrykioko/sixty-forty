@@ -1,8 +1,7 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Construction, ExternalLink } from "lucide-react";
-import CountdownTimer from "@/components/ui/countdown-timer";
+import CountdownTimer from "@/components/ui/CountdownTimer";
 import { useEffect, useState } from "react";
 import { usePastBattles } from "@/hooks/use-past-battles";
 

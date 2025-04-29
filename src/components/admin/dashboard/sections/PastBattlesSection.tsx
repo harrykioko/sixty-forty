@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
 import { Week } from "@/types/admin";
-import { PastBattleCard } from "@/components/admin/dashboard/PastBattleCard";
+import { PastBattleCard } from "../PastBattleCard";
 
 interface PastBattlesSectionProps {
   pastWeeks: Week[];
   onViewBattle: (week: Week) => void;
+  onEditBattle?: (week: Week) => void;
 }
 
 export const PastBattlesSection = ({ 
   pastWeeks, 
-  onViewBattle 
+  onViewBattle,
+  onEditBattle 
 }: PastBattlesSectionProps) => {
   if (!pastWeeks?.length) return null;
   
@@ -30,6 +32,7 @@ export const PastBattlesSection = ({
             key={week.id}
             week={week}
             onView={() => onViewBattle(week)}
+            onEdit={onEditBattle ? () => onEditBattle(week) : undefined}
           />
         ))}
       </div>

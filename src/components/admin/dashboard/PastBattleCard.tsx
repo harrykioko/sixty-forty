@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Eye } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Eye, Edit } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Week } from "@/types/admin";
@@ -9,9 +9,10 @@ import { format } from "date-fns";
 interface PastBattleCardProps {
   week: Week;
   onView: () => void;
+  onEdit?: () => void;
 }
 
-export const PastBattleCard = ({ week, onView }: PastBattleCardProps) => {
+export const PastBattleCard = ({ week, onView, onEdit }: PastBattleCardProps) => {
   const winner = week.products?.find(p => p.id === week.winnerId);
   
   return (
@@ -42,7 +43,7 @@ export const PastBattleCard = ({ week, onView }: PastBattleCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div>
               <h3 className="text-xl font-bold mb-1">
@@ -69,17 +70,30 @@ export const PastBattleCard = ({ week, onView }: PastBattleCardProps) => {
             <div className="text-sm text-white/40">
               {week.products?.length || 0} Entries • {week.totalVotes || 0} Votes
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onView}
-              className="border-white/20 hover:bg-white/10"
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              View Details
-            </Button>
+            <div className="flex gap-2">
+              {onEdit && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onEdit}
+                  className="border-white/20 hover:bg-white/10"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onView}
+                className="border-white/20 hover:bg-white/10"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                View Details
+              </Button>
+            </div>
           </div>
-        </div>
+        </CardContent>
       </Card>
     </motion.div>
   );

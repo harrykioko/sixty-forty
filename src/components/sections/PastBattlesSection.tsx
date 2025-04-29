@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronDown, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -10,11 +9,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BattleCard } from "./past-battles/battle-card";
-import { OlderBattlesList } from "./past-battles/older-battles-list";
-import { LoadingState } from "./past-battles/loading-state";
-import { ErrorState } from "./past-battles/error-state";
-import { EmptyState } from "./past-battles/empty-state";
+import { BattleCard } from "./past-battles/BattleCard";
+import { OlderBattlesList } from "./past-battles/OlderBattlesList";
+import { LoadingState } from "./past-battles/LoadingState";
+import { ErrorState } from "./past-battles/ErrorState";
+import { EmptyState } from "./past-battles/EmptyState";
 import { format } from "date-fns";
 
 export const PastBattlesSection = () => {

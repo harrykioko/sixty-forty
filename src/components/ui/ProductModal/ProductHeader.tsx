@@ -1,25 +1,30 @@
-
 import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ProductHeaderProps {
-  image: string;
   title: string;
   builderName: string;
+  onClose: () => void;
 }
 
-export const ProductHeader = ({ image, title, builderName }: ProductHeaderProps) => {
+export const ProductHeader = ({ title, builderName, onClose }: ProductHeaderProps) => {
   return (
-    <div className="relative">
-      <div className="relative h-64 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 z-10" />
-        <img src={image} alt={title} className="w-full h-full object-cover" />
-        <div className="absolute bottom-4 left-6 z-20">
-          <Badge className="mb-2 bg-sixty40-purple text-white">
-            Built by {builderName}
-          </Badge>
-          <h2 className="text-3xl font-bold text-white">{title}</h2>
-        </div>
+    <div className="flex items-center justify-between mb-6">
+      <div>
+        <Badge className="mb-2 bg-sixty40-purple text-white">
+          Built by {builderName}
+        </Badge>
+        <h2 className="text-3xl font-bold">{title}</h2>
       </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-white/60 hover:text-white"
+        onClick={onClose}
+      >
+        <X className="h-6 w-6" />
+      </Button>
     </div>
   );
 };

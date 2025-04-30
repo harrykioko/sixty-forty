@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProductHeader } from "./ProductHeader";
 import { ImageGallery } from "./ImageGallery";
 import { ProductSidebar } from "./ProductSidebar";
-import { ProductModalProps } from "./types";
+import { ProductModalProps } from "./Types";
 
 export const ProductModal = ({
   id,
@@ -56,8 +56,16 @@ export const ProductModal = ({
                 onClose={onClose}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+              <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-2">
+                  <div className="relative h-[400px] mb-6 rounded-lg overflow-hidden">
+                    <img
+                      src={selectedImage}
+                      alt={title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
                   <ImageGallery
                     images={allImages}
                     selectedImage={selectedImage}

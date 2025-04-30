@@ -1,11 +1,10 @@
-
 interface ImageGalleryProps {
   images: string[];
   selectedImage: string;
-  onImageSelect: (image: string) => void;
+  onSelectImage: (image: string) => void;
 }
 
-export const ImageGallery = ({ images, selectedImage, onImageSelect }: ImageGalleryProps) => {
+export const ImageGallery = ({ images, selectedImage, onSelectImage }: ImageGalleryProps) => {
   if (images.length <= 1) return null;
 
   return (
@@ -18,7 +17,7 @@ export const ImageGallery = ({ images, selectedImage, onImageSelect }: ImageGall
             className={`cursor-pointer rounded-md overflow-hidden border-2 ${
               selectedImage === img ? "border-sixty40-purple" : "border-transparent"
             }`}
-            onClick={() => onImageSelect(img)}
+            onClick={() => onSelectImage(img)}
           >
             <img
               src={img}

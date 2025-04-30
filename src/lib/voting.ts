@@ -69,7 +69,7 @@ export const submitVote = async (params: VoteParams): Promise<{ success: boolean
   if (isRateLimited()) {
     return {
       success: false,
-      error: "Whoops! You're voting a bit too fast. Try again in a few seconds.",
+      error: "Just a moment - let's give others a chance to vote too 😊",
     };
   }
 

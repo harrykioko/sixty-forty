@@ -26,14 +26,32 @@ _This is a living document. Update as you make progress._
   - [x] Implement frontend rate limiting
   - [x] Add duplicate vote prevention
 
-## 🟢 In Progress
+### Vote Display Enhancement
+- [x] Core Vote Count Query
+  - [x] Create `getVoteCountsByProduct` function in `voting.ts`
+  - [x] Implement Supabase query for vote counts by product
+  - [x] Add TypeScript interfaces for vote count response
+  - [x] Add error handling for query failures
 
-### Vote Analytics Implementation
-- [ ] Dashboard Features
-  - [ ] Real-time vote count display
-  - [ ] Vote distribution visualization
-  - [ ] Time-based vote analysis
-  - [ ] Export functionality
+- [x] Live Results Component Update
+  - [x] Add `hasVotes` state based on total vote count
+  - [x] Update conditional rendering logic in VotingResults
+  - [x] Create "No votes yet" placeholder
+  - [x] Preserve existing UI structure and styling
+
+- [x] User Vote Status Integration
+  - [x] Create utility to check user's vote status
+  - [x] Query votes table by voter_id and week_id
+  - [x] Handle "You voted for: X" message display
+  - [x] Ensure localStorage voter_id integration
+
+- [ ] Real-time Updates
+  - [x] Set up Supabase subscription for vote changes
+  - [x] Update vote counts on new votes
+  - [x] Handle subscription cleanup
+  - [ ] Add error handling for subscription failures
+
+## 🟢 In Progress
 
 ### Winner Selection System
 - [ ] Implementation Tasks
@@ -44,22 +62,22 @@ _This is a living document. Update as you make progress._
 
 ### Testing & Documentation
 - [ ] Unit Tests
-  - [ ] Vote submission functions
-  - [ ] Rate limiting logic
-  - [ ] Winner selection algorithm
-- [ ] Integration Tests
-  - [ ] Complete vote flow
-  - [ ] Real-time updates
-  - [ ] Analytics dashboard
+  - [ ] Test vote count query function
+  - [ ] Test conditional rendering logic
+  - [ ] Test user vote detection
+  - [ ] Test real-time update handling
+  - [ ] Test winner selection algorithm
 - [ ] Documentation
-  - [ ] Test scenarios
-  - [ ] Edge cases
-  - [ ] Setup instructions
+  - [ ] Document vote count query function
+  - [ ] Document component props and state
+  - [ ] Document winner selection process
+  - [ ] Add inline comments for complex logic
+  - [ ] Update README with new functionality
 
 ## 🔜 Up Next
 
-1. Build vote analytics dashboard
-2. Implement winner selection logic
+1. Add error handling for subscription failures
+2. Implement winner selection system
 3. Add comprehensive testing suite
 4. Create user documentation
 
@@ -68,6 +86,11 @@ _This is a living document. Update as you make progress._
 - Supabase RLS policies fixed and working correctly
 - Real-time vote updates functioning as expected
 - User feedback improved with gentler messaging
+- Vote display will show automatically when first vote is cast
+- Existing UI components will be preserved
+- Winner selection will be implemented after vote display enhancement
+- Vote counts are now managed through a dedicated function
+- Real-time updates are working but need better error handling
 
 ---
 _Last updated: June 2, 2025_

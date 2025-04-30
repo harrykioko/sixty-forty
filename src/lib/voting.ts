@@ -5,6 +5,18 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 // Rate limiting constants
 const RATE_LIMIT_SECONDS = 10;
 
+// Types for vote counting
+interface VoteCount {
+  product_id: string;
+  vote_count: number;
+}
+
+interface VoteCountsResponse {
+  data: VoteCount[];
+  error: string | null;
+  totalVotes: number;
+}
+
 export const getOrCreateVoterId = (): string => {
   const key = 'voter_id';
   let id = localStorage.getItem(key);
@@ -89,4 +101,62 @@ export const subscribeToVotes = (weekId: string, callback: () => void): Realtime
       callback
     )
     .subscribe();
+};
+
+/**
+ * Gets the vote counts for all products in a specific week
+ * @param weekId - The ID of the week to get vote counts for
+ * @returns Promise<VoteCountsResponse> - The vote counts grouped by product
+ */
+export const getVoteCountsByProduct = async (weekId: string): Promise<VoteCountsResponse> => {
+  try {
+    const { data, error } = await supabase
+      .from('votes')
+      .select('product_id')
+      .eq('week_id', weekId);
+
+    if (error) {
+      console.error('Error fetching vote counts:', error);
+      return {
+        data: [],
+        error: 'Failed to fetch vote counts',
+        totalVotes: 0
+      };
+    }
+
+    if (!data || data.length === 0) {
+      return {
+        data: [],
+        error: null,
+        totalVotes: 0
+      };
+    }
+
+    // Count votes by product
+    const voteCounts = data.reduce((acc: { [key: string]: number }, vote) => {
+      if (vote.product_id) {
+        acc[vote.product_id] = (acc[vote.product_id] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    // Convert to array format
+    const voteCountArray: VoteCount[] = Object.entries(voteCounts).map(([product_id, vote_count]) => ({
+      product_id,
+      vote_count
+    }));
+
+    return {
+      data: voteCountArray,
+      error: null,
+      totalVotes: data.length
+    };
+  } catch (err) {
+    console.error('Unexpected error fetching vote counts:', err);
+    return {
+      data: [],
+      error: 'An unexpected error occurred',
+      totalVotes: 0
+    };
+  }
 }; 

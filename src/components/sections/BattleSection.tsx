@@ -8,7 +8,7 @@ import SocialShare from '@/components/ui/SocialShare';
 import { useToast } from '@/hooks/use-toast';
 import { useCurrentBattle } from '@/hooks/use-current-battle';
 import { Product } from '@/types/admin';
-import { submitVote, subscribeToVotes } from '@/lib/voting';
+import { submitVote, subscribeToVotes, getVoteCountsByProduct } from '@/lib/voting';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -20,6 +20,7 @@ export const BattleSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [votedForId, setVotedForId] = useState<string | null>(null);
   const [productVotes, setProductVotes] = useState<{ [key: string]: number }>({});
+  const [totalVotes, setTotalVotes] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [voteSubscription, setVoteSubscription] = useState<RealtimeChannel | null>(null);
 
@@ -35,6 +36,12 @@ export const BattleSection = () => {
       // Initial vote count load
       refreshVoteCounts();
 
+      // Check if user has already voted
+      const savedVotedFor = localStorage.getItem("sixty40_voted_for");
+      if (savedVotedFor) {
+        setVotedForId(savedVotedFor);
+      }
+
       return () => {
         subscription.unsubscribe();
       };
@@ -44,19 +51,21 @@ export const BattleSection = () => {
   const refreshVoteCounts = async () => {
     if (!battleData?.currentWeek?.id) return;
 
-    const { data: votes } = await supabase
-      .from('votes')
-      .select('product_id')
-      .eq('week_id', battleData.currentWeek.id);
-
-    if (votes) {
-      const voteCounts = votes.reduce((acc, vote) => {
-        acc[vote.product_id] = (acc[vote.product_id] || 0) + 1;
-        return acc;
-      }, {} as { [key: string]: number });
-
-      setProductVotes(voteCounts);
+    const response = await getVoteCountsByProduct(battleData.currentWeek.id);
+    
+    if (response.error) {
+      console.error('Error fetching vote counts:', response.error);
+      return;
     }
+
+    // Convert array format to object format for existing component compatibility
+    const voteCounts = response.data.reduce((acc, vote) => {
+      acc[vote.product_id] = vote.vote_count;
+      return acc;
+    }, {} as { [key: string]: number });
+
+    setProductVotes(voteCounts);
+    setTotalVotes(response.totalVotes);
   };
 
   const openProductModal = (product: Product) => {
@@ -198,14 +207,14 @@ export const BattleSection = () => {
               title={product.title}
               builderName={product.builderName}
               shortDescription={product.shortDescription}
-              image={product.image}
-              techStack={product.techStack}
+              image={product.image || ''}
+              techStack={product.techStack || []}
               onClick={() => openProductModal(product)}
             />
           ))}
         </div>
 
-        {showVoteResults && battleData.products.length >= 2 && (
+        {(totalVotes > 0 || votedForId) && battleData.products.length >= 2 && (
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full">
               <VotingResults
@@ -223,6 +232,7 @@ export const BattleSection = () => {
                 }}
                 hasVoted={!!votedForId}
                 votedForId={votedForId || undefined}
+                totalVotes={totalVotes}
               />
               
               {votedForId && (
@@ -238,16 +248,22 @@ export const BattleSection = () => {
             </div>
           </div>
         )}
-      </div>
 
-      {selectedProduct && (
-        <ProductModal
-          {...selectedProduct}
-          isOpen={isModalOpen}
-          onClose={closeProductModal}
-          onVote={handleVote}
-        />
-      )}
+        {totalVotes === 0 && !votedForId && (
+          <div className="text-center text-muted-foreground">
+            <p>No votes yet. Be the first to vote!</p>
+          </div>
+        )}
+
+        {selectedProduct && (
+          <ProductModal
+            {...selectedProduct}
+            isOpen={isModalOpen}
+            onClose={closeProductModal}
+            onVote={handleVote}
+          />
+        )}
+      </div>
     </section>
   );
 };

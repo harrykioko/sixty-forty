@@ -118,13 +118,103 @@ Components for data input and editing.
 
 5. **Modal Components**
    - Suffix: `Modal`
-   - Example: `CreateBattleModal`, `AlertModal`
+   - Example: `PastBattleModal`, `CreateBattleModal`
 
-### File Naming Rules
-- ✅ Use **PascalCase** for all React component files (e.g., `ProductCard.tsx`, `BattleSection.tsx`)
-- ✅ Use **camelCase** for hooks and utilities (e.g., `useDashboardState.ts`, `formatDate.ts`)
-- ✅ Use **kebab-case** only for config files and folders (e.g., `tailwind.config.ts`, `/admin/modals/`)
-- ❌ Avoid mixing PascalCase and kebab-case in the same directory
+### Directory Structure Standards
+1. **Component Directories**
+   - ✅ Use PascalCase for component directories
+   - Example: `ProductModal/`, `PastBattleModal/`
+   - Must match component name exactly
+
+2. **Component File Structure**
+   - Main component: `index.tsx`
+   - Types: `Types.ts` (PascalCase)
+   - Sub-components: `ComponentName.tsx` (PascalCase)
+   - Example structure:
+     ```
+     PastBattleModal/
+     ├── index.tsx
+     ├── Types.ts
+     ├── PastProductColumn.tsx
+     └── [other related components]
+     ```
+
+3. **Type Definitions**
+   - Place in `Types.ts` within component directory
+   - Use interfaces over types when possible
+   - Mark optional props with `?` modifier
+   - Example:
+     ```typescript
+     interface ComponentProps {
+       required: string;
+       optional?: string;
+     }
+     ```
+
+### File Naming Conventions
+1. **Component Files**
+   - ✅ Use PascalCase for all component files
+   - Example: `ProductCard.tsx`, `BattleSection.tsx`
+   - ❌ Avoid kebab-case for components
+
+2. **Index Files**
+   - ✅ Use lowercase `index.tsx` for main component files
+   - ❌ Avoid `Index.tsx` (uppercase)
+   - Export component as default export
+
+3. **Type Files**
+   - ✅ Use PascalCase for type definition files
+   - Example: `Types.ts`, `Constants.ts`
+   - Group related types in same file
+
+### Import Patterns
+1. **Component Imports**
+   - ✅ Use absolute imports with `@/` prefix
+   - Example: `import { Component } from "@/components/ui/Component";`
+   - ❌ Avoid relative imports for shared components
+
+2. **Type Imports**
+   - ✅ Use explicit type imports
+   - Example: `import type { ComponentProps } from "./Types";`
+   - Keep types close to components that use them
+
+3. **Sub-component Imports**
+   - ✅ Use relative imports for co-located files
+   - Example: `import { SubComponent } from "./SubComponent";`
+   - Keep related components together
+
+### Recent Changes and Standards
+1. **Directory Migration**
+   - Moved from kebab-case to PascalCase directories
+   - Example: `past-battle-modal/` → `PastBattleModal/`
+   - Updated all related imports
+
+2. **Type Organization**
+   - Types live alongside components
+   - Optional vs required props clearly marked
+   - Interface naming matches component
+   - Example: `PastBattleModal/Types.ts`
+
+3. **Import Standardization**
+   - Using absolute paths for shared components
+   - Using relative paths for local components
+   - Consistent use of `@/` prefix
+
+### Improvement Recommendations
+1. **Type Documentation**
+   - Add JSDoc comments for complex props
+   - Document optional vs required fields
+   - Explain prop relationships
+
+2. **Directory Structure**
+   - Keep component-specific files together
+   - Use clear, consistent naming
+   - Maintain type definitions close to usage
+
+3. **Import Clarity**
+   - Use absolute paths for shared resources
+   - Use relative paths for local files
+   - Be explicit with type imports
 
 ## Export Patterns
 

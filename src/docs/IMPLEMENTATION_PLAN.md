@@ -154,11 +154,20 @@ _This is a living document. Update as you make progress._
    - [x] Removed kebab-case directory
    - [x] Verified PascalCase directory structure
 
-3. **Remaining Tasks**
-   - [ ] Fix type mismatches in PastBattlesSection.tsx:
-     - [ ] Update Week type to match expected properties
-     - [ ] Update Product type to include required fields
-     - [ ] Verify type definitions in Types.ts
+3. **Type Fixes Completed**
+   - [x] Updated Week interface in Types.ts:
+     - Made `id` optional as it's not needed in modal context
+     - Made `status` optional as it's not used in modal
+     - Kept required fields: `number`, `startDate`, `endDate`
+   - [x] Updated Product interface in Types.ts:
+     - Made `id` optional for modal usage
+     - Added missing fields: `longDesc`, `features`, `techStack`, etc.
+     - Made appropriate fields optional with `?` modifier
+   - [x] Fixed PastBattlesSection.tsx mappings:
+     - Added required `description` field
+     - Ensured all property names match interface
+
+4. **Remaining Tasks**
    - [ ] Import Updates
      - [x] Updated PastBattlesSection.tsx imports
      - [ ] Verify no other files import from old path
@@ -167,56 +176,11 @@ _This is a living document. Update as you make progress._
      - [ ] Verify build process
      - [ ] Check for runtime errors
 
-4. **Type Mismatch Resolution Plan**
-   - [ ] Compare Week type definition with usage
-   - [ ] Compare Product type definition with usage
-   - [ ] Update either types or component props to align
-   - [ ] Add any missing required fields
-   - [ ] Test type changes across components
-
-### Hook Naming Standardization
-- [ ] Convert all hook files to camelCase
-  - [ ] Create list of hooks using kebab-case
-  - [ ] Plan rename sequence to minimize conflicts
-  - [ ] Update imports in all dependent files
-  - [ ] Test functionality after renaming
-- [ ] Document hook naming convention
-  - [ ] Update style guide
-  - [ ] Add examples of correct naming
-  - [ ] Create migration guide for future hooks
-
----
-
-## ✅ Completed
-
-- [x] TimelineStepper (StatusTimeline) Redesign
-  - Icons above line
-  - Thicker/animated progress line
-  - Improved spacing and responsiveness
-  - Accessibility/tooltips
-  - Glassmorphic polish
-- [x] Frontend Audit Completed (May 28, 2025)
-- [x] Project Rules and Documentation Setup (May 28, 2025)
-- [x] Header improvements:
-  - [x] Show week pill
-  - [x] Add date range pill
-  - [x] Add new status/stage pill (replaces timeline)
-- [x] Product Form Refactoring:
-  - [x] Extract shared `ProductFormFields` component
-  - [x] Split into `CreateProductForm` and `EditProductForm`
-  - [x] Refactor legacy code and implement new forms
-  - [x] Add comprehensive tests
-  - [x] Remove legacy components
-- [x] Modal Naming Standardization:
-  - [x] Renamed `Dialog.tsx` to `Modal.tsx`
-  - [x] Renamed `AlertDialog.tsx` to `AlertModal.tsx`
-  - [x] Renamed `CreateBattleDialog.tsx` to `CreateBattleModal.tsx`
-  - [x] Updated all imports and references
-  - [x] Updated documentation to reflect changes
-- [x] Fixed toast import in SocialShare component
-- [x] Documented common import issues
-- [x] Updated component structure documentation
-- [x] Added import pattern guidelines
+5. **Next Steps**
+   - [ ] Run build to verify type fixes
+   - [ ] Test modal functionality with updated types
+   - [ ] Document type changes for team reference
+   - [ ] Consider adding JSDoc comments to explain optional fields
 
 ## ✅ Completed Today (June 2, 2025)
 - [x] Fixed ImageGallery import in ProductModal/index.tsx
@@ -227,6 +191,8 @@ _This is a living document. Update as you make progress._
 - [x] Renamed product-modal directory to ProductModal
 - [x] Fixed index file casing in ProductModal
 - [x] Updated imports in affected components
+- [x] Migrated past-battle-modal to PascalCase version
+- [x] Fixed type mismatches in PastBattleModal interfaces
 
 ### Remaining Directory Casing Issues to Fix:
 1. `past-battle-modal` → `PastBattleModal`

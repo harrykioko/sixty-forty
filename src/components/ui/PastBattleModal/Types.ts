@@ -1,7 +1,7 @@
 export interface Product {
-  id: string;
+  id?: string;
   name: string;
-  description: string;
+  description?: string;
   imageUrl: string;
   builder: string;
   builderAvatar?: string;
@@ -9,15 +9,20 @@ export interface Product {
   votes?: number;
   githubUrl?: string;
   demoUrl?: string;
+  longDesc?: string;
+  features?: string[];
+  techStack?: string[];
+  pricing?: string;
+  builderNotes?: string;
 }
 
 export interface Week {
-  id: string;
+  id?: string;
   number: number;
   startDate: string;
   endDate: string;
   theme?: string;
-  status: 'upcoming' | 'active' | 'completed';
+  status?: 'upcoming' | 'active' | 'completed';
 }
 
 export interface PastBattleModalProps {

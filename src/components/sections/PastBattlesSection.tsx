@@ -128,6 +128,7 @@ export const PastBattlesSection = () => {
             builder: product.builderName,
             isWinner: product.id === pastBattles[selectedWeek].winnerId,
             imageUrl: product.image || 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2',
+            description: product.description || 'Product description will be added soon.',
             longDesc: product.description || 'Product description will be added soon.',
             features: product.features || ['Feature coming soon'],
             techStack: product.techStack || ['Tech stack coming soon'],

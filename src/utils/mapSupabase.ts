@@ -3,6 +3,8 @@ import { Product, Week } from "@/types/admin";
 export function mapSupabaseProduct(p: any): Product {
   return {
     id: p.id,
+    name: p.name || '', // ✅ Add this
+    builder_id: p.builder_id || '', // ✅ Add this
     title: p.name || '',
     builderName: p.builders?.name || '',
     image: p.image_url || '',
@@ -18,6 +20,7 @@ export function mapSupabaseProduct(p: any): Product {
     week_id: p.week_id
   };
 }
+
 
 export function mapSupabaseWeek(w: any): Week {
   return {

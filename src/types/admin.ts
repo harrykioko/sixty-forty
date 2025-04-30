@@ -2,6 +2,8 @@ export type WeekStatus = "draft" | "active" | "voting" | "completed";
 
 export interface Product {
   id: string;
+  name: string; // ✅ Add this
+  builder_id: string; // ✅ Add this
   title: string;
   builderName: string;
   image: string;
@@ -10,12 +12,13 @@ export interface Product {
   techStack: string[];
   features: string[];
   votes: number;
-  pricing?: string;
-  demoLink?: string;
-  builderNotes?: string;
+  pricing?: string | null;
+  demoLink?: string | null;
+  builderNotes?: string | null;
   additionalImages?: string[];
   week_id?: string;
 }
+
 
 export interface Week {
   id: string;

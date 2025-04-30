@@ -137,6 +137,43 @@ _This is a living document. Update as you make progress._
   - [ ] Add automated check for directory casing
   - [ ] Update component templates to use correct casing
 
+### PastBattleModal Migration Plan
+1. **Current State Analysis** ✅
+   - Compared both versions:
+     - `past-battle-modal/` (kebab-case) - 3.7KB index.tsx
+     - `PastBattleModal/` (PascalCase) - 3.8KB index.tsx, PastProductColumn.tsx, Types.ts
+   - Identified differences:
+     - Import paths (relative vs absolute)
+     - Type imports (explicit vs implicit)
+     - Unused imports in PascalCase version
+     - No functional differences in component logic
+
+2. **Migration Steps Completed**
+   - [x] Backed up kebab-case version
+   - [x] Updated import in PastBattlesSection.tsx to use PascalCase path
+   - [x] Removed kebab-case directory
+   - [x] Verified PascalCase directory structure
+
+3. **Remaining Tasks**
+   - [ ] Fix type mismatches in PastBattlesSection.tsx:
+     - [ ] Update Week type to match expected properties
+     - [ ] Update Product type to include required fields
+     - [ ] Verify type definitions in Types.ts
+   - [ ] Import Updates
+     - [x] Updated PastBattlesSection.tsx imports
+     - [ ] Verify no other files import from old path
+   - [ ] Post-Migration Verification
+     - [ ] Run full test suite
+     - [ ] Verify build process
+     - [ ] Check for runtime errors
+
+4. **Type Mismatch Resolution Plan**
+   - [ ] Compare Week type definition with usage
+   - [ ] Compare Product type definition with usage
+   - [ ] Update either types or component props to align
+   - [ ] Add any missing required fields
+   - [ ] Test type changes across components
+
 ### Hook Naming Standardization
 - [ ] Convert all hook files to camelCase
   - [ ] Create list of hooks using kebab-case

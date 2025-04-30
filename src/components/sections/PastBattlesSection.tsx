@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import PastBattleModal from "@/components/ui/past-battle-modal";
+import PastBattleModal from "@/components/ui/PastBattleModal";
 import { usePastBattles } from "@/hooks/use-past-battles";
 import {
   DropdownMenu,

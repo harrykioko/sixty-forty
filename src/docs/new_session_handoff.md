@@ -1,97 +1,88 @@
 # 📝 Sixty40 Admin Dashboard – Session Handoff
 
 ## What Was Accomplished (Previous Session)
-- ✅ Fixed Supabase RLS policies for votes table
-  - Resolved infinite recursion issue
-  - Confirmed successful vote storage
-  - Verified duplicate vote prevention
-- ✅ Implemented frontend rate limiting
-  - Added 10-second cooldown between votes
-  - Improved user feedback with gentler messaging
-  - Confirmed working in production
-- ✅ Enhanced user experience
-  - Updated toast notifications to be more friendly
-  - Added real-time vote count updates
-  - Improved error handling and feedback
-- ✅ Implemented core vote count functionality
-  - Added getVoteCountsByProduct function
-  - Integrated real-time vote updates
-  - Implemented vote count display in UI
+- ✅ Improved builder stats display in hero section
+  - Implemented builder_id matching instead of name-based matching
+  - Added proper fallbacks for missing data
+  - Integrated wins and products_launched display
+- ✅ Fixed RLS policies for builder stats
+  - Resolved data access issues
+  - Confirmed successful stats retrieval
+  - Verified public access working
+- ✅ Enhanced builder profile display
+  - Updated BuilderProfileCard component
+  - Added glassmorphic styling
+  - Improved responsive layout
 
 ## Current State
+
 ### Working Features
-- Vote submission with validation
-- Real-time vote updates
-- Frontend rate limiting
-- Duplicate vote prevention
-- User-friendly error messages
-- Live vote count display
-- Vote distribution visualization
+- Builder stats query from Supabase
+- Real-time stats display
+- Proper builder_id matching
+- Fallback handling for missing data
+- Responsive layout and styling
 
 ### Known Issues
-- None currently blocking (all critical voting issues resolved)
+- TypeScript errors in BattleCard.tsx:
+  1. Cannot find module '@/types/builder'
+  2. Property access errors for stats.name, stats.avatar_url, stats.tagline
+  3. Type mismatch between useBuilderStats return type and component usage
 
 ## What to Focus on Next
 
-### 1. Winner Selection System
+### 1. Type System Fixes
 Priority: High
-- Define winner selection criteria
-  - Implement vote counting finalization
-  - Add timestamp-based cutoff
-  - Handle edge cases (ties, etc.)
-- Create admin interface for winner management
-  - Add winner confirmation UI
-  - Include manual override capability
-  - Add winner announcement scheduling
-- Implement winner announcement system
-  - Design winner display UI
-  - Add social sharing functionality
-  - Create historical winners archive
+- Create proper types for builder stats:
+  - Define BuilderStatsWithInfo interface
+  - Update useBuilderStats return type
+  - Fix property access in BattleCard
+  - Ensure proper typing for Product interface
+- Implementation approach:
+  1. Create /types/builder.ts with proper interfaces
+  2. Update useBuilderStats to use new types
+  3. Fix BattleCard component type usage
+  4. Add proper type guards if needed
 
-### 2. Testing Suite Development
-Priority: High
-- Create unit tests for:
-  - Vote submission
-  - Rate limiting
-  - Vote counting
-  - Winner selection logic
-- Add integration tests for:
-  - Complete voting flow
-  - Real-time updates
-  - Winner selection process
-
-### 3. Documentation
+### 2. Builder Stats Enhancement
 Priority: Medium
-- Document voting system architecture
-- Document winner selection process
-- Create test coverage report
-- Write setup instructions
-- Add troubleshooting guide
+- Add loading states
+- Implement error handling
+- Add retry mechanism
+- Improve performance
+
+### 3. Testing & Documentation
+Priority: Medium
+- Add unit tests for builder stats
+- Document type system
+- Update component documentation
+- Add error handling documentation
 
 ## Technical Context
-- Frontend rate limiting uses localStorage
-- Supabase RLS policies handle duplicate vote prevention
-- Real-time updates use Supabase subscriptions
-- Toast notifications use shadcn/ui system
-- Vote counting uses Supabase queries with real-time updates
+- Builder stats are fetched using Supabase query
+- Current query joins builder_stats with builders table
+- Real-time updates use React Query
+- Component uses glassmorphic UI style
+- Stats display integrated with BuilderProfileCard
 
 ## Guidelines
-- Maintain glassmorphic UI style
-- Keep error messages friendly and helpful
-- Prioritize real-time feedback
-- Follow existing component structure
+- Maintain existing UI/UX patterns
+- Follow TypeScript best practices
+- Keep error handling consistent
+- Preserve glassmorphic styling
 
 ## Relevant Files
-- `src/lib/voting.ts` - Core voting functionality
-- `src/components/sections/BattleSection.tsx` - Main voting interface
-- `src/components/ui/VotingResults.tsx` - Vote display
+- `src/components/sections/hero/BattleCard.tsx` - Main component needing fixes
+- `src/hooks/use-builder-stats.ts` - Stats fetching hook
+- `src/components/sections/hero/BuilderProfileCard.tsx` - Profile display component
 - Implementation Plan (updated with current progress)
 
 ## Dependencies
-- Supabase real-time functionality
+- Supabase for data fetching
+- React Query for state management
+- TypeScript for type system
 - shadcn/ui components
 - TailwindCSS for styling
-- React 18 hooks
 
 ---
 _Last updated: June 2, 2025_ 

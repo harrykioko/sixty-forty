@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Trophy, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface BuilderStatsProps {
+export interface BuilderStatsProps {
   id: string;
   builder_id: string;
   wins: number;

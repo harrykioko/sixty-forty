@@ -8,10 +8,14 @@ import { BattleEmptyState } from "./battle-states/EmptyState";
 import { BattleHeader } from "./BattleHeader";
 import { BuilderProfileCard } from "./BuilderProfileCard";
 import { BattleActions } from "./BattleActions";
+import { BuilderStatsProps } from "@/components/sections/builders/BuilderCard";
+import { Product } from "@/types/admin";
 
 export const BattleCard = () => {
-  const { data: builderStats = [] } = useBuilderStats();
+  const { data: builderStats = [] } = useBuilderStats<BuilderStatsProps[]>();
   const { data: battleData, isLoading, error } = useCurrentBattle();
+  
+  console.log('Builder Stats:', builderStats);
   
   if (isLoading) {
     return <BattleLoadingState />;
@@ -27,6 +31,11 @@ export const BattleCard = () => {
 
   const isBattleActive = battleData.currentWeek.status === 'active';
   const isBuilding = battleData.isBuildingPhase || battleData.currentWeek.status === 'draft';
+
+  // Find Harry and Marcos stats by their builder_ids from the products
+  const getBuilderStats = (product: Product): BuilderStatsProps | undefined => {
+    return builderStats.find(stat => stat.builder_id === product.builder_id);
+  };
 
   return (
     <motion.div
@@ -44,50 +53,40 @@ export const BattleCard = () => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {battleData.products.map((product) => {
-              const isHarry = product.builderName.toLowerCase().includes('harry');
-              const stats = builderStats.find(
-                (stat: any) => stat.builder?.name.toLowerCase().includes(isHarry ? 'harry' : 'marcos')
-              );
-              
-              return (
+            {battleData.products?.length > 0 ? (
+              battleData.products.map((product) => {
+                const isHarry = product.builderName.toLowerCase().includes('harry');
+                const stats = getBuilderStats(product);
+                
+                return (
+                  <BuilderProfileCard
+                    key={product.id}
+                    name={stats?.builder?.name || product.builderName}
+                    avatar_url={stats?.builder?.avatar_url}
+                    tagline={stats?.builder?.tagline}
+                    wins={stats?.wins || 0}
+                    products_launched={stats?.products_launched || 0}
+                    product={isBattleActive ? { name: product.title } : null}
+                    isHarry={isHarry}
+                    isBattleActive={isBattleActive}
+                  />
+                );
+              })
+            ) : (
+              // Fallback when no products are available
+              builderStats.map((stats) => (
                 <BuilderProfileCard
-                  key={product.id}
-                  name={product.builderName}
-                  avatar_url={stats?.builder?.avatar_url}
-                  tagline={stats?.builder?.tagline}
-                  wins={stats?.wins || 0}
-                  products_launched={stats?.products_launched || 0}
-                  product={isBattleActive ? { name: product.title } : null}
-                  isHarry={isHarry}
-                  isBattleActive={isBattleActive}
-                />
-              );
-            })}
-
-            {battleData.products.length === 0 && isBuilding && (
-              <>
-                <BuilderProfileCard
-                  name="Harry"
-                  avatar_url={null}
-                  tagline="Puts the VC into vibe coding"
-                  wins={0}
-                  products_launched={0}
+                  key={stats.id}
+                  name={stats.builder?.name || ''}
+                  avatar_url={stats.builder?.avatar_url}
+                  tagline={stats.builder?.tagline}
+                  wins={stats.wins}
+                  products_launched={stats.products_launched}
                   product={null}
-                  isHarry={true}
+                  isHarry={stats.builder?.name?.toLowerCase().includes('harry') || false}
                   isBattleActive={false}
                 />
-                <BuilderProfileCard
-                  name="Marcos"
-                  avatar_url={null}
-                  tagline="Speed. Sass. SaaS."
-                  wins={0}
-                  products_launched={0}
-                  product={null}
-                  isHarry={false}
-                  isBattleActive={false}
-                />
-              </>
+              ))
             )}
           </div>
           

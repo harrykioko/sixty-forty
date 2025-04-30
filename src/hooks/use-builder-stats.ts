@@ -1,9 +1,9 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { BuilderStatsProps } from "@/components/sections/builders/BuilderCard";
 
-export function useBuilderStats() {
-  return useQuery({
+export function useBuilderStats<T = BuilderStatsProps[]>() {
+  return useQuery<T>({
     queryKey: ["builder-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -13,12 +13,13 @@ export function useBuilderStats() {
           builder:builders(
             name,
             avatar_url,
-            tagline
+            tagline,
+            slug
           )
         `);
 
       if (error) throw error;
-      return data;
+      return data as T;
     },
   });
 }

@@ -63,6 +63,22 @@ _This is a living document. Update as you make progress._
 
 ## 🟢 In Progress
 
+### Builder Stats Display Implementation
+- [ ] Fix TypeScript errors in BattleCard component
+  - [ ] Create proper types for builder stats data structure
+  - [ ] Update useBuilderStats hook return type
+  - [ ] Fix property access in BattleCard for stats.name, stats.avatar_url, etc.
+  - [ ] Ensure proper typing for Product interface
+- [ ] Improve builder stats display
+  - [x] Show wins and products_launched in hero section
+  - [x] Match builders by builder_id instead of name
+  - [x] Add proper fallbacks for missing data
+  - [ ] Fix type safety for builder info access
+- [ ] Add loading states for builder stats
+  - [ ] Show skeleton UI while loading
+  - [ ] Handle error states gracefully
+  - [ ] Add retry mechanism for failed loads
+
 ### Winner Selection System Enhancements
 - [ ] Add confirmation dialog before declaring winner
 - [ ] Add ability to change winner (admin override)

@@ -281,4 +281,25 @@ Components for data input and editing.
 3. **Import Path Confusion**
    - Multiple possible locations for similar components
    - Need to establish clear import patterns
-   - Document exceptions to rules 
+   - Document exceptions to rules
+
+4. **Directory Casing Inconsistency**
+   - ❌ Issue: Duplicate directories with different casing (e.g., `past-battle-modal` and `PastBattleModal`)
+   - ✅ Standard: Use PascalCase for component directories (e.g., `PastBattleModal`, `ProductModal`)
+   - 🔄 Action: Need to consolidate duplicate directories and update imports
+   - ⚠️ Impact: May cause import errors if not handled systematically
+
+### Directory Naming Rules
+1. **Component Directories**
+   - ✅ Use PascalCase for component directories
+   - Example: `ProductModal/`, `PastBattleModal/`
+   - Matches component file naming convention
+
+2. **Config and Utility Directories**
+   - ✅ Use kebab-case for non-component directories
+   - Example: `config/`, `utils/`
+
+3. **Directory Structure Validation**
+   - Regular audits needed to catch casing inconsistencies
+   - Automated checks recommended
+   - Document any temporary exceptions 

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { ProductHeader } from "./product-header";
-import { ImageGallery } from "./image-gallery";
-import { ProductSidebar } from "./product-sidebar";
+import { ProductHeader } from "./ProductHeader";
+import { ImageGallery } from "./ImageGallery";
+import { ProductSidebar } from "./ProductSidebar";
 import { ProductModalProps } from "./types";
 
 export const ProductModal = ({

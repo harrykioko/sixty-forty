@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import ProductCard from '@/components/ui/ProductCard';
-import ProductModal from '@/components/ui/product-modal';
+import ProductModal from '@/components/ui/ProductModal';
 import VotingResults from '@/components/ui/VotingResults';
 import SocialShare from '@/components/ui/SocialShare';
 import { useToast } from '@/hooks/use-toast';

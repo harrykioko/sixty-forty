@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Trophy, Calendar, ExternalLink } from "lucide-react";
+import { Trophy, Calendar } from "lucide-react";
 import { PastBattleModalProps } from "./types";
-import { PastProductColumn } from "./PastProductColumn";
+import { PastProductColumn } from "@/components/ui/PastBattleModal/PastProductColumn";
 
 export const PastBattleModal = ({
   week,

@@ -101,20 +101,41 @@ _This is a living document. Update as you make progress._
 - [ ] Test: Add, edit, and view flows for all product states
 
 ### Import Path Standardization
-- [ ] Fix hook import paths
+- [x] Fix hook import paths
   - [x] Update toast import in SocialShare component
+  - [x] Fixed ImageGallery import in product-modal
+  - [x] Fixed PastProductColumn import in past-battle-modal
   - [ ] Audit all hook imports across codebase
   - [ ] Create list of components using incorrect hook paths
   - [ ] Fix remaining hook import issues
 - [ ] Standardize component import paths
-  - [ ] Audit current import patterns
-  - [ ] Document components with incorrect imports
+  - [x] Document components with incorrect imports
   - [ ] Update imports to follow conventions
   - [ ] Test all components after updates
 - [ ] Create automated import checker
   - [ ] Write script to verify import paths
   - [ ] Add import path rules to ESLint config
   - [ ] Document common import patterns
+
+### Directory Casing Consolidation
+- [ ] Audit and fix directory casing issues
+  - [x] Identified duplicate directories (`past-battle-modal` vs `PastBattleModal`)
+  - [x] Renamed `product-modal` to `ProductModal`
+  - [x] Fixed index file casing (`Index.tsx` → `index.tsx`)
+  - [x] Updated imports in BattleSection.tsx
+  - [ ] Create list of all affected directories and files
+  - [ ] Plan migration sequence to minimize conflicts
+  - [ ] Back up affected files
+- [ ] Execute directory consolidation
+  - [ ] Move files from kebab-case to PascalCase directories
+  - [ ] Update all import paths
+  - [ ] Remove empty kebab-case directories
+  - [ ] Test affected components
+- [ ] Document and prevent future issues
+  - [x] Added directory naming rules to documentation
+  - [ ] Create PR checklist item for directory naming
+  - [ ] Add automated check for directory casing
+  - [ ] Update component templates to use correct casing
 
 ### Hook Naming Standardization
 - [ ] Convert all hook files to camelCase
@@ -159,6 +180,22 @@ _This is a living document. Update as you make progress._
 - [x] Documented common import issues
 - [x] Updated component structure documentation
 - [x] Added import pattern guidelines
+
+## ✅ Completed Today (June 2, 2025)
+- [x] Fixed ImageGallery import in ProductModal/index.tsx
+- [x] Fixed PastProductColumn import using absolute path
+- [x] Updated component-structure.md with directory naming rules
+- [x] Documented directory casing inconsistency issue
+- [x] Created plan for directory consolidation
+- [x] Renamed product-modal directory to ProductModal
+- [x] Fixed index file casing in ProductModal
+- [x] Updated imports in affected components
+
+### Remaining Directory Casing Issues to Fix:
+1. `past-battle-modal` → `PastBattleModal`
+2. Check for any other kebab-case component directories
+3. Verify all index.tsx files use lowercase
+4. Update any affected imports
 
 ---
 

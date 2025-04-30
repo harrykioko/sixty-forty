@@ -14,9 +14,7 @@ import { Product } from "@/types/admin";
 export const BattleCard = () => {
   const { data: builderStats = [] } = useBuilderStats<BuilderStatsProps[]>();
   const { data: battleData, isLoading, error } = useCurrentBattle();
-  
-  console.log('Builder Stats:', builderStats);
-  
+
   if (isLoading) {
     return <BattleLoadingState />;
   }
@@ -32,7 +30,6 @@ export const BattleCard = () => {
   const isBattleActive = battleData.currentWeek.status === 'active';
   const isBuilding = battleData.isBuildingPhase || battleData.currentWeek.status === 'draft';
 
-  // Find Harry and Marcos stats by their builder_ids from the products
   const getBuilderStats = (product: Product): BuilderStatsProps | undefined => {
     return builderStats.find(stat => stat.builder_id === product.builder_id);
   };
@@ -57,13 +54,16 @@ export const BattleCard = () => {
               battleData.products.map((product) => {
                 const isHarry = product.builderName.toLowerCase().includes('harry');
                 const stats = getBuilderStats(product);
-                
+                const tagline = isHarry
+                  ? "Puts the VC into vibe coding"
+                  : "Speed. Sass. SaaS.";
+
                 return (
                   <BuilderProfileCard
                     key={product.id}
                     name={stats?.builder?.name || product.builderName}
                     avatar_url={stats?.builder?.avatar_url}
-                    tagline={stats?.builder?.tagline}
+                    tagline={tagline}
                     wins={stats?.wins || 0}
                     products_launched={stats?.products_launched || 0}
                     product={isBattleActive ? { name: product.title } : null}
@@ -73,23 +73,29 @@ export const BattleCard = () => {
                 );
               })
             ) : (
-              // Fallback when no products are available
-              builderStats.map((stats) => (
-                <BuilderProfileCard
-                  key={stats.id}
-                  name={stats.builder?.name || ''}
-                  avatar_url={stats.builder?.avatar_url}
-                  tagline={stats.builder?.tagline}
-                  wins={stats.wins}
-                  products_launched={stats.products_launched}
-                  product={null}
-                  isHarry={stats.builder?.name?.toLowerCase().includes('harry') || false}
-                  isBattleActive={false}
-                />
-              ))
+              builderStats.map((stats) => {
+                const isHarry = stats.builder?.name?.toLowerCase().includes('harry') || false;
+                const tagline = isHarry
+                  ? "Puts the VC into vibe coding"
+                  : "Speed. Sass. SaaS.";
+
+                return (
+                  <BuilderProfileCard
+                    key={stats.id}
+                    name={stats.builder?.name || ''}
+                    avatar_url={stats.builder?.avatar_url}
+                    tagline={tagline}
+                    wins={stats.wins}
+                    products_launched={stats.products_launched}
+                    product={null}
+                    isHarry={isHarry}
+                    isBattleActive={false}
+                  />
+                );
+              })
             )}
           </div>
-          
+
           <BattleActions 
             isBattleActive={isBattleActive}
             isBuilding={isBuilding}

@@ -112,8 +112,8 @@ export const BattleSection = () => {
       setIsModalOpen(false);
 
       toast({
-        title: "Vote recorded!",
-        description: "Your vote has been submitted successfully.",
+        title: "✅ Thanks for voting!",
+        description: "Your vote has been recorded successfully.",
       });
     } catch (error) {
       console.error('Error submitting vote:', error);

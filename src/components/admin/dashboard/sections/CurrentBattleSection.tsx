@@ -1,18 +1,20 @@
-
 import { motion } from "framer-motion";
 import { Week } from "@/types/admin";
 import { ProductWeekCard } from "@/components/admin/dashboard/ProductWeekCard";
+import { WinnerSelectionPanel } from "@/components/admin/dashboard/WinnerSelectionPanel";
 
 interface CurrentBattleSectionProps {
   week: Week | null;
   onEdit: () => void;
   onView: () => void;
+  onWinnerSelected: () => void;
 }
 
 export const CurrentBattleSection = ({ 
   week, 
   onEdit, 
-  onView 
+  onView,
+  onWinnerSelected
 }: CurrentBattleSectionProps) => {
   if (!week) return null;
   
@@ -28,6 +30,15 @@ export const CurrentBattleSection = ({
         onEdit={onEdit}
         onView={onView}
       />
+      
+      {week.products && week.products.length > 0 && (
+        <WinnerSelectionPanel
+          weekId={week.id}
+          products={week.products}
+          winnerId={week.winnerId}
+          onWinnerSelected={onWinnerSelected}
+        />
+      )}
     </motion.section>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { useToast } from "@/hooks/use-toast";
@@ -14,7 +14,10 @@ import { PastBattlesSection } from "@/components/admin/dashboard/sections/PastBa
 import { DashboardModals } from "@/components/admin/dashboard/modals/DashboardModals";
 
 export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashboardProps) => {
-  const navigate = useNavigate(); // Add this line to fix navigation
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const { 
     state, 
     setCreateBattleModalOpen, 
@@ -34,6 +37,13 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     handleSaveWeek 
   } = useDashboardActions();
 
+  const handleEditCurrentBattle = () => {
+    if (currentBattle?.currentWeek) {
+      setSelectedWeek(currentBattle.currentWeek);
+      setWeekEditorModalOpen(true);
+    }
+  };
+
   const handleViewCurrentBattle = () => {
     if (currentBattle?.currentWeek) {
       setSelectedWeek(currentBattle.currentWeek);
@@ -41,10 +51,24 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
     }
   };
 
-  const handleEditCurrentBattle = () => {
-    if (currentBattle?.currentWeek) {
-      setSelectedWeek(currentBattle.currentWeek);
-      setWeekEditorModalOpen(true);
+  const handleWinnerSelected = async () => {
+    setIsRefreshing(true);
+    try {
+      // Refresh the current battle data
+      // This will be handled by the parent component's data fetching
+      toast({
+        title: "Success",
+        description: "Battle data refreshed successfully.",
+      });
+    } catch (error) {
+      console.error('Error refreshing battle data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to refresh battle data.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -73,6 +97,7 @@ export const AdminDashboardLayout = ({ currentBattle, pastBattles }: AdminDashbo
             week={currentBattle.currentWeek}
             onEdit={handleEditCurrentBattle}
             onView={handleViewCurrentBattle}
+            onWinnerSelected={handleWinnerSelected}
           />
         )}
         

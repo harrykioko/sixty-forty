@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import ProductCard from '@/components/ui/ProductCard';
@@ -8,6 +8,9 @@ import SocialShare from '@/components/ui/SocialShare';
 import { useToast } from '@/hooks/use-toast';
 import { useCurrentBattle } from '@/hooks/use-current-battle';
 import { Product } from '@/types/admin';
+import { submitVote, subscribeToVotes } from '@/lib/voting';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 
 export const BattleSection = () => {
   const { toast } = useToast();
@@ -17,6 +20,44 @@ export const BattleSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [votedForId, setVotedForId] = useState<string | null>(null);
   const [productVotes, setProductVotes] = useState<{ [key: string]: number }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [voteSubscription, setVoteSubscription] = useState<RealtimeChannel | null>(null);
+
+  // Set up real-time vote subscription
+  useEffect(() => {
+    if (battleData?.currentWeek?.id) {
+      const subscription = subscribeToVotes(battleData.currentWeek.id, () => {
+        // Refresh vote counts when new votes come in
+        refreshVoteCounts();
+      });
+      setVoteSubscription(subscription);
+
+      // Initial vote count load
+      refreshVoteCounts();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [battleData?.currentWeek?.id]);
+
+  const refreshVoteCounts = async () => {
+    if (!battleData?.currentWeek?.id) return;
+
+    const { data: votes } = await supabase
+      .from('votes')
+      .select('product_id')
+      .eq('week_id', battleData.currentWeek.id);
+
+    if (votes) {
+      const voteCounts = votes.reduce((acc, vote) => {
+        acc[vote.product_id] = (acc[vote.product_id] || 0) + 1;
+        return acc;
+      }, {} as { [key: string]: number });
+
+      setProductVotes(voteCounts);
+    }
+  };
 
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
@@ -28,21 +69,42 @@ export const BattleSection = () => {
     setTimeout(() => setSelectedProduct(null), 300);
   };
 
-  const handleVote = (productId: string) => {
-    if (votedForId) {
+  const handleVote = async (productId: string) => {
+    if (!battleData?.currentWeek?.id) {
       toast({
-        title: "Already voted",
-        description: "You have already cast your vote for this week.",
+        title: "Error",
+        description: "Unable to submit vote. Please try again.",
         variant: "destructive",
       });
       return;
     }
 
-    setTimeout(() => {
-      setProductVotes({
-        ...productVotes,
-        [productId]: (productVotes[productId] || 0) + 1,
+    setIsSubmitting(true);
+
+    try {
+      const result = await submitVote({
+        productId,
+        weekId: battleData.currentWeek.id,
+        metadata: {
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
       });
+
+      if (!result.success) {
+        toast({
+          title: "Vote Error",
+          description: result.error || "Failed to submit vote. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Update local state
+      setProductVotes(prev => ({
+        ...prev,
+        [productId]: (prev[productId] || 0) + 1,
+      }));
 
       localStorage.setItem("sixty40_voted_for", productId);
       setVotedForId(productId);
@@ -53,7 +115,16 @@ export const BattleSection = () => {
         title: "Vote recorded!",
         description: "Your vote has been submitted successfully.",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isLoading) {

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -15,42 +14,42 @@ export const ProductSidebar = ({
   pricing,
   demoLink,
   onVote,
-  isSubmitting,
+  isSubmitting
 }: ProductSidebarProps) => {
   return (
-    <div className="md:w-1/3">
-      <div className="glass-card p-4 mb-4">
-        <h3 className="text-lg font-semibold mb-3">Tech Stack</h3>
+    <div className="space-y-6">
+      {/* Tech Stack */}
+      <div>
+        <h4 className="text-sm font-medium mb-2">Tech Stack</h4>
         <div className="flex flex-wrap gap-2">
           {techStack.map((tech) => (
-            <Badge key={tech} variant="outline" className="bg-sixty40-dark/40">
+            <Badge key={tech} variant="secondary">
               {tech}
             </Badge>
           ))}
         </div>
       </div>
 
+      {/* Pricing */}
       {pricing && (
-        <div className="glass-card p-4 mb-4">
-          <h3 className="text-lg font-semibold mb-2">Pricing</h3>
-          <p className="text-muted-foreground">{pricing}</p>
+        <div>
+          <h4 className="text-sm font-medium mb-2">Pricing</h4>
+          <p className="text-sm text-muted-foreground">{pricing}</p>
         </div>
       )}
 
+      {/* Demo Link */}
       {demoLink && (
-        <div className="glass-card p-4 mb-4">
-          <h3 className="text-lg font-semibold mb-2">Live Demo</h3>
-          <a
-            href={demoLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sixty40-blue hover:underline text-sm flex items-center gap-1"
-          >
-            Visit Demo
-          </a>
-        </div>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => window.open(demoLink, '_blank')}
+        >
+          View Demo
+        </Button>
       )}
 
+      {/* Vote Button */}
       <Button
         className="w-full bg-sixty40-purple hover:bg-sixty40-purple/90 text-white"
         size="lg"

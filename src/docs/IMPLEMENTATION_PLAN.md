@@ -6,6 +6,50 @@ _This is a living document. Update as you make progress._
 
 ## 🟢 In Progress
 
+### Voting Functionality Implementation
+- [x] Database Layer
+  - [x] Implement Supabase RLS policies for votes table
+  - [x] Create vote submission function
+  - [x] Add real-time subscription for votes
+  - [x] Set up vote validation rules
+  - [ ] Implement rate limiting
+
+- [ ] Application Layer
+  - [x] Update `handleVote` in BattleSection to write to Supabase
+  - [x] Add vote validation logic
+  - [x] Implement real-time vote updates
+  - [ ] Add vote analytics dashboard
+  - [ ] Implement winner selection logic
+  - [ ] Add vote export functionality
+
+- [x] Security Layer
+  - [x] Implement RLS policies
+  - [x] Add vote validation rules
+  - [ ] Set up rate limiting
+  - [x] Add duplicate vote prevention
+
+- [ ] Testing & Documentation
+  - [ ] Add unit tests for vote submission
+  - [ ] Add integration tests for vote flow
+  - [ ] Document vote validation rules
+  - [ ] Create vote analytics documentation
+  - [ ] Add security documentation
+
+### Completed Voting Implementation Details
+- [x] Created `voting.ts` utility functions:
+  - [x] `getOrCreateVoterId()`: Manages unique voter identification
+  - [x] `submitVote()`: Handles vote submission with validation
+  - [x] `subscribeToVotes()`: Sets up real-time vote subscription
+- [x] Implemented duplicate vote prevention using voter_id
+- [x] Added error handling for database constraints
+- [x] Set up Supabase RLS policies for vote table
+- [x] Integrated vote submission with BattleSection component
+- [x] Added real-time vote updates:
+  - [x] Created Supabase real-time subscription for votes
+  - [x] Implemented vote count refresh on new votes
+  - [x] Added cleanup for subscription on component unmount
+  - [x] Integrated with VotingResults component for live updates
+
 ### Past Battles Section
 - [x] Create PastBattlesSection component
   - [x] Show grid of past battle cards

@@ -100,286 +100,86 @@ _This is a living document. Update as you make progress._
   - [ ] Add inline comments for complex logic
   - [ ] Update README with new functionality
 
+### Product Details Modal UI Restoration
+Priority: High
+- [ ] Restore glassmorphic styling and layout
+  - [ ] Add proper backdrop blur effects
+  - [ ] Restore translucent background with proper opacity
+  - [ ] Fix border styling with white/10 opacity
+  - [ ] Add subtle shadow effects for depth
+  
+- [ ] Improve content organization
+  - [ ] Create distinct card sections for different content types
+  - [ ] Add proper spacing between sections
+  - [ ] Implement consistent padding rules
+  - [ ] Restore proper heading hierarchy
+
+- [ ] Fix tech stack display
+  - [ ] Restore pill-style tech badges
+  - [ ] Add proper spacing between badges
+  - [ ] Implement hover effects
+  - [ ] Ensure consistent badge sizes
+
+- [ ] Enhance action sections
+  - [ ] Restore styled "Vote for this Product" button
+  - [ ] Add proper hover and focus states
+  - [ ] Fix pricing section layout
+  - [ ] Improve demo link presentation
+
+- [ ] Polish modal interactions
+  - [ ] Add smooth open/close animations
+  - [ ] Implement proper backdrop click handling
+  - [ ] Add keyboard navigation support
+  - [ ] Ensure proper mobile responsiveness
+
+### Component Structure Updates
+- [ ] Create reusable styled sections
+  - [ ] Extract ProductDetailSection component
+  - [ ] Create TechStackDisplay component
+  - [ ] Build PricingSection component
+  - [ ] Implement ActionButton component
+
+- [ ] Improve component organization
+  - [ ] Move modal-specific components to dedicated directory
+  - [ ] Create shared styled components for reuse
+  - [ ] Update import structure
+  - [ ] Add proper component documentation
+
 ## 🔜 Up Next
 
-1. Add error handling for subscription failures
-2. Implement winner selection enhancements
-3. Add comprehensive testing suite
-4. Create user documentation
+1. Restore product details modal UI
+2. Implement loading states for builder stats
+3. Add error handling for subscription failures
+4. Implement winner selection enhancements
+5. Add comprehensive testing suite
 
 ## 📝 Notes
-- Frontend rate limiting implemented with 10-second cooldown
-- Supabase RLS policies fixed and working correctly
-- Real-time vote updates functioning as expected
-- User feedback improved with gentler messaging
-- Vote display will show automatically when first vote is cast
-- Existing UI components will be preserved
-- Winner selection is now implemented with basic functionality
-- Vote counts are now managed through a dedicated function
-- Real-time updates are working but need better error handling
+- Modal UI regression needs immediate attention
+- Original glassmorphic design should be restored
+- Focus on maintaining consistency with Sixty40's visual language
+- Ensure all interactive elements follow accessibility guidelines
+- Consider extracting reusable components for future modals
 
----
-_Last updated: June 2, 2025_
+## 🎯 Visual Requirements
 
----
+### Glassmorphic Style Guide
+- Background: `bg-black/20`
+- Backdrop blur: `backdrop-blur-md`
+- Border: `border border-white/10`
+- Shadow: `shadow-2xl`
+- Content background: `bg-white/5`
 
-## 🟢 In Progress
+### Layout Guidelines
+- Section padding: `p-6` (desktop), `p-4` (mobile)
+- Content gap: `gap-6`
+- Border radius: `rounded-lg`
+- Max width: `max-w-3xl`
 
-### Voting Functionality Implementation
-- [x] Database Layer
-  - [x] Implement Supabase RLS policies for votes table
-  - [x] Create vote submission function
-  - [x] Add real-time subscription for votes
-  - [x] Set up vote validation rules
-  - [ ] Implement rate limiting
-
-- [ ] Application Layer
-  - [x] Update `handleVote` in BattleSection to write to Supabase
-  - [x] Add vote validation logic
-  - [x] Implement real-time vote updates
-  - [ ] Add vote analytics dashboard
-  - [ ] Implement winner selection logic
-  - [ ] Add vote export functionality
-
-- [x] Security Layer
-  - [x] Implement RLS policies
-  - [x] Add vote validation rules
-  - [ ] Set up rate limiting
-  - [x] Add duplicate vote prevention
-
-- [ ] Testing & Documentation
-  - [ ] Add unit tests for vote submission
-  - [ ] Add integration tests for vote flow
-  - [ ] Document vote validation rules
-  - [ ] Create vote analytics documentation
-  - [ ] Add security documentation
-
-### Completed Voting Implementation Details
-- [x] Created `voting.ts` utility functions:
-  - [x] `getOrCreateVoterId()`: Manages unique voter identification
-  - [x] `submitVote()`: Handles vote submission with validation
-  - [x] `subscribeToVotes()`: Sets up real-time vote subscription
-- [x] Implemented duplicate vote prevention using voter_id
-- [x] Added error handling for database constraints
-- [x] Set up Supabase RLS policies for vote table
-- [x] Integrated vote submission with BattleSection component
-- [x] Added real-time vote updates:
-  - [x] Created Supabase real-time subscription for votes
-  - [x] Implemented vote count refresh on new votes
-  - [x] Added cleanup for subscription on component unmount
-  - [x] Integrated with VotingResults component for live updates
-
-### Past Battles Section
-- [x] Create PastBattlesSection component
-  - [x] Show grid of past battle cards
-  - [x] Each card shows week number, date range, winner
-  - [x] Add view details button
-  - [x] Implement glassmorphic styling
-- [x] Add PastBattleCard component
-  - [x] Show week number and date range
-  - [x] Display winner product with image
-  - [x] Add view details button
-  - [x] Apply glassmorphic styling
-- [ ] Implement past battle details modal
-  - [ ] Show all products from the battle
-  - [ ] Display voting results
-  - [ ] Show winner details
-  - [ ] Add close button
-- [ ] Add pagination or infinite scroll for past battles
-- [ ] Ensure responsive design for all screen sizes
-
-### PastBattlesSection Component Standardization
-- [ ] Define consistent interface for PastBattlesSection component
-  - [ ] Document proper prop types (pastWeeks vs weeks naming)
-  - [ ] Standardize event handler names (onView/onViewBattle)
-  - [ ] Add proper TypeScript interfaces
-- [ ] Update component implementations
-  - [ ] Modify PastBattlesSection to use new interface
-  - [ ] Update AdminDashboardLayout usage
-  - [ ] Update DashboardContent usage
-- [ ] Add test coverage for standardized component
-- [ ] Verify no breaking changes in other components
-- [ ] Document the standardized interface for future reference
-
-### Product Overview Improvements
-- [ ] If 2+ products: show side-by-side in responsive grid
-- [ ] If 1 product: center card and add prominent Add Product button
-- [ ] If 0 products: center Add Product button with CTA
-- [ ] Product Card: Builder pill, name, hero image, short description, edit/view button
-- [ ] Product Modal: Remove timeline, add status pill near title, prioritize product info at top, glassmorphic styling
-- [ ] Responsive: Grid collapses to 1 column on mobile, all elements accessible
-- [ ] Test: Add, edit, and view flows for all product states
-
-### Battle Card Visual Polish
-- [x] Apply glassmorphism (backdrop-blur, translucent background, soft shadow)
-- [x] Increase internal padding and spacing
-- [x] Refine border and card styling (rounded corners, subtle border)
-- [x] Improve hierarchy and readability (typography, section separation)
-  - [x] Add divider between timeline/status and metadata row
-- [x] Ensure responsiveness and accessibility
-  - [x] Metadata row is mobile-friendly (column layout on small screens)
-- [x] Maintain and improve edit/view buttons in top-right
-  - [x] Use glassmorphic, circular style with focus/hover states
-  - [x] Add tooltips and aria-labels for accessibility
-  - [x] Ensure mobile-friendly placement and spacing
-
-### General Dashboard Layout Polish
-- [x] Remove redundant elements (e.g., rogue footer button)
-  - [x] Persistent Create New Battle footer button removed
-- [x] Ensure consistent glassmorphic effects across panels
-- [x] Streamline layout for clarity and usability
-  - [x] Spacing, alignment, and glassmorphism are now consistent across dashboard
-
-### Center and Glassify "Add New Product" Modal
-- [x] Move modal to true center of screen
-- [x] Apply glassmorphism styling
-  - [x] Added backdrop blur and translucent background
-  - [x] Improved card styling with proper border opacity
-  - [x] Added gradient text effect to header
-- [x] Ensure modal is responsive and accessible
-  - [x] Proper max-width and max-height constraints
-  - [x] Improved scrollbar styling for better UX
-  - [x] Added smooth animations and transitions
-  - [x] Implemented click outside to close
-
-### Battle Details Page & Product Modal Redesign
-- [x] Product Modal overlay for editing products (edit button opens ProductForm as overlay, battle details modal remains open)
-- [x] Split Product Form into Create and Edit flows:
-  - [x] Extract shared field components (ProductFormFields, etc.)
-  - [x] Refactor ProductForm to use ProductFormFields
-  - [x] Create CreateProductForm (empty/default values, create logic)
-  - [x] Create EditProductForm (prepopulated, update logic)
-  - [x] Refactor modal state management to distinguish add vs. edit
-  - [x] Update parent handlers to open correct form/modal
-  - [x] Test add, edit, and cancel flows for both forms
-  - [x] Remove legacy ProductForm and related code (after successful migration and testing)
-- [ ] Header: Show week pill, date range pill, and new status/stage pill (replaces timeline)
-- [ ] Product Overview: 
-  - [ ] If 2+ products: show side-by-side in responsive grid
-  - [ ] If 1 product: center card, add prominent Add Product button
-  - [ ] If 0 products: center Add Product button with CTA
-- [ ] Product Card: Builder pill, name, hero image, short description, edit/view button
-- [ ] Product Modal: Remove timeline, add status pill near title, prioritize product info at top, glassmorphic styling
-- [ ] Responsive: Grid collapses to 1 column on mobile, all elements accessible
-- [ ] Test: Add, edit, and view flows for all product states
-
-### Import Path Standardization
-- [x] Fix hook import paths
-  - [x] Update toast import in SocialShare component
-  - [x] Fixed ImageGallery import in product-modal
-  - [x] Fixed PastProductColumn import in past-battle-modal
-  - [ ] Audit all hook imports across codebase
-  - [ ] Create list of components using incorrect hook paths
-  - [ ] Fix remaining hook import issues
-- [ ] Standardize component import paths
-  - [x] Document components with incorrect imports
-  - [ ] Update imports to follow conventions
-  - [ ] Test all components after updates
-- [ ] Create automated import checker
-  - [ ] Write script to verify import paths
-  - [ ] Add import path rules to ESLint config
-  - [ ] Document common import patterns
-
-### Directory Casing Consolidation
-- [ ] Audit and fix directory casing issues
-  - [x] Identified duplicate directories (`past-battle-modal` vs `PastBattleModal`)
-  - [x] Renamed `product-modal` to `ProductModal`
-  - [x] Fixed index file casing (`Index.tsx` → `index.tsx`)
-  - [x] Updated imports in BattleSection.tsx
-  - [ ] Create list of all affected directories and files
-  - [ ] Plan migration sequence to minimize conflicts
-  - [ ] Back up affected files
-- [ ] Execute directory consolidation
-  - [ ] Move files from kebab-case to PascalCase directories
-  - [ ] Update all import paths
-  - [ ] Remove empty kebab-case directories
-  - [ ] Test affected components
-- [ ] Document and prevent future issues
-  - [x] Added directory naming rules to documentation
-  - [ ] Create PR checklist item for directory naming
-  - [ ] Add automated check for directory casing
-  - [ ] Update component templates to use correct casing
-
-### PastBattleModal Migration Plan
-1. **Current State Analysis** ✅
-   - Compared both versions:
-     - `past-battle-modal/` (kebab-case) - 3.7KB index.tsx
-     - `PastBattleModal/` (PascalCase) - 3.8KB index.tsx, PastProductColumn.tsx, Types.ts
-   - Identified differences:
-     - Import paths (relative vs absolute)
-     - Type imports (explicit vs implicit)
-     - Unused imports in PascalCase version
-     - No functional differences in component logic
-
-2. **Migration Steps Completed**
-   - [x] Backed up kebab-case version
-   - [x] Updated import in PastBattlesSection.tsx to use PascalCase path
-   - [x] Removed kebab-case directory
-   - [x] Verified PascalCase directory structure
-
-3. **Type Fixes Completed**
-   - [x] Updated Week interface in Types.ts:
-     - Made `id` optional as it's not needed in modal context
-     - Made `status` optional as it's not used in modal
-     - Kept required fields: `number`, `startDate`, `endDate`
-   - [x] Updated Product interface in Types.ts:
-     - Made `id` optional for modal usage
-     - Added missing fields: `longDesc`, `features`, `techStack`, etc.
-     - Made appropriate fields optional with `?` modifier
-   - [x] Fixed PastBattlesSection.tsx mappings:
-     - Added required `description` field
-     - Ensured all property names match interface
-
-4. **Remaining Tasks**
-   - [ ] Import Updates
-     - [x] Updated PastBattlesSection.tsx imports
-     - [ ] Verify no other files import from old path
-   - [ ] Post-Migration Verification
-     - [ ] Run full test suite
-     - [ ] Verify build process
-     - [ ] Check for runtime errors
-
-5. **Next Steps**
-   - [ ] Run build to verify type fixes
-   - [ ] Test modal functionality with updated types
-   - [ ] Document type changes for team reference
-   - [ ] Consider adding JSDoc comments to explain optional fields
-
-## ✅ Completed Today (June 2, 2025)
-- [x] Fixed ImageGallery import in ProductModal/index.tsx
-- [x] Fixed PastProductColumn import using absolute path
-- [x] Updated component-structure.md with directory naming rules
-- [x] Documented directory casing inconsistency issue
-- [x] Created plan for directory consolidation
-- [x] Renamed product-modal directory to ProductModal
-- [x] Fixed index file casing in ProductModal
-- [x] Updated imports in affected components
-- [x] Migrated past-battle-modal to PascalCase version
-- [x] Fixed type mismatches in PastBattleModal interfaces
-
-### Remaining Directory Casing Issues to Fix:
-1. `past-battle-modal` → `PastBattleModal`
-2. Check for any other kebab-case component directories
-3. Verify all index.tsx files use lowercase
-4. Update any affected imports
-
----
-
-## 🔜 Up Next
-
-- [ ] Build PastWeekCard component (show historical battle weeks below current battle)
-- [ ] Improve Edit Week Modal layout (spacing, mobile responsiveness)
-- [ ] Add Voting Analytics Overview (entries, votes, winner inline on dashboard)
-- [ ] Improve responsiveness across Admin Dashboard (mobile, tablet, desktop)
-- [ ] Create "Nudge Builders" Button (admin action for reminders)
-- [ ] Accessibility & Color Contrast Audit (ensure all new UI changes meet standards)
-- [ ] Add/Update Unit & Integration Tests (cover new UI logic and layout changes)
-- [ ] Complete hook naming standardization
-- [ ] Fix remaining import path issues
-- [ ] Implement automated import checking
-- [ ] Update component documentation
-
----
+### Typography
+- Title: `text-2xl font-bold`
+- Section headers: `text-lg font-semibold`
+- Body text: `text-base text-white/80`
+- Tech stack badges: `text-sm font-medium`
 
 ## 🧠 Guidelines
 
